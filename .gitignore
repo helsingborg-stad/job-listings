@@ -46,6 +46,15 @@ Thumbs.db
 *.tar
 *.zip
 
+# ignore TODO files
+TODO
+*.todo
+*.todos
+*.task
+*.tasks
+*.taskpaper
+todolist.txt
+
 # ignore dist temp folder
 dist/temp
 dist/.temp
