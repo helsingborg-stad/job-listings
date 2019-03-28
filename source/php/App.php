@@ -6,11 +6,7 @@ class App
 {
     public function __construct()
     {
-        // add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
-        // add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
-
-
-        new \JobListings\Entity\PostType('Jobs', 'Job', 'lediga-jobb', array(
+        new \JobListings\Entity\PostType('Jobs', 'Job', 'job-listing', array(
             'description'          =>   __('Available jobs', 'modularity-resource-booking'),
             'menu_icon'            =>   'dashicons-list-view',
             'public'               =>   true,
@@ -20,6 +16,10 @@ class App
             'has_archive'          =>   true,
             'hierarchical'          =>  false,
             'exclude_from_search'   =>  false,
+            'rewrite'              =>   array(
+                'slug'       =>   'lediga-jobb',
+                'with_front' =>   false
+            ),
             'taxonomies'            =>  array(),
             'supports'              =>  array('title', 'revisions', 'editor')
         ));
