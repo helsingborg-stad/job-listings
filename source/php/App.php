@@ -6,8 +6,23 @@ class App
 {
     public function __construct()
     {
-        add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
+        // add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
+        // add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
+
+
+        new \JobListings\Entity\PostType('Jobs', 'Job', 'lediga-jobb', array(
+            'description'          =>   __('Available jobs', 'modularity-resource-booking'),
+            'menu_icon'            =>   'dashicons-list-view',
+            'public'               =>   true,
+            'publicly_queriable'   =>   true,
+            'show_ui'              =>   true,
+            'show_in_nav_menus'    =>   true,
+            'has_archive'          =>   true,
+            'hierarchical'          =>  false,
+            'exclude_from_search'   =>  false,
+            'taxonomies'            =>  array(),
+            'supports'              =>  array('title', 'revisions', 'editor')
+        ));
     }
 
     /**
