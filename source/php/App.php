@@ -23,6 +23,14 @@ class App
             'taxonomies'            =>  array(),
             'supports'              =>  array('title', 'revisions', 'editor')
         ));
+
+        add_filter('Municipio/blade/view_paths', array($this, 'includePluginTemplates'), 10);
+    }
+
+    public function includePluginTemplates($paths)
+    {
+        $paths[] = JOBLISTINGS_PATH . 'views';
+        return $paths;
     }
 
     /**
