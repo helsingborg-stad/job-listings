@@ -12,7 +12,7 @@ class Import
     private $baseNode = "Assignments"; 
     private $subNode = "Assignment"; 
 
-    private $cacheTTL = 600; 
+    private $cacheTTL = 60*60; //Minutes 
 
     public function __construct()
     {
@@ -32,8 +32,8 @@ class Import
 
         //Fetch data 
         $data = $curl->request(
-            'GET', 
-            $baseUrl, 
+            'GET',
+            $baseUrl,
             array(
                 'guidGroup' => $guidGroup
             )
@@ -107,9 +107,12 @@ class Import
                 ); 
             }
 
-            //Update if ther is data
+            //Update if there is data
             if(is_array($dataObject) && !empty($dataObject)) {
                 foreach($dataObject as $metaKey => $metaValue) {
+                    if($metaKey == "") {
+                       continue;  
+                    }
                     update_post_meta($postId, $metaKey, $metaValue);
                 }    
             }
@@ -136,18 +139,18 @@ class Import
             die("Must be key -> value pair"); 
         }
 
-        $args = array(
-            'meta_query' => array(
-                array(
-                    'key' => $search['key'],
-                    'value' => $search['value']
-                )
-            ),
-            'post_type' => $this->postType,
-            'posts_per_page' => 1
+        $post = get_posts(
+            array(
+                'meta_query' => array(
+                    array(
+                        'key' => $search['key'],
+                        'value' => $search['value']
+                    )
+                ),
+                'post_type' => $this->postType,
+                'posts_per_page' => 1
+            )
         );
-
-        $post = get_posts($args);
 
         if(!empty($post) && is_array($post)) {
             return array_pop($post)->ID;
