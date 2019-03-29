@@ -48,7 +48,7 @@ class Import
         
         //Get main node 
         $data = json_decode(json_encode($data->{$this->baseNode}), FALSE)->{$this->subNode};
-
+//ar_dump($data);
         //Check if valid list, update jobs 
         if(isset($data) && is_array($data) && !empty($data)) {
             foreach ($data as $item) {
@@ -83,10 +83,20 @@ class Import
                     $val = $item->{$target[0]}->{$target[1]}->{$target[2]}; 
                 }
 
+                if(count($target) == 4) {
+                    $val = $item->{$target[0]}->{$target[1]}->{$target[2]}->{$target[3]}; 
+                }
+
+                if(count($target) == 5) {
+                    $val = $item->{$target[0]}->{$target[1]}->{$target[2]}->{$target[3]}->{$target[4]}; 
+                }
+
                 //Store
                 $dataObject[$key] = $val; 
 
             }
+
+            var_dump($dataObject); 
 
             //Get matching post
             $postId = $this->getPostID(
@@ -102,7 +112,8 @@ class Import
                     array(
                         'post_title' => $dataObject['post_title'], 
                         'post_content' => $dataObject['post_content'],
-                        'post_type' => $this->postType
+                        'post_type' => $this->postType,
+                        'post_status' => 'publish'
                     )
                 ); 
             }
@@ -128,8 +139,20 @@ class Import
     private function metaKeyMap() {
         return array(
             'uuid' => array("@attributes", "AssignmentId"),
-            'post_title' => array("@attributes", "AssignmentId"),
-            'post_content' => array("@attributes", "AssignmentId"),
+            'post_title' => array("Localization", "AssignmentLoc", "AssignmentTitle"),
+            'post_content' => array("Localization", "AssignmentLoc", "WorkDescr"),
+            'publish_start_date' => array("PublishStartDate"),
+            'publish_end_date' => array("PublishEndDate"),
+            'application_end_date' => array("ApplicationEndDate"),
+            'employment_start_date' => array("EmploymentStartDate"),
+            'employment_end_date' => array("EmploymentEndDate"),
+            'ad_created' => array("Created"),
+            'ad_modified' => array("Modified"),
+            'ad_reference_nbr' => array("RefNo"),
+            'number_of_positions' => array("NumberOfJobs"),
+            'external_url' => array("ReadMoreUrl"),
+            'is_internal' => array("IsInternal"),
+            'location_name' => array("Localization", "AssignmentLoc", "Municipality", "Name")
         ); 
     }
 
