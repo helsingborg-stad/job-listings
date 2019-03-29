@@ -37,3 +37,14 @@ $loader->register();
 new JobListings\App();
 new JobListings\Admin\Settings();
 new JobListings\Cron\Import();
+
+// Acf auto import and export
+add_action('plugins_loaded', function () {
+    $acfExportManager = new \AcfExportManager\AcfExportManager();
+    $acfExportManager->setTextdomain('modularity');
+    $acfExportManager->setExportFolder(MODULARITY_PATH . 'source/php/AcfFields/');
+    $acfExportManager->autoExport(array(
+        'settings'          => 'group_5c9de924499d4'
+    ));
+    $acfExportManager->import();
+});
