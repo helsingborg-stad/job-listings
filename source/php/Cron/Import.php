@@ -96,12 +96,13 @@ class Import
             }
 
             //Get matching post
-            $postId = $this->getPostID(
+            $postObject = $this->getPost(
                 array(
                     'key' => 'uuid', 
                     'value' => $dataObject['uuid']
                 )
             );
+            $postId = $postObject->ID; 
 
             //Not existing, create new 
             if (is_null($postId)) {
@@ -113,6 +114,26 @@ class Import
                         'post_status' => 'publish'
                     )
                 ); 
+            } else {
+
+                //Create diffable array
+                $updateDiff = array(
+                    $postObject->post_title, 
+                    $postObject->post_content, 
+                    $dataObject['post_title'], 
+                    $dataObject['post_content']
+                ); 
+
+                //Diff data 
+                if(count(array_unique($updateDiff)) != count($updateDiff)) {
+                    wp_update_post(
+                        array(
+                            'ID' => $postId,
+                            'post_title' => $dataObject['post_title'], 
+                            'post_content' => $dataObject['post_content']
+                        )
+                    );
+                }
             }
 
             //Update if there is data
@@ -153,7 +174,7 @@ class Import
         ); 
     }
 
-    private function getPostID($search) {
+    private function getPost($search) {
         
         if (!is_array($search)) {
             die("Must be key -> value pair"); 
@@ -174,7 +195,7 @@ class Import
         );
 
         if(!empty($post) && is_array($post)) {
-            return array_pop($post)->ID;
+            return array_pop($post);
         }
 
         return null; 
