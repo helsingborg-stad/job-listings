@@ -22,6 +22,7 @@ class Import
     public function importXmlTrigger() {
         if(isset($_GET['jobListingImport'])) {
             $this->importXml($this->baseUrl, $this->guidGroup); 
+            die("Stuff has been imported.");
         }
     }
 
@@ -48,7 +49,7 @@ class Import
         
         //Get main node 
         $data = json_decode(json_encode($data->{$this->baseNode}), FALSE)->{$this->subNode};
-//ar_dump($data);
+
         //Check if valid list, update jobs 
         if(isset($data) && is_array($data) && !empty($data)) {
             foreach ($data as $item) {
@@ -58,8 +59,6 @@ class Import
         }
         
         return null; //Unsuccessfull, no new data 
-
-        die("Imported");
     }
 
     private function updateItem($item) {
@@ -96,8 +95,6 @@ class Import
 
             }
 
-            var_dump($dataObject); 
-
             //Get matching post
             $postId = $this->getPostID(
                 array(
@@ -124,14 +121,12 @@ class Import
                     if($metaKey == "") {
                        continue;  
                     }
-                    if($metaValue != get_post_meta($postID, $metaKey, true)) {
+                    if($metaValue != get_post_meta($postId, $metaKey, true)) {
                         update_post_meta($postId, $metaKey, $metaValue);
                     }
                 }    
             }
-            
 
-            die("---"); 
             return true;
         }
 
