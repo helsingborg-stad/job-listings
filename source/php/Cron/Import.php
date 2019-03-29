@@ -124,7 +124,9 @@ class Import
                     if($metaKey == "") {
                        continue;  
                     }
-                    update_post_meta($postId, $metaKey, $metaValue);
+                    if($metaValue != get_post_meta($postID, $metaKey, true)) {
+                        update_post_meta($postId, $metaKey, $metaValue);
+                    }
                 }    
             }
             
@@ -171,7 +173,8 @@ class Import
                     )
                 ),
                 'post_type' => $this->postType,
-                'posts_per_page' => 1
+                'posts_per_page' => 1,
+                'post_status' => 'all'
             )
         );
 
