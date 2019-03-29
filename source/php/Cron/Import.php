@@ -16,17 +16,30 @@ class Import
 
     public function __construct()
     {
+        //Manual trigger 
         add_action('admin_init', array($this, 'importXmlTrigger')); 
+
+        //Cron trigger
+        add_action('import_avalable_job_list', array($this, 'importXml'));
+
+        //Cron schedule
+        add_action('admin_init', array($this, 'scheduleCronJob')); 
+    }
+
+    public function scheduleCronJob() {
+        if (!wp_next_scheduled ('import_avalable_job_list')) {
+            wp_schedule_event(time(), 'hourly', 'import_avalable_job_list');
+        }
     }
 
     public function importXmlTrigger() {
         if(isset($_GET['jobListingImport'])) {
-            $this->importXml($this->baseUrl, $this->guidGroup); 
+            $this->importXml(); 
             die("Stuff has been imported.");
         }
     }
 
-    public function importXml($baseUrl, $guidGroup) {
+    public function importXml() {
 
         //Get curl helper
         $curl = new \JobListings\Helper\Curl(true, $this->cacheTTL);
@@ -34,9 +47,9 @@ class Import
         //Fetch data 
         $data = $curl->request(
             'GET',
-            $baseUrl,
+            $this->baseUrl,
             array(
-                'guidGroup' => $guidGroup
+                'guidGroup' => $this->guidGroup
             )
         ); 
 
@@ -175,10 +188,6 @@ class Import
     }
 
     private function getPost($search) {
-        
-        if (!is_array($search)) {
-            die("Must be key -> value pair"); 
-        }
 
         $post = get_posts(
             array(
