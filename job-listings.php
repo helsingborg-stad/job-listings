@@ -42,7 +42,7 @@ new JobListings\Cron\Import();
 add_action('plugins_loaded', function () {
     $acfExportManager = new \AcfExportManager\AcfExportManager();
     $acfExportManager->setTextdomain('modularity');
-    $acfExportManager->setExportFolder(MODULARITY_PATH . 'source/php/AcfFields/');
+    $acfExportManager->setExportFolder(JOBLISTINGS_PATH . 'source/php/AcfFields/');
     $acfExportManager->autoExport(array(
         'settings'          => 'group_5c9de924499d4'
     ));
