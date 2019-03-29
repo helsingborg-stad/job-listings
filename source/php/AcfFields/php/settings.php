@@ -44,9 +44,9 @@
     'location' => array(
         0 => array(
             0 => array(
-                'param' => 'post_type',
+                'param' => 'options_page',
                 'operator' => '==',
-                'value' => 'job-listing',
+                'value' => 'acf-options-import-settings',
             ),
         ),
     ),
