@@ -35,3 +35,5 @@ $loader->register();
 
 // Start application
 new JobListings\App();
+new JobListings\Admin\Settings();
+new JobListings\Cron\Import();
