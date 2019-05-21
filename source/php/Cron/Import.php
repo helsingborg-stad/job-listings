@@ -214,6 +214,7 @@ class Import
             'work_experience' => array("Localization", "AssignmentLoc", "WorkExperiencePrerequisite", "Name"),
             'employment_type' => array("Localization", "AssignmentLoc", "EmploymentType", "Name"),
             'employment_grade' => array("Localization", "AssignmentLoc", "EmploymentGrade", "Name"),
+            'departments' => array("Localization", "AssignmentLoc", "Departments", "Department", "Name"),
 
 
             //'departments' => array("Localization", "AssignmentLoc", "Departments", "Department", "Name")

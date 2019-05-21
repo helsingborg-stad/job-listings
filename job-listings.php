@@ -5,7 +5,7 @@
  * Plugin URI:        (#plugin_url#)
  * Description:       
  * Version:           1.0.0
- * Author:            Nikolas Ramstedt
+ * Author:            Nikolas Ramstedt, Sebastian Thulin & Johan Silvergrund
  * Author URI:        
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT

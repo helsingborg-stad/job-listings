@@ -25,7 +25,7 @@
                         $endDate = date_create(substr($postMeta['application_end_date'][0], 0,
                             strpos($postMeta['application_end_date'][0], "T")));
                         $diff = date_diff($todaysDate, $endDate);
-                        
+
                         ?>
                         <div class="grid">
                             <div class="grid-xs-12">
@@ -34,12 +34,12 @@
                                     @include('partials.blog.post-header')
                                     @if ($postMeta['application_end_date'][0] < date('Y-m-d'))
                                         <button class="btn btn-lg btn-contrasted disabled btn-block">
-                                            Ansökningstiden har gått ut
+                                            <?php _e('The application period has ended','job-listings'); ?>
                                         </button>
                                     @else
                                         <a class="btn btn-lg btn-block btn-primary btn-outline" href="{{get_field('apply_button_url',
-                                            'option')}}{{$postMeta['guid'][0]}}">Ansök här ({{$diff->format("%r%a")}}
-                                            dagar kvar) </a>
+                                            'option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ','job-listings'); ?>
+                                            ({{$diff->format("%r%a")}} <?php _e('days left','job-listings'); ?>) </a>
                                     @endif
                                     <br/>
                                     <article class="u-mb-5" id="article">
@@ -65,54 +65,62 @@
                     </div>
                 </div>
             </div>
-            <aside class="grid-lg-3 grid-md-12 sidebar-right-sidebar hidden-xs hidden-sm hidden-md">
+            <aside class="grid-lg-3 grid-md-12 sidebar-left-sidebar">
 
                 <div class="grid grid--columns">
                     <div class="box box-card">
                         <div class="box-content">
 
-                            <b>Sista ansökningsdatum:</b><br/>
+
+                            <b><?php _e('Deadline for applications:','job-listings'); ?></b><br/>
                             {{substr($postMeta['application_end_date'][0], 0,
                                         strpos($postMeta['application_end_date'][0], "T"))}}
-                            <span class="text-sm">({{$diff->format("%r%a")}} dagar kvar)</span>
+                            <span class="text-sm">({{$diff->format("%r%a")}} <?php _e('days left','job-listings'); ?>)</span>
                             <br/><br/>
-                            <b>Ref nr:</b><br/>
+                            <b><?php _e('Ref nr:','job-listings'); ?></b><br/>
                             {{$postMeta['ad_reference_nbr'][0]}}
                             <br/><br/>
-                            <b>Publicerad:</b><br/>
+                            <b><?php _e('Published:','job-listings'); ?></b><br/>
                             {{substr($postMeta['publish_start_date'][0], 0,
                                       strpos($postMeta['publish_start_date'][0], "T"))}}
                             <br/><br/>
 
-                            <b>Antal sökande:</b><br/>
+                            <b><?php _e('Number of applicants:','job-listings'); ?></b><br/>
                             {{$postMeta['number_of_positions'][0]}}
 
                             <br/><br/>
-                            <b>Erfarenhet:</b><br/>
+                            <b><?php _e('Experience:','job-listings'); ?></b><br/>
                             {{$postMeta['work_experience'][0]}}
 
                             <br/><br/>
-                            <b>Anställningstyp:</b><br/>
+                            <b><?php _e('Employee:','job-listings'); ?></b><br/>
                             {{$postMeta['employment_type'][0]}}
 
                             <br/><br/>
-                            <b>Omfattning:</b><br/>
+                            <b><?php _e('Extent:','job-listings'); ?></b><br/>
                             {{$postMeta['employment_grade'][0]}}
 
                             <br/><br/>
-                            <b>Kommun:</b><br/>
+                            <b><?php _e('Municipality:','job-listings'); ?></b><br/>
                             {{$postMeta['location_name'][0]}}
                             <br/><br/>
+
+                            @if(isset($postMeta['departments'][0]) && !empty($postMeta['departments'][0]))
+                                <b><?php _e('Company:','job-listings'); ?></b><br/>
+                                {{ucfirst(mb_strtolower($postMeta['departments'][0]))}}
+                                <br/><br/>
+                            @endif
+
                             @if ($postMeta['application_end_date'][0] < date('Y-m-d'))
-                                <button class="btn btn-lg btn-contrasted disabled btn-block">Ansökningstiden har gått
-                                    ut
+                                <button class="btn btn-lg btn-contrasted disabled btn-block">
+                                <?php _e('The application period has ended','job-listings'); ?>
                                 </button>
                             @else
 
                                 <a target="_blank"
                                    class="btn btn-lg btn-block btn-primary btn-outline"
-                                   href="{{get_field('apply_button_url','option')}}{{$postMeta['guid'][0]}}">Ansök här
-                                    ({{$diff->format("%r%a")}} dagar kvar)
+                                   href="{{get_field('apply_button_url','option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ','job-listings'); ?>
+                                    ({{$diff->format("%r%a")}} <?php _e('days left','job-listings'); ?>)
                                 </a>
                             @endif
                         </div>

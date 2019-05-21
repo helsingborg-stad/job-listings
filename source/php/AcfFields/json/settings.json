@@ -23,7 +23,7 @@
             "label": "Guid group",
             "name": "job_listing_xml_api_url_id",
             "type": "text",
-            "instructions": "Import identifier (called guidGroup) in visma.",
+            "instructions": "Importera fr\u00e5n Visma",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -39,7 +39,7 @@
         },
         {
             "key": "field_5ce3dd222ff6d",
-            "label": "Apply button URL",
+            "label": "Ans\u00f6k knapp",
             "name": "apply_button_url",
             "type": "url",
             "instructions": "",

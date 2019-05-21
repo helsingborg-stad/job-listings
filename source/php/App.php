@@ -6,8 +6,8 @@ class App
 {
     public function __construct()
     {
-        new \JobListings\Entity\PostType('Jobs', 'Job', 'job-listing', array(
-            'description'          =>   __('Available jobs', 'modularity-resource-booking'),
+        new \JobListings\Entity\PostType(__('Jobs', 'job-listings'), __('Job', 'job-listings'), 'job-listing', array(
+            'description'          =>   __('Available jobs', 'job-listings'),
             'menu_icon'            =>   'dashicons-list-view',
             'public'               =>   true,
             'publicly_queriable'   =>   true,

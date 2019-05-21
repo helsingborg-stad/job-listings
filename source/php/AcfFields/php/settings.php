@@ -26,7 +26,7 @@
             'label' => __('Guid group', 'job-listings'),
             'name' => 'job_listing_xml_api_url_id',
             'type' => 'text',
-            'instructions' => __('Import identifier (called guidGroup) in visma.', 'job-listings'),
+            'instructions' => __('Importera från Visma', 'job-listings'),
             'required' => 1,
             'conditional_logic' => 0,
             'wrapper' => array(
@@ -42,7 +42,7 @@
         ),
         2 => array(
             'key' => 'field_5ce3dd222ff6d',
-            'label' => __('Apply button URL', 'job-listings'),
+            'label' => __('Ansök knapp', 'job-listings'),
             'name' => 'apply_button_url',
             'type' => 'url',
             'instructions' => '',
