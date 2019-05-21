@@ -83,9 +83,9 @@
                             <?php $postNum = 0;?>
                             <table class="table table-striped table-hover">
                                 <tr>
-                                    <th>{{__('Position', 'municipio')}}</th>
-                                    <th>{{__('Published', 'municipio')}}</th>
-                                    <th>{{__('Apply by', 'municipio')}}</th>
+                                    <th><?php _e('Position','job-listings'); ?></th>
+                                    <th><?php _e('Published','job-listings'); ?></th>
+                                    <th><?php _e('Apply by','job-listings'); ?></th>
                                 </tr>
 
                                 @while(have_posts())
