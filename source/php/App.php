@@ -50,4 +50,6 @@ class App
     {
         wp_register_script('job-listings-js', JOBLISTINGS_URL . '/dist/' . \JobListings\Helper\CacheBust::name('js/job-listings.js'));
     }
+
+
 }
