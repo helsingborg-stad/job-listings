@@ -53,6 +53,30 @@ class Import
     }
 
     /**
+     * Convert Object to array
+     * @param $data
+     * @return array|bool
+     */
+    public function objectToArray($data) {
+        if ((! is_array($data)) and (! is_object($data))) {
+            return false;
+        }
+
+        $result = array();
+
+        $data = (array) $data;
+        foreach ($data as $key => $value) {
+            if (is_object($value)) $value = (array) $value;
+            if (is_array($value))
+                $result[$key] = $this->objectToArray($value);
+            else
+                $result[$key] = $value;
+        }
+
+        return $result;
+    }
+
+    /**
      * Import XML
      * @return bool|null
      */
@@ -80,16 +104,35 @@ class Import
         //Get main node
         $data = json_decode(json_encode($data->{$this->baseNode}), FALSE)->{$this->subNode};
 
+        //Conve
+
         //Check if valid list, update jobs
-        if(isset($data) && is_array($data) && !empty($data)) {
+        if(isset($data) && !empty($data)) {
+
             foreach ($data as $item) {
-                $this->updateItem($item);
+                if ($item) {
+                    $this->updateItem($item);
+                }
             }
             return true;
         }
 
         return null; //Unsuccessfull, no new data
     }
+
+    function getArrayDepth($array) {
+        $max_indentation = 1;
+        $array_str = print_r($array, true);
+        $lines = explode("\n", $array_str);
+        foreach ($lines as $line) {
+            $indentation = (strlen($line) - strlen(ltrim($line))) / 4;
+            if ($indentation > $max_indentation) {
+                $max_indentation = $indentation;
+            }
+        }
+        return ceil(($max_indentation - 1) / 2) + 1;
+    }
+
 
     /**
      * Update Item
@@ -121,12 +164,24 @@ class Import
                     $val = $item->{$target[0]}->{$target[1]}->{$target[2]}->{$target[3]};
                 }
 
-                if(count($target) == 5) {
-                    $val = $item->{$target[0]}->{$target[1]}->{$target[2]}->{$target[3]}->{$target[4]};
-                }
-
                 $dataObject[$key] = $val;
 
+                if(count($target) == 5) {
+                    if ($key === 'occupationclassifications' || $key === 'departments') {
+
+                        $val = $this->objectToArray($item->{$target[0]}->{$target[1]}->{$target[2]}->{$target[3]});
+                        if(is_array($val)) {
+
+                            for($int=0; $int<count($val); $int++){
+                                if ($this->getArrayDepth($val) > 2) {
+                                    $dataObject[$key.'_'.$int] = ucfirst(strtolower($val[$int]['Name']));
+                                } else {
+                                    $dataObject[$key.'_'.$int] = ucfirst(strtolower($val['Name']));
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             //Get matching post
@@ -136,6 +191,7 @@ class Import
                     'value' => $dataObject['uuid']
                 )
             );
+            
             $postId = $postObject->ID;
 
             //Not existing, create new
@@ -173,12 +229,27 @@ class Import
             //Update if there is data
             if(is_array($dataObject) && !empty($dataObject)) {
                 foreach($dataObject as $metaKey => $metaValue) {
+
                     if($metaKey == "") {
                         continue;
                     }
-                    if($metaValue != get_post_meta($postId, $metaKey, true)) {
-                        update_post_meta($postId, $metaKey, $metaValue);
+
+                    if ($dataObject[$metaKey] == 'departments' || $dataObject[$metaKey] == 'occupationclassifications') {
+
+                        var_dump($metaValue[$metaKey]);
+
+                        if($metaValue != get_post_meta($postId, $metaKey, true)) {
+                            for($int=0; $int<count($metaValue); $int++){
+                                update_post_meta($postId, $metaKey, $dataObject[$metaKey][$int]);
+                            }
+
+                        }
+                    } else {
+                        if($metaValue != get_post_meta($postId, $metaKey, true)) {
+                            update_post_meta($postId, $metaKey, $metaValue);
+                        }
                     }
+
                 }
             }
 
@@ -215,6 +286,7 @@ class Import
             'employment_type' => array("Localization", "AssignmentLoc", "EmploymentType", "Name"),
             'employment_grade' => array("Localization", "AssignmentLoc", "EmploymentGrade", "Name"),
             'departments' => array("Localization", "AssignmentLoc", "Departments", "Department", "Name"),
+            'occupationclassifications' => array("Localization", "AssignmentLoc", "OccupationClassifications", "OccupationClassification", "Name"),
 
 
             //'departments' => array("Localization", "AssignmentLoc", "Departments", "Department", "Name")
