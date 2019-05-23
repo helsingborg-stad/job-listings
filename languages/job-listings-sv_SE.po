@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Job Listings\n"
-"POT-Creation-Date: 2019-05-21 16:24+0200\n"
-"PO-Revision-Date: 2019-05-21 16:24+0200\n"
+"POT-Creation-Date: 2019-05-23 15:47+0200\n"
+"PO-Revision-Date: 2019-05-23 15:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -20,6 +20,10 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
+#: source/php/AcfFields/php/settings.php:6 source/php/Admin/Settings.php:33
+msgid "Import settings"
+msgstr "Import inställningar"
+
 #: source/php/AcfFields/php/settings.php:10
 msgid "XML Api URL"
 msgstr "XML Api URL"
@@ -29,30 +33,26 @@ msgid "Guid group"
 msgstr "Guid grupp"
 
 #: source/php/AcfFields/php/settings.php:29
-msgid "Importera från Visma"
+msgid "Import identifier (called guidGroup) in visma."
 msgstr "Importera från Visma"
 
 #: source/php/AcfFields/php/settings.php:45
-msgid "Ansök knapp"
+msgid "Apply button URL"
 msgstr "Ansök knapp"
 
-#: source/php/Admin/Settings.php:21
+#: source/php/Admin/Settings.php:32
 msgid "Import job settings"
 msgstr "Importera jobb inställningar"
 
-#: source/php/Admin/Settings.php:22
-msgid "Import settings"
-msgstr "Import inställningar"
-
-#: source/php/App.php:9
+#: source/php/App.php:16
 msgid "Jobs"
 msgstr "Jobb"
 
-#: source/php/App.php:9
+#: source/php/App.php:16
 msgid "Job"
 msgstr "Jobb"
 
-#: source/php/App.php:10
+#: source/php/App.php:17
 msgid "Available jobs"
 msgstr "Lediga jobb"
 
@@ -61,7 +61,7 @@ msgstr "Lediga jobb"
 msgid "Add new %s"
 msgstr "Lägg till ny %s"
 
-#: source/php/Entity/PostType.php:52 source/php/Entity/Taxonomy.php:33
+#: source/php/Entity/PostType.php:52 source/php/Entity/Taxonomy.php:48
 #, php-format
 msgid "Edit %s"
 msgstr "Redigera %s"
@@ -76,7 +76,7 @@ msgstr "New %s"
 msgid "View %s"
 msgstr "Visa %s"
 
-#: source/php/Entity/PostType.php:55 source/php/Entity/Taxonomy.php:29
+#: source/php/Entity/PostType.php:55 source/php/Entity/Taxonomy.php:44
 #, php-format
 msgid "Search %s"
 msgstr "Sök %s"
@@ -91,28 +91,28 @@ msgstr "%s hittade inte"
 msgid "No %s found in trash"
 msgstr "%s hittades inte i papperskorgen"
 
-#: source/php/Entity/PostType.php:58 source/php/Entity/Taxonomy.php:31
-#: source/php/Entity/Taxonomy.php:32
+#: source/php/Entity/PostType.php:58 source/php/Entity/Taxonomy.php:46
+#: source/php/Entity/Taxonomy.php:47
 #, php-format
 msgid "Parent %s:"
 msgstr "Förälder %s"
 
-#: source/php/Entity/Taxonomy.php:30
+#: source/php/Entity/Taxonomy.php:45
 #, php-format
 msgid "All %s"
 msgstr "Alla %s"
 
-#: source/php/Entity/Taxonomy.php:34
+#: source/php/Entity/Taxonomy.php:49
 #, php-format
 msgid "Update %s"
 msgstr "Uppdatera %s"
 
-#: source/php/Entity/Taxonomy.php:35
+#: source/php/Entity/Taxonomy.php:50
 #, php-format
 msgid "Add New %s"
 msgstr "Lägg till Ny %s"
 
-#: source/php/Entity/Taxonomy.php:36
+#: source/php/Entity/Taxonomy.php:51
 #, php-format
 msgid "New %s Name"
 msgstr "Nytt %s namn"
@@ -123,62 +123,62 @@ msgstr "Tjänst"
 
 #: views/archive-job-listing.blade.php:87
 msgid "Published"
-msgstr "Publiserad"
+msgstr "Publicerad"
 
 #: views/archive-job-listing.blade.php:88
 msgid "Apply by"
 msgstr "Ansök senast"
 
-#: views/archive-job-listing.blade.php:124
+#: views/archive-job-listing.blade.php:130
 msgid "No posts to show"
 msgstr "Inga poster att visa"
 
-#: views/single-job-listing.blade.php:37 views/single-job-listing.blade.php:116
+#: views/single-job-listing.blade.php:43 views/single-job-listing.blade.php:144
 msgid "The application period has ended"
 msgstr "Ansökningstiden har gått ut."
 
-#: views/single-job-listing.blade.php:41 views/single-job-listing.blade.php:122
+#: views/single-job-listing.blade.php:47 views/single-job-listing.blade.php:150
 msgid "Apply here, "
 msgstr "Ansök här,"
 
-#: views/single-job-listing.blade.php:42 views/single-job-listing.blade.php:78
-#: views/single-job-listing.blade.php:123
+#: views/single-job-listing.blade.php:49 views/single-job-listing.blade.php:87
+#: views/single-job-listing.blade.php:152
 msgid "days left"
 msgstr "dagar kvar"
 
-#: views/single-job-listing.blade.php:75
+#: views/single-job-listing.blade.php:84
 msgid "Deadline for applications:"
 msgstr "Sista ansökningsdatum:"
 
-#: views/single-job-listing.blade.php:80
+#: views/single-job-listing.blade.php:93
 msgid "Ref nr:"
 msgstr "Ref nr:"
 
-#: views/single-job-listing.blade.php:83
+#: views/single-job-listing.blade.php:99
 msgid "Published:"
 msgstr "Publicerad:"
 
-#: views/single-job-listing.blade.php:88
+#: views/single-job-listing.blade.php:106
 msgid "Number of applicants:"
 msgstr "Antal tjänster:"
 
-#: views/single-job-listing.blade.php:92
+#: views/single-job-listing.blade.php:112
 msgid "Experience:"
 msgstr "Erfarenhet:"
 
-#: views/single-job-listing.blade.php:96
+#: views/single-job-listing.blade.php:118
 msgid "Employee:"
 msgstr "Anställningsform:"
 
-#: views/single-job-listing.blade.php:100
+#: views/single-job-listing.blade.php:124
 msgid "Extent:"
 msgstr "Omfattning:"
 
-#: views/single-job-listing.blade.php:104
+#: views/single-job-listing.blade.php:130
 msgid "Municipality:"
 msgstr "Kommun:"
 
-#: views/single-job-listing.blade.php:109
+#: views/single-job-listing.blade.php:136
 msgid "Company:"
 msgstr "Förvaltning:"
 
@@ -194,14 +194,14 @@ msgstr "(# Plugin_url #)"
 msgid "Nikolas Ramstedt, Sebastian Thulin & Johan Silvergrund"
 msgstr ""
 
-#~ msgid "Business / Management:"
-#~ msgstr "Förvaltning:"
-
-#~ msgid "Import identifier (called guidGroup) in visma."
+#~ msgid "Importera från Visma"
 #~ msgstr "Importera från Visma"
 
-#~ msgid "Apply button URL"
+#~ msgid "Ansök knapp"
 #~ msgstr "Ansök knapp"
+
+#~ msgid "Business / Management:"
+#~ msgstr "Förvaltning:"
 
 #~ msgid "Nikolas Ramstedt"
 #~ msgstr "Nicodemus"

@@ -62,7 +62,7 @@
             0 => array(
                 'param' => 'options_page',
                 'operator' => '==',
-                'value' => 'acf-options-import-installningar',
+                'value' => 'acf-options-import-settings',
             ),
         ),
     ),
