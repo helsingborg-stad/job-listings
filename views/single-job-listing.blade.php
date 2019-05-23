@@ -28,12 +28,9 @@
                             $endDate = date_create(substr($postMeta['application_end_date'][0], 0,
                                 strpos($postMeta['application_end_date'][0], "T")));
                             $diff = date_diff($todaysDate, $endDate);
-                            $daysLeft = $diff->format("%r%a") . " ";
-                            if ($daysLeft === 1) {
-                                $daysLeft .= _e('day left', 'job-listings');
-                            } else {
-                                $daysLeft .= _e('days left', 'job-listings');
-                            }
+
+                            $days = (int) $diff->format("%r%a");
+
                         }
 
 
@@ -52,7 +49,13 @@
                                             <a class="btn btn-lg btn-block btn-primary btn-outline" href="{{get_field('apply_button_url',
                                             'option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ',
                                                     'job-listings'); ?>
-                                                ({{$daysLeft}}) </a>
+                                                (
+                                                @if ($days > 1)
+                                                    {{$diff->format("%r%a")}} {{_e('days left', 'job-listings')}}
+                                                @else
+                                                    {{$diff->format("%r%a")}} {{_e('day left', 'job-listings')}}
+                                                @endif
+                                                ) </a>
                                         @endif
                                     @endif
                                     <br/>
@@ -89,7 +92,13 @@
                                 <b><?php _e('Deadline for applications:', 'job-listings'); ?></b><br/>
                                 {{substr($postMeta['application_end_date'][0], 0,
                                             strpos($postMeta['application_end_date'][0], "T"))}}
-                                <span class="text-sm">({{$daysLeft}})</span>
+                                <span class="text-sm">(
+                                    @if ($days > 1)
+                                        {{$diff->format("%r%a")}} {{_e('days left', 'job-listings')}}
+                                    @else
+                                        {{$diff->format("%r%a")}} {{_e('day left', 'job-listings')}}
+                                    @endif
+                                    )</span>
                                 <br/><br/>
                             @endif
 
@@ -153,7 +162,13 @@
                                        class="btn btn-lg btn-block btn-primary btn-outline"
                                        href="{{get_field('apply_button_url','option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ',
                                             'job-listings'); ?>
-                                        ({{$daysLeft}})
+                                        (
+                                        @if ($days > 1)
+                                            {{$diff->format("%r%a")}} {{_e('days left', 'job-listings')}}
+                                        @else
+                                            {{$diff->format("%r%a")}} {{_e('day left', 'job-listings')}}
+                                        @endif
+                                        )
                                     </a>
                                 @endif
                             @endif
