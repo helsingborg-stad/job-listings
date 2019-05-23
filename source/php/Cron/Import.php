@@ -129,20 +129,24 @@ class Import
         return null; //Unsuccessfull, no new data
     }
 
+    /**
+     * Checking how many levels in multidimensional array
+     * @param $array
+     * @return float|int
+     */
     function getArrayDepth($array)
     {
-        $max_indentation = 1;
+        $maxIndentation = 1;
         $array_str = print_r($array, true);
         $lines = explode("\n", $array_str);
         foreach ($lines as $line) {
             $indentation = (strlen($line) - strlen(ltrim($line))) / 4;
-            if ($indentation > $max_indentation) {
-                $max_indentation = $indentation;
+            if ($indentation > $maxIndentation) {
+                $maxIndentation = $indentation;
             }
         }
-        return ceil(($max_indentation - 1) / 2) + 1;
+        return ceil(($maxIndentation - 1) / 2) + 1;
     }
-
 
     /**
      * Update Item
@@ -179,10 +183,8 @@ class Import
 
                 if (count($target) == 5) {
                     if ($key === 'occupationclassifications' || $key === 'departments') {
-
                         $val = $this->objectToArray($item->{$target[0]}->{$target[1]}->{$target[2]}->{$target[3]});
                         if (is_array($val)) {
-
                             for ($int = 0; $int < count($val); $int++) {
                                 if ($this->getArrayDepth($val) > 2) {
                                     $dataObject[$key] = ucfirst(mb_strtolower($val[$int]['Name']));
@@ -260,7 +262,7 @@ class Import
     }
 
     /**
-     * Key map
+     * Mapping meta keys
      * @return array
      */
     private function metaKeyMap()
@@ -294,10 +296,6 @@ class Import
                 "OccupationClassification",
                 "Name"
             ),
-
-
-            //'departments' => array("Localization", "AssignmentLoc", "Departments", "Department", "Name")
-
         );
     }
 
@@ -308,7 +306,6 @@ class Import
      */
     private function getPost($search)
     {
-
         $post = get_posts(
             array(
                 'meta_query' => array(

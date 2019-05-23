@@ -2,6 +2,10 @@
 
 namespace JobListings\Helper;
 
+/**
+ * Class Curl
+ * @package JobListings\Helper
+ */
 class Curl
 {
     /**
@@ -19,6 +23,11 @@ class Curl
     private $curlOptions = [];
     private $cacheKey;
 
+    /**
+     * Curl constructor.
+     * @param bool $useCache
+     * @param int $cacheTTL
+     */
     public function __construct($useCache = true, $cacheTTL = 60)
     {
         if (is_bool($useCache)) {
@@ -30,6 +39,14 @@ class Curl
         }
     }
 
+    /**
+     * @param $type
+     * @param $url
+     * @param null $data
+     * @param string $contentType
+     * @param null $headers
+     * @return bool|string
+     */
     public function request($type, $url, $data = null, $contentType = 'json', $headers = null)
     {
         //Create cache key as a reference
@@ -130,7 +147,6 @@ class Curl
      * @param  array $headers      Request headers
      * @return string              The cache key
      */
-
     public function createCacheKey($type, $url, $data = null, $contentType = 'json', $headers = null)
     {
         $this->cacheKey = "curl_cache_".md5($type.$url.(is_array($data) ? implode($data, "") : $data).$contentType.(is_array($headers) ? implode($headers, "") : $headers));

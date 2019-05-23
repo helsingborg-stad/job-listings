@@ -2,6 +2,10 @@
 
 namespace JobListings\Entity;
 
+/**
+ * Class Taxonomy
+ * @package JobListings\Entity
+ */
 class Taxonomy
 {
     public $namePlural;
@@ -10,6 +14,14 @@ class Taxonomy
     public $args;
     public $postTypes;
 
+    /**
+     * Taxonomy constructor.
+     * @param $namePlural
+     * @param $nameSingular
+     * @param $slug
+     * @param $postTypes
+     * @param $args
+     */
     public function __construct($namePlural, $nameSingular, $slug, $postTypes, $args)
     {
         $this->namePlural = $namePlural;
@@ -21,6 +33,9 @@ class Taxonomy
         add_action('init', array($this, 'registerTaxonomy'));
     }
 
+    /**
+     * @return string
+     */
     public function registerTaxonomy() : string
     {
         $labels = array(

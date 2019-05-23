@@ -2,13 +2,24 @@
 
 namespace JobListings\Admin;
 
+/**
+ * Class Settings
+ * @package JobListings\Admin
+ */
 class Settings
 {
+
+    /**
+     * Settings constructor.
+     */
     public function __construct()
     {  
         add_action('acf/init', array($this, 'registerSettingsPage')); 
     }
 
+    /**
+     * register settings page
+     */
     public function registerSettingsPage() {
         //Check if acf pro
         if (!function_exists('acf_add_options_sub_page')) {

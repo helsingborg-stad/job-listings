@@ -2,8 +2,15 @@
 
 namespace JobListings;
 
+/**
+ * Class App
+ * @package JobListings
+ */
 class App
 {
+    /**
+     * App constructor.
+     */
     public function __construct()
     {
         new \JobListings\Entity\PostType(__('Jobs', 'job-listings'), __('Job', 'job-listings'), 'job-listing', array(
@@ -27,6 +34,10 @@ class App
         add_filter('Municipio/blade/view_paths', array($this, 'includePluginTemplates'), 10);
     }
 
+    /**
+     * @param $paths
+     * @return array
+     */
     public function includePluginTemplates($paths)
     {
         $paths[] = JOBLISTINGS_PATH . 'views';
