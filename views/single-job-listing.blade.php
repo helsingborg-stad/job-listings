@@ -18,6 +18,8 @@
                         {!! the_post() !!}
                         <?php
 
+                        //Fetching Postmeta
+                        // Diffing dates
                         $postMeta = get_post_meta(get_the_ID());
                         global $post;
 
@@ -27,6 +29,7 @@
                                 strpos($postMeta['application_end_date'][0], "T")));
                             $diff = date_diff($todaysDate, $endDate);
                         }
+
 
                         ?>
                         <div class="grid">
