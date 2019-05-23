@@ -83,39 +83,45 @@
                             <?php $postNum = 0;?>
                             <table class="table table-striped table-hover">
                                 <tr>
-                                    <th><?php _e('Position','job-listings'); ?></th>
-                                    <th><?php _e('Published','job-listings'); ?></th>
-                                    <th><?php _e('Apply by','job-listings'); ?></th>
+                                    <th><?php _e('Position', 'job-listings'); ?></th>
+                                    <th><?php _e('Published', 'job-listings'); ?></th>
+                                    <th><?php _e('Apply by', 'job-listings'); ?></th>
                                 </tr>
 
                                 @while(have_posts())
                                     <tr>
                                         {!! the_post() !!}
-                                        <?php $postMeta = get_post_meta(get_the_ID()); ?>
-                                        @if (in_array($template, array('full', 'compressed', 'collapsed', 'horizontal-cards')))
-                                            <td>
-                                                <a href="{{ the_permalink() }}"
-                                                   class="box box-news box-news-horizontal">
-                                                    <h3 class="text-highlight">{{ the_title() }}</h3>
-                                                </a>
-                                            <td><?php if ($postMeta['publish_start_date']) {
-                                                    echo substr($postMeta['publish_start_date'][0], 0,
-                                                        strpos($postMeta['publish_start_date'][0], "T"));
-                                                } ?></td>
-                                            </td>
-                                            <td>
-                                                <?php if ($postMeta['application_end_date']) {
-                                                    echo substr($postMeta['application_end_date'][0], 0,
-                                                        strpos($postMeta['application_end_date'][0], "T"));
-                                                } ?>
-                                            </td>
-
+                                        <?php
+                                        $postMeta = get_post_meta(get_the_ID());
+                                        ?>
+                                        @if($postMeta !== null)
+                                            @if (in_array($template, array('full', 'compressed', 'collapsed', 'horizontal-cards')))
+                                                <td>
+                                                    <a href="{{ the_permalink() }}"
+                                                       class="box box-news box-news-horizontal">
+                                                        <h3 class="text-highlight">{{ the_title() }}</h3>
+                                                    </a>
+                                                <td>
+                                                    @if(isset($postMeta['publish_start_date'][0]) && !empty($postMeta['publish_start_date'][0]))
+                                                        {{substr($postMeta['publish_start_date'][0], 0,
+                                                            strpos($postMeta['publish_start_date'][0], "T"))}}
+                                                    @endif
+                                                </td>
+                                                </td>
+                                                <td>
+                                                    @if(isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
+                                                        @if(date('Y-m-d') > substr($postMeta['application_end_date'][0], 0,
+                                                            strpos($postMeta['application_end_date'][0], "T")))
+                                                                Ansökninsdag har passerat.
+                                                        @else
+                                                            {{substr($postMeta['application_end_date'][0], 0,
+                                                            strpos($postMeta['application_end_date'][0], "T"))}}
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                            @endif
                                     </tr>
-
-                                    @else
-                                        @include('partials.blog.type.post-' . $template)
                                     @endif
-
                                     <?php $postNum++; ?>
                                 @endwhile
                             </table>

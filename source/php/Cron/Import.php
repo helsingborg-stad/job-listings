@@ -16,7 +16,7 @@ class Import
     private $baseNode = "Assignments";
     private $subNode = "Assignment";
 
-    private $cacheTTL = 60*60; //Minutes
+    private $cacheTTL = 60 * 60; //Minutes
 
     /**
      * Import constructor.
@@ -36,8 +36,9 @@ class Import
     /**
      * Schedule Cron
      */
-    public function scheduleCronJob() {
-        if (!wp_next_scheduled ('import_avalable_job_list')) {
+    public function scheduleCronJob()
+    {
+        if (!wp_next_scheduled('import_avalable_job_list')) {
             wp_schedule_event(time(), 'twicedaily', 'import_avalable_job_list');
         }
     }
@@ -45,8 +46,9 @@ class Import
     /**
      * import XML trigger
      */
-    public function importXmlTrigger() {
-        if(isset($_GET['jobListingImport'])) {
+    public function importXmlTrigger()
+    {
+        if (isset($_GET['jobListingImport'])) {
             $this->importXml();
             //die("Stuff has been imported.");
         }
@@ -57,20 +59,24 @@ class Import
      * @param $data
      * @return array|bool
      */
-    public function objectToArray($data) {
-        if ((! is_array($data)) and (! is_object($data))) {
+    public function objectToArray($data)
+    {
+        if ((!is_array($data)) and (!is_object($data))) {
             return false;
         }
 
         $result = array();
 
-        $data = (array) $data;
+        $data = (array)$data;
         foreach ($data as $key => $value) {
-            if (is_object($value)) $value = (array) $value;
-            if (is_array($value))
+            if (is_object($value)) {
+                $value = (array)$value;
+            }
+            if (is_array($value)) {
                 $result[$key] = $this->objectToArray($value);
-            else
+            } else {
                 $result[$key] = $value;
+            }
         }
 
         return $result;
@@ -80,7 +86,8 @@ class Import
      * Import XML
      * @return bool|null
      */
-    public function importXml() {
+    public function importXml()
+    {
 
         //Get curl helper
         $curl = new \JobListings\Helper\Curl(true, $this->cacheTTL);
@@ -97,17 +104,19 @@ class Import
         //Create array with simple xml
         try {
             $data = simplexml_load_string($data);
-        } catch(Exception $e) {
-            if(!strstr($e->getMessage(), 'XML')) throw $e;
+        } catch (Exception $e) {
+            if (!strstr($e->getMessage(), 'XML')) {
+                throw $e;
+            }
         }
 
         //Get main node
-        $data = json_decode(json_encode($data->{$this->baseNode}), FALSE)->{$this->subNode};
+        $data = json_decode(json_encode($data->{$this->baseNode}), false)->{$this->subNode};
 
         //Conve
 
         //Check if valid list, update jobs
-        if(isset($data) && !empty($data)) {
+        if (isset($data) && !empty($data)) {
 
             foreach ($data as $item) {
                 if ($item) {
@@ -120,7 +129,8 @@ class Import
         return null; //Unsuccessfull, no new data
     }
 
-    function getArrayDepth($array) {
+    function getArrayDepth($array)
+    {
         $max_indentation = 1;
         $array_str = print_r($array, true);
         $lines = explode("\n", $array_str);
@@ -139,8 +149,9 @@ class Import
      * @param $item
      * @return bool
      */
-    private function updateItem($item) {
-        if(isset($item) && is_object($item) && !empty($item)) {
+    private function updateItem($item)
+    {
+        if (isset($item) && is_object($item) && !empty($item)) {
 
             //Create Response object
             $dataObject = array();
@@ -148,35 +159,36 @@ class Import
             //Gather data
             foreach ($this->metaKeyMap() as $key => $target) {
 
-                if(count($target) == 1) {
+                if (count($target) == 1) {
                     $val = $item->{$target[0]};
                 }
 
-                if(count($target) == 2) {
+                if (count($target) == 2) {
                     $val = $item->{$target[0]}->{$target[1]};
                 }
 
-                if(count($target) == 3) {
+                if (count($target) == 3) {
                     $val = $item->{$target[0]}->{$target[1]}->{$target[2]};
                 }
 
-                if(count($target) == 4) {
+                if (count($target) == 4) {
                     $val = $item->{$target[0]}->{$target[1]}->{$target[2]}->{$target[3]};
                 }
 
                 $dataObject[$key] = $val;
 
-                if(count($target) == 5) {
+                if (count($target) == 5) {
                     if ($key === 'occupationclassifications' || $key === 'departments') {
 
                         $val = $this->objectToArray($item->{$target[0]}->{$target[1]}->{$target[2]}->{$target[3]});
-                        if(is_array($val)) {
+                        if (is_array($val)) {
 
-                            for($int=0; $int<count($val); $int++){
+                            for ($int = 0; $int < count($val); $int++) {
                                 if ($this->getArrayDepth($val) > 2) {
-                                    $dataObject[$key.'_'.$int] = ucfirst(strtolower($val[$int]['Name']));
+                                    $dataObject[$key] = ucfirst(mb_strtolower($val[$int]['Name']));
+
                                 } else {
-                                    $dataObject[$key.'_'.$int] = ucfirst(strtolower($val['Name']));
+                                    $dataObject[$key] = ucfirst(mb_strtolower($val['Name']));
                                 }
                             }
                         }
@@ -191,7 +203,7 @@ class Import
                     'value' => $dataObject['uuid']
                 )
             );
-            
+
             $postId = $postObject->ID;
 
             //Not existing, create new
@@ -201,6 +213,7 @@ class Import
                         'post_title' => $dataObject['post_title'],
                         'post_content' => $dataObject['post_content'],
                         'post_type' => $this->postType,
+
                         'post_status' => 'publish'
                     )
                 );
@@ -215,7 +228,7 @@ class Import
                 );
 
                 //Diff data
-                if(count(array_unique($updateDiff)) != count($updateDiff)) {
+                if (count(array_unique($updateDiff)) != count($updateDiff)) {
                     wp_update_post(
                         array(
                             'ID' => $postId,
@@ -227,29 +240,16 @@ class Import
             }
 
             //Update if there is data
-            if(is_array($dataObject) && !empty($dataObject)) {
-                foreach($dataObject as $metaKey => $metaValue) {
+            if (is_array($dataObject) && !empty($dataObject)) {
+                foreach ($dataObject as $metaKey => $metaValue) {
 
-                    if($metaKey == "") {
+                    if ($metaKey == "") {
                         continue;
                     }
 
-                    if ($dataObject[$metaKey] == 'departments' || $dataObject[$metaKey] == 'occupationclassifications') {
-
-                        var_dump($metaValue[$metaKey]);
-
-                        if($metaValue != get_post_meta($postId, $metaKey, true)) {
-                            for($int=0; $int<count($metaValue); $int++){
-                                update_post_meta($postId, $metaKey, $dataObject[$metaKey][$int]);
-                            }
-
-                        }
-                    } else {
-                        if($metaValue != get_post_meta($postId, $metaKey, true)) {
-                            update_post_meta($postId, $metaKey, $metaValue);
-                        }
+                    if ($metaValue != get_post_meta($postId, $metaKey, true)) {
+                        update_post_meta($postId, $metaKey, $metaValue);
                     }
-
                 }
             }
 
@@ -263,7 +263,8 @@ class Import
      * Key map
      * @return array
      */
-    private function metaKeyMap() {
+    private function metaKeyMap()
+    {
         return array(
             'uuid' => array("@attributes", "AssignmentId"),
             'guid' => array("Guid"),
@@ -286,7 +287,13 @@ class Import
             'employment_type' => array("Localization", "AssignmentLoc", "EmploymentType", "Name"),
             'employment_grade' => array("Localization", "AssignmentLoc", "EmploymentGrade", "Name"),
             'departments' => array("Localization", "AssignmentLoc", "Departments", "Department", "Name"),
-            'occupationclassifications' => array("Localization", "AssignmentLoc", "OccupationClassifications", "OccupationClassification", "Name"),
+            'occupationclassifications' => array(
+                "Localization",
+                "AssignmentLoc",
+                "OccupationClassifications",
+                "OccupationClassification",
+                "Name"
+            ),
 
 
             //'departments' => array("Localization", "AssignmentLoc", "Departments", "Department", "Name")
@@ -299,7 +306,8 @@ class Import
      * @param $search
      * @return mixed|null
      */
-    private function getPost($search) {
+    private function getPost($search)
+    {
 
         $post = get_posts(
             array(
@@ -315,7 +323,7 @@ class Import
             )
         );
 
-        if(!empty($post) && is_array($post)) {
+        if (!empty($post) && is_array($post)) {
             return array_pop($post);
         }
 
