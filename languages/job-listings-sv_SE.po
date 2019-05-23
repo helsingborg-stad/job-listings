@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Job Listings\n"
-"POT-Creation-Date: 2019-05-23 15:47+0200\n"
-"PO-Revision-Date: 2019-05-23 15:47+0200\n"
+"POT-Creation-Date: 2019-05-23 16:02+0200\n"
+"PO-Revision-Date: 2019-05-23 16:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -133,52 +133,55 @@ msgstr "Ansök senast"
 msgid "No posts to show"
 msgstr "Inga poster att visa"
 
-#: views/single-job-listing.blade.php:43 views/single-job-listing.blade.php:144
-msgid "The application period has ended"
-msgstr "Ansökningstiden har gått ut."
+#: views/single-job-listing.blade.php:33
+msgid "day left"
+msgstr "dag kvar"
 
-#: views/single-job-listing.blade.php:47 views/single-job-listing.blade.php:150
-msgid "Apply here, "
-msgstr "Ansök här,"
-
-#: views/single-job-listing.blade.php:49 views/single-job-listing.blade.php:87
-#: views/single-job-listing.blade.php:152
+#: views/single-job-listing.blade.php:35
 msgid "days left"
 msgstr "dagar kvar"
 
-#: views/single-job-listing.blade.php:84
+#: views/single-job-listing.blade.php:49 views/single-job-listing.blade.php:148
+msgid "The application period has ended"
+msgstr "Ansökningstiden har gått ut."
+
+#: views/single-job-listing.blade.php:53 views/single-job-listing.blade.php:154
+msgid "Apply here, "
+msgstr "Ansök här,"
+
+#: views/single-job-listing.blade.php:89
 msgid "Deadline for applications:"
 msgstr "Sista ansökningsdatum:"
 
-#: views/single-job-listing.blade.php:93
+#: views/single-job-listing.blade.php:97
 msgid "Ref nr:"
 msgstr "Ref nr:"
 
-#: views/single-job-listing.blade.php:99
+#: views/single-job-listing.blade.php:103
 msgid "Published:"
 msgstr "Publicerad:"
 
-#: views/single-job-listing.blade.php:106
+#: views/single-job-listing.blade.php:110
 msgid "Number of applicants:"
 msgstr "Antal tjänster:"
 
-#: views/single-job-listing.blade.php:112
+#: views/single-job-listing.blade.php:116
 msgid "Experience:"
 msgstr "Erfarenhet:"
 
-#: views/single-job-listing.blade.php:118
+#: views/single-job-listing.blade.php:122
 msgid "Employee:"
 msgstr "Anställningsform:"
 
-#: views/single-job-listing.blade.php:124
+#: views/single-job-listing.blade.php:128
 msgid "Extent:"
 msgstr "Omfattning:"
 
-#: views/single-job-listing.blade.php:130
+#: views/single-job-listing.blade.php:134
 msgid "Municipality:"
 msgstr "Kommun:"
 
-#: views/single-job-listing.blade.php:136
+#: views/single-job-listing.blade.php:140
 msgid "Company:"
 msgstr "Förvaltning:"
 

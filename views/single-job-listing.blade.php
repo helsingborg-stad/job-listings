@@ -28,6 +28,12 @@
                             $endDate = date_create(substr($postMeta['application_end_date'][0], 0,
                                 strpos($postMeta['application_end_date'][0], "T")));
                             $diff = date_diff($todaysDate, $endDate);
+                            $daysLeft = $diff->format("%r%a") . " ";
+                            if ($daysLeft === 1) {
+                                $daysLeft .= _e('day left', 'job-listings');
+                            } else {
+                                $daysLeft .= _e('days left', 'job-listings');
+                            }
                         }
 
 
@@ -46,8 +52,7 @@
                                             <a class="btn btn-lg btn-block btn-primary btn-outline" href="{{get_field('apply_button_url',
                                             'option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ',
                                                     'job-listings'); ?>
-                                                ({{$diff->format("%r%a")}} <?php _e('days left', 'job-listings'); ?>
-                                                ) </a>
+                                                ({{$daysLeft}}) </a>
                                         @endif
                                     @endif
                                     <br/>
@@ -84,8 +89,7 @@
                                 <b><?php _e('Deadline for applications:', 'job-listings'); ?></b><br/>
                                 {{substr($postMeta['application_end_date'][0], 0,
                                             strpos($postMeta['application_end_date'][0], "T"))}}
-                                <span class="text-sm">({{$diff->format("%r%a")}} <?php _e('days left',
-                                        'job-listings'); ?>)</span>
+                                <span class="text-sm">({{$daysLeft}})</span>
                                 <br/><br/>
                             @endif
 
@@ -149,7 +153,7 @@
                                        class="btn btn-lg btn-block btn-primary btn-outline"
                                        href="{{get_field('apply_button_url','option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ',
                                             'job-listings'); ?>
-                                        ({{$diff->format("%r%a")}} <?php _e('days left', 'job-listings'); ?>)
+                                        ({{$daysLeft}})
                                     </a>
                                 @endif
                             @endif
