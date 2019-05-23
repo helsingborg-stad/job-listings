@@ -21,10 +21,12 @@
                         $postMeta = get_post_meta(get_the_ID());
                         global $post;
 
-                        $todaysDate = date_create(date('Y-m-d'));
-                        $endDate = date_create(substr($postMeta['application_end_date'][0], 0,
-                            strpos($postMeta['application_end_date'][0], "T")));
-                        $diff = date_diff($todaysDate, $endDate);
+                        if (isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0])) {
+                            $todaysDate = date_create(date('Y-m-d'));
+                            $endDate = date_create(substr($postMeta['application_end_date'][0], 0,
+                                strpos($postMeta['application_end_date'][0], "T")));
+                            $diff = date_diff($todaysDate, $endDate);
+                        }
 
                         ?>
                         <div class="grid">
@@ -32,14 +34,18 @@
                                 <div class="post post-single">
 
                                     @include('partials.blog.post-header')
-                                    @if ($postMeta['application_end_date'][0] < date('Y-m-d'))
-                                        <button class="btn btn-lg btn-contrasted disabled btn-block">
-                                            <?php _e('The application period has ended','job-listings'); ?>
-                                        </button>
-                                    @else
-                                        <a class="btn btn-lg btn-block btn-primary btn-outline" href="{{get_field('apply_button_url',
-                                            'option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ','job-listings'); ?>
-                                            ({{$diff->format("%r%a")}} <?php _e('days left','job-listings'); ?>) </a>
+                                    @if (isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
+                                        @if ($postMeta['application_end_date'][0] < date('Y-m-d'))
+                                            <button class="btn btn-lg btn-contrasted disabled btn-block">
+                                                <?php _e('The application period has ended', 'job-listings'); ?>
+                                            </button>
+                                        @else
+                                            <a class="btn btn-lg btn-block btn-primary btn-outline" href="{{get_field('apply_button_url',
+                                            'option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ',
+                                                    'job-listings'); ?>
+                                                ({{$diff->format("%r%a")}} <?php _e('days left', 'job-listings'); ?>
+                                                ) </a>
+                                        @endif
                                     @endif
                                     <br/>
                                     <article class="u-mb-5" id="article">
@@ -71,57 +77,78 @@
                     <div class="box box-card">
                         <div class="box-content">
 
+                            @if (isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
+                                <b><?php _e('Deadline for applications:', 'job-listings'); ?></b><br/>
+                                {{substr($postMeta['application_end_date'][0], 0,
+                                            strpos($postMeta['application_end_date'][0], "T"))}}
+                                <span class="text-sm">({{$diff->format("%r%a")}} <?php _e('days left',
+                                        'job-listings'); ?>)</span>
+                                <br/><br/>
+                            @endif
 
-                            <b><?php _e('Deadline for applications:','job-listings'); ?></b><br/>
-                            {{substr($postMeta['application_end_date'][0], 0,
-                                        strpos($postMeta['application_end_date'][0], "T"))}}
-                            <span class="text-sm">({{$diff->format("%r%a")}} <?php _e('days left','job-listings'); ?>)</span>
-                            <br/><br/>
-                            <b><?php _e('Ref nr:','job-listings'); ?></b><br/>
-                            {{$postMeta['ad_reference_nbr'][0]}}
-                            <br/><br/>
-                            <b><?php _e('Published:','job-listings'); ?></b><br/>
-                            {{substr($postMeta['publish_start_date'][0], 0,
-                                      strpos($postMeta['publish_start_date'][0], "T"))}}
-                            <br/><br/>
+                            @if (isset($postMeta['ad_reference_nbr'][0]) && !empty($postMeta['ad_reference_nbr'][0]))
+                                <b><?php _e('Ref nr:', 'job-listings'); ?></b><br/>
+                                {{$postMeta['ad_reference_nbr'][0]}}
+                                <br/><br/>
+                            @endif
 
-                            <b><?php _e('Number of applicants:','job-listings'); ?></b><br/>
-                            {{$postMeta['number_of_positions'][0]}}
+                            @if (isset($postMeta['publish_start_date'][0]) && !empty($postMeta['publish_start_date'][0]))
+                                <b><?php _e('Published:', 'job-listings'); ?></b><br/>
+                                {{substr($postMeta['publish_start_date'][0], 0,
+                                          strpos($postMeta['publish_start_date'][0], "T"))}}
+                                <br/><br/>
+                            @endif
 
-                            <br/><br/>
-                            <b><?php _e('Experience:','job-listings'); ?></b><br/>
-                            {{$postMeta['work_experience'][0]}}
+                            @if (isset($postMeta['number_of_positions'][0]) && !empty($postMeta['number_of_positions'][0]))
+                                <b><?php _e('Number of applicants:', 'job-listings'); ?></b><br/>
+                                {{$postMeta['number_of_positions'][0]}}
+                                <br/><br/>
+                            @endif
 
-                            <br/><br/>
-                            <b><?php _e('Employee:','job-listings'); ?></b><br/>
-                            {{$postMeta['employment_type'][0]}}
+                            @if (isset($postMeta['work_experience'][0]) && !empty($postMeta['work_experience'][0]))
+                                <b><?php _e('Experience:', 'job-listings'); ?></b><br/>
+                                {{$postMeta['work_experience'][0]}}
+                                <br/><br/>
+                            @endif
 
-                            <br/><br/>
-                            <b><?php _e('Extent:','job-listings'); ?></b><br/>
-                            {{$postMeta['employment_grade'][0]}}
+                            @if (isset($postMeta['employment_type'][0]) && !empty($postMeta['employment_type'][0]))
+                                <b><?php _e('Employee:', 'job-listings'); ?></b><br/>
+                                {{$postMeta['employment_type'][0]}}
+                                <br/><br/>
+                            @endif
 
-                            <br/><br/>
-                            <b><?php _e('Municipality:','job-listings'); ?></b><br/>
-                            {{$postMeta['location_name'][0]}}
-                            <br/><br/>
+                            @if (isset($postMeta['employment_grade'][0]) && !empty($postMeta['employment_grade'][0]))
+                                <b><?php _e('Extent:', 'job-listings'); ?></b><br/>
+                                {{$postMeta['employment_grade'][0]}}
+                                <br/><br/>
+                            @endif
+
+                            @if (isset($postMeta['employment_grade'][0]) && !empty($postMeta['employment_grade'][0]))
+                                <b><?php _e('Municipality:', 'job-listings'); ?></b><br/>
+                                {{$postMeta['location_name'][0]}}
+                                <br/><br/>
+                            @endif
 
                             @if(isset($postMeta['departments'][0]) && !empty($postMeta['departments'][0]))
-                                <b><?php _e('Company:','job-listings'); ?></b><br/>
+                                <b><?php _e('Company:', 'job-listings'); ?></b><br/>
                                 {{ucfirst(mb_strtolower($postMeta['departments'][0]))}}
                                 <br/><br/>
                             @endif
 
-                            @if ($postMeta['application_end_date'][0] < date('Y-m-d'))
-                                <button class="btn btn-lg btn-contrasted disabled btn-block">
-                                <?php _e('The application period has ended','job-listings'); ?>
-                                </button>
-                            @else
+                            @if(isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
+                                @if ($postMeta['application_end_date'][0] < date('Y-m-d'))
+                                    <button class="btn btn-lg btn-contrasted disabled btn-block">
+                                        <?php _e('The application period has ended', 'job-listings'); ?>
+                                    </button>
+                                @else
 
-                                <a target="_blank"
-                                   class="btn btn-lg btn-block btn-primary btn-outline"
-                                   href="{{get_field('apply_button_url','option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ','job-listings'); ?>
-                                    ({{$diff->format("%r%a")}} <?php _e('days left','job-listings'); ?>)
-                                </a>
+                                    <a target="_blank"
+                                       class="btn btn-lg btn-block btn-primary btn-outline"
+                                       href="{{get_field('apply_button_url','option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ',
+                                            'job-listings'); ?>
+                                        ({{$diff->format("%r%a")}} <?php _e('days left', 'job-listings'); ?>)
+                                    </a>
+                                @endif
                             @endif
                         </div>
                     </div>
