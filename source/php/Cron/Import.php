@@ -250,15 +250,14 @@ class Import
                 }
             }
 
+            // Taxonomies - Work categories
             if (isset($dataObject['occupationclassifications']) && !empty($dataObject['occupationclassifications'])) {
 
-                if (strlen($dataObject['occupationclassifications']) > 32) {
-                    $dataObject['occupationclassifications'] = substr($dataObject['occupationclassifications'], 0,
-                            29) . '...';
-                }
-                $term = term_exists( $dataObject['occupationclassifications'], 'job-listing-category' );
-          
-                if ( 0 === $term || null === $term ) {
+                // Checking terms
+                $term = term_exists($dataObject['occupationclassifications'], 'job-listing-category');
+
+                if (0 === $term || null === $term) {
+                    // Adding terms
                     $term = wp_insert_term(
                         $dataObject['occupationclassifications'],
                         'job-listing-category',
@@ -271,6 +270,7 @@ class Import
                     $term = $dataObject['occupationclassifications'];
                 }
 
+                // Connecting term to post
                 wp_set_post_terms($postId, $term, 'job-listing-category', true);
 
             }
