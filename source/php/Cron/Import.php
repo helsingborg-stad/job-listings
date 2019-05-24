@@ -252,23 +252,32 @@ class Import
 
             if (isset($dataObject['occupationclassifications']) && !empty($dataObject['occupationclassifications'])) {
 
-                if(strlen($dataObject['occupationclassifications']) > 32) {
-                    $dataObject[$key] =  substr($dataObject[$key], 0, 29).'...';
+                if (strlen($dataObject['occupationclassifications']) > 32) {
+                    $dataObject['occupationclassifications'] = substr($dataObject['occupationclassifications'], 0,
+                            29) . '...';
                 }
 
-                register_taxonomy(
+
+                new \JobListings\Entity\Taxonomy(
+                    'job-listing',
+                    'job-listings',
                     sanitize_title($dataObject['occupationclassifications']),
                     $this->postType,
                     array(
                         'label' => $dataObject['occupationclassifications'],
-                        'rewrite' => array('slug' => $dataObject['occupationclassifications']),
-                        'hierarchical' => false,
+                        'public' => true,
+                        'show_in_nav_menus' => true,
                         'show_admin_column' => true,
+                        'hierarchical' => false,
+                        'show_tagcloud' => false,
                         'show_ui' => true,
-                        'public' => true
+                        'query_var' => true,
+                        'rewrite' => true,
+                        'show_in_rest' => true,
                     )
                 );
-                wp_set_post_terms( $postId, false, sanitize_title($dataObject['occupationclassifications']),  true);
+
+                wp_set_post_terms($postId, true, sanitize_title($dataObject['occupationclassifications']), true);
             }
 
             //Update if there is data

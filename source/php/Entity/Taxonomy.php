@@ -30,13 +30,13 @@ class Taxonomy
         $this->args = $args;
         $this->postTypes = $postTypes;
 
-        add_action('init', array($this, 'registerTaxonomy'));
+        $this->registerTaxonomy();
     }
 
     /**
      * @return string
      */
-    public function registerTaxonomy() : string
+    public function registerTaxonomy()
     {
         $labels = array(
             'name'              => $this->namePlural,
@@ -55,7 +55,6 @@ class Taxonomy
         $this->args['labels'] = $labels;
 
         register_taxonomy($this->slug, $this->postTypes, $this->args);
-        
         return $this->slug;
     }
 }
