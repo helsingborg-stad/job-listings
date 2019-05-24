@@ -32,6 +32,27 @@ class App
         ));
 
         add_filter('Municipio/blade/view_paths', array($this, 'includePluginTemplates'), 10);
+
+        new \JobListings\Entity\Taxonomy(
+            __('Job categories', 'job-listings'),
+            __('Job category', 'job-listings'),
+            'job-listing-category',
+            'job-listing',
+            array(
+                'label' => __('Job Categories', 'job-listings'),
+                'public' => true,
+                'description' => '',
+                'show_in_nav_menus' => true,
+                'show_admin_column' => true,
+                'hierarchical' => false,
+                'show_tagcloud' => false,
+                'show_ui' => true,
+                'query_var' => true,
+                'rewrite' => true,
+                'show_in_rest' => true,
+            )
+        );
+
     }
 
     /**

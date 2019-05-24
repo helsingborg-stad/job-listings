@@ -256,28 +256,23 @@ class Import
                     $dataObject['occupationclassifications'] = substr($dataObject['occupationclassifications'], 0,
                             29) . '...';
                 }
+                $term = term_exists( $dataObject['occupationclassifications'], 'job-listing-category' );
+          
+                if ( 0 === $term || null === $term ) {
+                    $term = wp_insert_term(
+                        $dataObject['occupationclassifications'],
+                        'job-listing-category',
+                        array(
+                            'description' => $dataObject['occupationclassifications'],
+                            'slug' => sanitize_title($dataObject['occupationclassifications'])
+                        )
+                    );
+                } else {
+                    $term = $dataObject['occupationclassifications'];
+                }
 
-                new \JobListings\Entity\Taxonomy(
-                    __('Jobs', 'job-listings'),
-                    __('Job', 'job-listings'),
-                    sanitize_title($dataObject['occupationclassifications']),
-                    $this->postType,
-                    array(
-                        'label' => $dataObject['occupationclassifications'],
-                        'public' => true,
-                        'description' => $dataObject['occupationclassifications'],
-                        'show_in_nav_menus' => true,
-                        'show_admin_column' => true,
-                        'hierarchical' => false,
-                        'show_tagcloud' => false,
-                        'show_ui' => true,
-                        'query_var' => true,
-                        'rewrite' => array( 'slug' => sanitize_title($dataObject['occupationclassifications']) ),
-                        'show_in_rest' => true,
-                    )
-                );
+                wp_set_post_terms($postId, $term, 'job-listing-category', true);
 
-                wp_set_post_terms($postId, true, sanitize_title($dataObject['occupationclassifications']), true);
             }
 
             //Update if there is data

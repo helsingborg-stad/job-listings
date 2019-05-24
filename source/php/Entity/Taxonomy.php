@@ -30,7 +30,7 @@ class Taxonomy
         $this->args = $args;
         $this->postTypes = $postTypes;
 
-        $this->registerTaxonomy();
+        add_action('init', array($this, 'registerTaxonomy'), 10, 0);
     }
 
     /**
