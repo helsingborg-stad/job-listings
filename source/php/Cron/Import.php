@@ -186,12 +186,20 @@ class Import
                         $val = $this->objectToArray($item->{$target[0]}->{$target[1]}->{$target[2]}->{$target[3]});
                         if (is_array($val)) {
                             for ($int = 0; $int < count($val); $int++) {
+
                                 if ($this->getArrayDepth($val) > 2) {
-                                    $dataObject[$key] = ucfirst(mb_strtolower($val[$int]['Name']));
+                                    $level = $val[$int]['Level'];
+                                    if ($level == 2) {
+                                        $dataObject[$key] = ucfirst(mb_strtolower($val[$int]['Name']));
+                                    }
 
                                 } else {
-                                    $dataObject[$key] = ucfirst(mb_strtolower($val['Name']));
+                                    $level = $val['Level'];
+                                    if ($level == 2) {
+                                        $dataObject[$key] = ucfirst(mb_strtolower($val['Name']));
+                                    }
                                 }
+
                             }
                         }
                     }
@@ -219,6 +227,7 @@ class Import
                         'post_status' => 'publish'
                     )
                 );
+
             } else {
 
                 //Create diffable array
@@ -239,6 +248,27 @@ class Import
                         )
                     );
                 }
+            }
+
+            if (isset($dataObject['occupationclassifications']) && !empty($dataObject['occupationclassifications'])) {
+
+                if(strlen($dataObject['occupationclassifications']) > 32) {
+                    $dataObject[$key] =  substr($dataObject[$key], 0, 29).'...';
+                }
+
+                register_taxonomy(
+                    sanitize_title($dataObject['occupationclassifications']),
+                    $this->postType,
+                    array(
+                        'label' => $dataObject['occupationclassifications'],
+                        'rewrite' => array('slug' => $dataObject['occupationclassifications']),
+                        'hierarchical' => false,
+                        'show_admin_column' => true,
+                        'show_ui' => true,
+                        'public' => true
+                    )
+                );
+                wp_set_post_terms( $postId, false, sanitize_title($dataObject['occupationclassifications']),  true);
             }
 
             //Update if there is data
@@ -295,7 +325,7 @@ class Import
                 "OccupationClassifications",
                 "OccupationClassification",
                 "Name"
-            ),
+            )
         );
     }
 
