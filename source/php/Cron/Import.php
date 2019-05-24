@@ -257,22 +257,22 @@ class Import
                             29) . '...';
                 }
 
-
                 new \JobListings\Entity\Taxonomy(
-                    'job-listing',
-                    'job-listings',
+                    __('Jobs', 'job-listings'),
+                    __('Job', 'job-listings'),
                     sanitize_title($dataObject['occupationclassifications']),
                     $this->postType,
                     array(
                         'label' => $dataObject['occupationclassifications'],
                         'public' => true,
+                        'description' => $dataObject['occupationclassifications'],
                         'show_in_nav_menus' => true,
                         'show_admin_column' => true,
                         'hierarchical' => false,
                         'show_tagcloud' => false,
                         'show_ui' => true,
                         'query_var' => true,
-                        'rewrite' => true,
+                        'rewrite' => array( 'slug' => sanitize_title($dataObject['occupationclassifications']) ),
                         'show_in_rest' => true,
                     )
                 );
