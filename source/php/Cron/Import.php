@@ -189,15 +189,29 @@ class Import
 
                                 if ($this->getArrayDepth($val) > 2) {
                                     $level = $val[$int]['Level'];
-                                    if ($level == 1) {
-                                        $dataObject[$key] = $val[$int]['Name'];
+                                    if ($key === 'departments') {
+                                        if ($level == 2) {
+                                            $dataObject[$key] = $val[$int]['Name'];
+                                        }
+                                    } else {
+                                        if ($level == 1) {
+                                            $dataObject[$key] = $val[$int]['Name'];
+                                        }
                                     }
 
                                 } else {
                                     $level = $val['Level'];
-                                    if ($level == 1) {
-                                        $dataObject[$key] = $val['Name'];
+                                    if ($key === 'departments') {
+                                        if ($level == 3) {
+                                            $dataObject[$key] = $val['Name'];
+                                        }
+                                    } else {
+                                        if ($level == 1) {
+                                            $dataObject[$key] = $val['Name'];
+                                        }
                                     }
+
+
                                 }
 
                             }

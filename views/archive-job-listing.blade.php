@@ -84,8 +84,8 @@
                             <table class="table table-striped table-hover table-lg">
                                 <tr>
                                     <th><?php _e('Position', 'job-listings'); ?></th>
-                                    <th><?php _e('Published', 'job-listings'); ?></th>
-                                    <th><?php _e('Apply by', 'job-listings'); ?></th>
+                                    <th class="hidden-sm hidden-xs"><?php _e('Published', 'job-listings'); ?></th>
+                                    <th class="hidden-sm hidden-xs"><?php _e('Apply by', 'job-listings'); ?></th>
                                 </tr>
 
                                 @while(have_posts())
@@ -102,15 +102,40 @@
                                                     <a href="{{ the_permalink() }}"
                                                        class="box box-news box-news-horizontal">
                                                         {{ the_title() }}
+                                                        <span class="hidden-lg hidden-md text-sm">
+                                                            <br />
+                                                            <?php _e('Published', 'job-listings'); ?>:
+
+                                                            @if(isset($postMeta['publish_start_date'][0]) && !empty($postMeta['publish_start_date'][0]))
+                                                                {{substr($postMeta['publish_start_date'][0], 0,
+                                                                    strpos($postMeta['publish_start_date'][0], "T"))}}
+                                                            @endif
+
+                                                        </span>
+                                                        <span class="hidden-lg hidden-md text-sm">
+                                                            <br />
+                                                            <?php _e('Apply by', 'job-listings'); ?>:
+                                                            @if(isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
+
+                                                                @if(date('Y-m-d') > substr($postMeta['application_end_date'][0], 0,
+                                                                    strpos($postMeta['application_end_date'][0], "T")))
+                                                                    Ansökninsdag har passerat.
+                                                                @else
+                                                                    {{substr($postMeta['application_end_date'][0], 0,
+                                                                    strpos($postMeta['application_end_date'][0], "T"))}}
+                                                                @endif
+
+                                                            @endif
+                                                        </span>
                                                     </a>
-                                                <td>
+                                                <td class="hidden-sm hidden-xs">
                                                     @if(isset($postMeta['publish_start_date'][0]) && !empty($postMeta['publish_start_date'][0]))
                                                         {{substr($postMeta['publish_start_date'][0], 0,
                                                             strpos($postMeta['publish_start_date'][0], "T"))}}
                                                     @endif
                                                 </td>
                                                 </td>
-                                                <td>
+                                                <td class="hidden-sm hidden-xs">
                                                     @if(isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
                                                         @if(date('Y-m-d') > substr($postMeta['application_end_date'][0], 0,
                                                             strpos($postMeta['application_end_date'][0], "T")))
