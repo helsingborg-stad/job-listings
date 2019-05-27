@@ -13,6 +13,8 @@ class App
      */
     public function __construct()
     {
+        add_action('wp_enqueue_style', array($this, 'enqueueStyles'));
+
         new \JobListings\Entity\PostType(__('Jobs', 'job-listings'), __('Job', 'job-listings'), 'job-listing', array(
             'description'          =>   __('Available jobs', 'job-listings'),
             'menu_icon'            =>   'dashicons-list-view',
@@ -71,7 +73,12 @@ class App
      */
     public function enqueueStyles()
     {
-        wp_register_style('job-listings-css', JOBLISTINGS_URL . '/dist/' . \JobListings\Helper\CacheBust::name('css/job-listings.css'));
+        if (file_exists(JOBLISTINGS_PATH . '/dist/' . Helper\CacheBust::name('css/job-listings.css'))) {
+            wp_register_style('job-listings-css',
+                JOBLISTINGS_URL . '/dist/' . \JobListings\Helper\CacheBust::name('css/job-listings.css'));
+        } else {
+            echo "----------WTF";
+        }
     }
 
     /**
