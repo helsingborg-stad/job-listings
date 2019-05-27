@@ -78,10 +78,10 @@
                             @include('partials.archive-filters')
                         </div>
                     @endif
-                    <div class="grid grid--columns">
+                    <div class="grid--columns">
                         @if (have_posts())
                             <?php $postNum = 0;?>
-                            <table class="table table-striped table-hover">
+                            <table class="table table-striped table-hover table-lg">
                                 <tr>
                                     <th><?php _e('Position', 'job-listings'); ?></th>
                                     <th><?php _e('Published', 'job-listings'); ?></th>
@@ -89,17 +89,19 @@
                                 </tr>
 
                                 @while(have_posts())
+                                    {!! the_post() !!}
+                                    <?php
+                                    $postMeta = get_post_meta(get_the_ID());
+                                    ?>
                                     <tr>
-                                        {!! the_post() !!}
-                                        <?php
-                                        $postMeta = get_post_meta(get_the_ID());
-                                        ?>
-                                        @if($postMeta !== null)
+
+                                        @if(isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]) && date('Y-m-d') < substr($postMeta['application_end_date'][0], 0,
+                                                            strpos($postMeta['application_end_date'][0], "T")))
                                             @if (in_array($template, array('full', 'compressed', 'collapsed', 'horizontal-cards')))
                                                 <td>
                                                     <a href="{{ the_permalink() }}"
                                                        class="box box-news box-news-horizontal">
-                                                        <h3 class="text-highlight">{{ the_title() }}</h3>
+                                                        {{ the_title() }}
                                                     </a>
                                                 <td>
                                                     @if(isset($postMeta['publish_start_date'][0]) && !empty($postMeta['publish_start_date'][0]))
