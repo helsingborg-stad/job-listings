@@ -191,7 +191,8 @@ class Import
                                     $level = $val[$int]['Level'];
                                     if ($key === 'departments') {
                                         if ($level == 2) {
-                                            $dataObject[$key] = $val[$int]['Name'];
+                                            $dataObject[$key] = ($val[$int]['Name'] != '' && $val[$int]['Name'] != null) ? $val[$int]['Name'] : '';
+
                                         }
                                     } else {
                                         if ($level == 1) {
@@ -202,8 +203,8 @@ class Import
                                 } else {
                                     $level = $val['Level'];
                                     if ($key === 'departments') {
-                                        if ($level == 3) {
-                                            $dataObject[$key] = $val['Name'];
+                                        if ($level == 2) {
+                                            $dataObject[$key] = ($val['Name'] != '' && $val['Name'] != null) ? $val['Name'] : '';
                                         }
                                     } else {
                                         if ($level == 1) {
