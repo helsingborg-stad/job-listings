@@ -51,9 +51,9 @@
                                                     'job-listings'); ?>
                                                 (
                                                 @if ($days > 1)
-                                                    {{$diff->format("%r%a")}} {{_e('days left', 'job-listings')}}
+                                                    {{$diff->format("%r%a")}} <?php _e('days left', 'job-listings'); ?>
                                                 @else
-                                                    {{$diff->format("%r%a")}} {{_e('day left', 'job-listings')}}
+                                                    {{$diff->format("%r%a")}} <?php _e('day left', 'job-listings'); ?>
                                                 @endif
                                                 ) </a>
                                         @endif
@@ -94,7 +94,7 @@
                                     {{substr($postMeta['application_end_date'][0], 0,
                                                 strpos($postMeta['application_end_date'][0], "T"))}}
                                     <span class="text-sm">(
-                                        {{$diff->format("%r%a")}} {{_e('days left', 'job-listings')}}
+                                        {{$diff->format("%r%a")}} <?php _e('days left', 'job-listings'); ?>
                                     )</span>
                                 @else
                                     {{substr($postMeta['application_end_date'][0], 0,
@@ -164,7 +164,7 @@
                                        href="{{get_field('apply_button_url','option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here, ',
                                             'job-listings'); ?>
                                         (
-                                        {{$diff->format("%r%a")}} {{_e('days left', 'job-listings')}}
+                                        {{$diff->format("%r%a")}} <?php _e('days left', 'job-listings'); ?>
                                         )
                                     </a>
                                 @endif

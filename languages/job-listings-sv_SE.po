@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Job Listings\n"
-"POT-Creation-Date: 2019-05-24 16:30+0200\n"
-"PO-Revision-Date: 2019-05-24 16:31+0200\n"
+"POT-Creation-Date: 2019-05-27 11:25+0200\n"
+"PO-Revision-Date: 2019-05-27 11:25+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -141,51 +141,60 @@ msgstr "Publicerad"
 msgid "Apply by"
 msgstr "Ansök senast"
 
-#: views/archive-job-listing.blade.php:130
+#: views/archive-job-listing.blade.php:132
 msgid "No posts to show"
 msgstr "Inga poster att visa"
 
-#: views/single-job-listing.blade.php:46 views/single-job-listing.blade.php:157
+#: views/single-job-listing.blade.php:46 views/single-job-listing.blade.php:158
 msgid "The application period has ended"
 msgstr "Ansökningstiden har gått ut."
 
-#: views/single-job-listing.blade.php:50 views/single-job-listing.blade.php:163
+#: views/single-job-listing.blade.php:50 views/single-job-listing.blade.php:164
 msgid "Apply here, "
 msgstr "Ansök här,"
+
+#: views/single-job-listing.blade.php:54 views/single-job-listing.blade.php:97
+#: views/single-job-listing.blade.php:167
+msgid "days left"
+msgstr "dagar kvar"
+
+#: views/single-job-listing.blade.php:56
+msgid "day left"
+msgstr "dag kvar"
 
 #: views/single-job-listing.blade.php:92
 msgid "Deadline for applications:"
 msgstr "Sista ansökningsdatum:"
 
-#: views/single-job-listing.blade.php:106
+#: views/single-job-listing.blade.php:107
 msgid "Ref nr:"
 msgstr "Ref nr:"
 
-#: views/single-job-listing.blade.php:112
+#: views/single-job-listing.blade.php:113
 msgid "Published:"
 msgstr "Publicerad:"
 
-#: views/single-job-listing.blade.php:119
+#: views/single-job-listing.blade.php:120
 msgid "Number of applicants:"
 msgstr "Antal tjänster:"
 
-#: views/single-job-listing.blade.php:125
+#: views/single-job-listing.blade.php:126
 msgid "Experience:"
 msgstr "Erfarenhet:"
 
-#: views/single-job-listing.blade.php:131
+#: views/single-job-listing.blade.php:132
 msgid "Employee:"
 msgstr "Anställningsform:"
 
-#: views/single-job-listing.blade.php:137
+#: views/single-job-listing.blade.php:138
 msgid "Extent:"
 msgstr "Omfattning:"
 
-#: views/single-job-listing.blade.php:143
+#: views/single-job-listing.blade.php:144
 msgid "Municipality:"
 msgstr "Kommun:"
 
-#: views/single-job-listing.blade.php:149
+#: views/single-job-listing.blade.php:150
 msgid "Company:"
 msgstr "Förvaltning:"
 
@@ -200,12 +209,6 @@ msgstr "(# Plugin_url #)"
 #. Author of the plugin/theme
 msgid "Nikolas Ramstedt, Sebastian Thulin & Johan Silvergrund"
 msgstr ""
-
-#~ msgid "day left"
-#~ msgstr "dag kvar"
-
-#~ msgid "days left"
-#~ msgstr "dagar kvar"
 
 #~ msgid "Importera från Visma"
 #~ msgstr "Importera från Visma"
