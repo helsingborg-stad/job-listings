@@ -152,7 +152,7 @@
                                 @if (isset($postMeta['employment_grade'][0]) && !empty($postMeta['employment_grade'][0]))
                                     <li><b><?php _e('Municipality:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['location_name'][0]}}</li>
-                                    
+
                                 @endif
 
                                 @if(isset($postMeta['departments'][0]) && !empty($postMeta['departments'][0]))
