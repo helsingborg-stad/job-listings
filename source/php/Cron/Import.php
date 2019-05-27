@@ -190,13 +190,13 @@ class Import
                                 if ($this->getArrayDepth($val) > 2) {
                                     $level = $val[$int]['Level'];
                                     if ($level == 1) {
-                                        $dataObject[$key] = ucfirst(mb_strtolower($val[$int]['Name']));
+                                        $dataObject[$key] = $val[$int]['Name'];
                                     }
 
                                 } else {
                                     $level = $val['Level'];
                                     if ($level == 1) {
-                                        $dataObject[$key] = ucfirst(mb_strtolower($val['Name']));
+                                        $dataObject[$key] = $val['Name'];
                                     }
                                 }
 
