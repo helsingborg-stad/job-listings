@@ -190,10 +190,11 @@ class Import
                                 if ($this->getArrayDepth($val) > 2) {
                                     $level = $val[$int]['Level'];
                                     if ($key === 'departments') {
-                                        if ($level == 2) {
-                                            $dataObject[$key] = ($val[$int]['Name'] != '' && $val[$int]['Name'] != null) ? $val[$int]['Name'] : '';
+                                        //if ($level == 2) {
+                                        $dataObject[$key] = ($level == 2 && $val[$int]['Name'] != '' &&
+                                            $val[$int]['Name'] != null) ? $val[$int]['Name'] : '';
 
-                                        }
+                                        //}
                                     } else {
                                         if ($level == 1) {
                                             $dataObject[$key] = $val[$int]['Name'];
@@ -203,9 +204,10 @@ class Import
                                 } else {
                                     $level = $val['Level'];
                                     if ($key === 'departments') {
-                                        if ($level == 2) {
-                                            $dataObject[$key] = ($val['Name'] != '' && $val['Name'] != null) ? $val['Name'] : '';
-                                        }
+                                        //if ($level == 2) {
+                                        $dataObject[$key] = ($level == 2 && $val['Name'] != '' &&
+                                            $val['Name'] != null) ? $val['Name'] : '';
+                                        //}
                                     } else {
                                         if ($level == 1) {
                                             $dataObject[$key] = $val['Name'];

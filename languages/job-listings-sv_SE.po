@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Job Listings\n"
-"POT-Creation-Date: 2019-05-27 11:25+0200\n"
-"PO-Revision-Date: 2019-05-27 11:25+0200\n"
+"POT-Creation-Date: 2019-05-27 14:24+0200\n"
+"PO-Revision-Date: 2019-05-27 14:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -44,27 +44,27 @@ msgstr "Importera jobb inställningar"
 msgid "Import settings"
 msgstr "Import inställningar"
 
-#: source/php/App.php:16
+#: source/php/App.php:18
 msgid "Jobs"
 msgstr "Jobb"
 
-#: source/php/App.php:16
+#: source/php/App.php:18
 msgid "Job"
 msgstr "Jobb"
 
-#: source/php/App.php:17
+#: source/php/App.php:19
 msgid "Available jobs"
 msgstr "Lediga jobb"
 
-#: source/php/App.php:37
+#: source/php/App.php:39
 msgid "Job categories"
 msgstr "Jobb kategorier"
 
-#: source/php/App.php:38
+#: source/php/App.php:40
 msgid "Job category"
 msgstr "Jobb kategori"
 
-#: source/php/App.php:42
+#: source/php/App.php:44
 msgid "Job Categories"
 msgstr "Jobb Kategorier"
 
@@ -134,69 +134,75 @@ msgid "Position"
 msgstr "Tjänst"
 
 #: views/archive-job-listing.blade.php:87
+#: views/archive-job-listing.blade.php:107
 msgid "Published"
 msgstr "Publicerad"
 
 #: views/archive-job-listing.blade.php:88
+#: views/archive-job-listing.blade.php:117
 msgid "Apply by"
 msgstr "Ansök senast"
 
-#: views/archive-job-listing.blade.php:132
+#: views/archive-job-listing.blade.php:157
 msgid "No posts to show"
 msgstr "Inga poster att visa"
 
-#: views/single-job-listing.blade.php:46 views/single-job-listing.blade.php:158
+#: views/single-job-listing.blade.php:46 views/single-job-listing.blade.php:156
 msgid "The application period has ended"
 msgstr "Ansökningstiden har gått ut."
 
-#: views/single-job-listing.blade.php:50 views/single-job-listing.blade.php:164
-msgid "Apply here, "
-msgstr "Ansök här,"
+#: views/single-job-listing.blade.php:50
+msgid "Apply here "
+msgstr "Ansök här "
 
-#: views/single-job-listing.blade.php:54 views/single-job-listing.blade.php:97
-#: views/single-job-listing.blade.php:167
+#: views/single-job-listing.blade.php:53 views/single-job-listing.blade.php:95
+#: views/single-job-listing.blade.php:165
 msgid "days left"
 msgstr "dagar kvar"
 
-#: views/single-job-listing.blade.php:56
+#: views/single-job-listing.blade.php:55
 msgid "day left"
 msgstr "dag kvar"
 
-#: views/single-job-listing.blade.php:92
+#: views/single-job-listing.blade.php:90
 msgid "Deadline for applications:"
 msgstr "Sista ansökningsdatum:"
 
-#: views/single-job-listing.blade.php:107
+#: views/single-job-listing.blade.php:105
 msgid "Ref nr:"
-msgstr "Ref nr:"
+msgstr "Referensnummer:"
 
-#: views/single-job-listing.blade.php:113
+#: views/single-job-listing.blade.php:111
 msgid "Published:"
 msgstr "Publicerad:"
 
-#: views/single-job-listing.blade.php:120
+#: views/single-job-listing.blade.php:118
 msgid "Number of applicants:"
 msgstr "Antal tjänster:"
 
-#: views/single-job-listing.blade.php:126
+#: views/single-job-listing.blade.php:124
 msgid "Experience:"
 msgstr "Erfarenhet:"
 
-#: views/single-job-listing.blade.php:132
+#: views/single-job-listing.blade.php:130
 msgid "Employee:"
 msgstr "Anställningsform:"
 
-#: views/single-job-listing.blade.php:138
+#: views/single-job-listing.blade.php:136
 msgid "Extent:"
 msgstr "Omfattning:"
 
-#: views/single-job-listing.blade.php:144
+#: views/single-job-listing.blade.php:142
 msgid "Municipality:"
 msgstr "Kommun:"
 
-#: views/single-job-listing.blade.php:150
+#: views/single-job-listing.blade.php:148
 msgid "Company:"
 msgstr "Förvaltning:"
+
+#: views/single-job-listing.blade.php:162
+msgid "Apply here, "
+msgstr "Ansök här,"
 
 #. Plugin Name of the plugin/theme
 msgid "Job Listings"

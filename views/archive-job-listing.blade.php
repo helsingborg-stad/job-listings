@@ -6,7 +6,7 @@
         @include('partials.archive-filters')
     @endif
 
-    <div class="container main-container">
+    <div class="container main-container job-listings">
         @include('partials.breadcrumbs')
 
         <div class="grid">
@@ -28,7 +28,7 @@
 
                 @if (get_field('archive_' . sanitize_title($postType) . '_title', 'option') || is_category() || is_date())
                     <div class="grid">
-                        <div class="grid-xs-12">
+                        <div class="grid-md-12">
                             @if (get_field('archive_' . sanitize_title($postType) . '_title', 'option'))
                                 @if (is_category())
                                     <h3>{{ get_field('archive_' . sanitize_title($postType) . '_title', 'option') }}
@@ -78,10 +78,10 @@
                             @include('partials.archive-filters')
                         </div>
                     @endif
-                    <div class="grid--columns">
+                    <div class="grid--columns grid">
                         @if (have_posts())
                             <?php $postNum = 0;?>
-                            <table class="table table-striped table-hover table-lg">
+                            <table class="table table-striped table-hover">
                                 <tr>
                                     <th><?php _e('Position', 'job-listings'); ?></th>
                                     <th class="hidden-sm hidden-xs"><?php _e('Published', 'job-listings'); ?></th>
