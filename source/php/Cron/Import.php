@@ -186,13 +186,11 @@ class Import
                         $val = $this->objectToArray($item->{$target[0]}->{$target[1]}->{$target[2]}->{$target[3]});
                         if (is_array($val)) {
                             for ($int = 0; $int < count($val); $int++) {
-
                                 if ($this->getArrayDepth($val) > 2) {
                                     $level = $val[$int]['Level'];
                                     if ($key === 'departments') {
                                         if ($level == 2) {
                                             $dataObject[$key] = ($val[$int]['Name'] != '' && $val[$int]['Name'] != null) ? $val[$int]['Name'] : '';
-
                                         }
                                     } else {
                                         if ($level == 1) {
@@ -211,10 +209,7 @@ class Import
                                             $dataObject[$key] = $val['Name'];
                                         }
                                     }
-
-
                                 }
-
                             }
                         }
                     }
