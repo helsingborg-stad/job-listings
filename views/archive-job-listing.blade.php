@@ -78,7 +78,7 @@
                             @include('partials.archive-filters')
                         </div>
                     @endif
-                    <div class="grid--columns grid">
+
                         @if (have_posts())
                             <?php $postNum = 0;?>
                             <table class="table table-striped table-hover">
@@ -159,7 +159,7 @@
                                 </div>
                             </div>
                         @endif
-                    </div>
+          
 
                 @endif
 
