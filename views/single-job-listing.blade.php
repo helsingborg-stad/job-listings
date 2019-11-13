@@ -39,29 +39,41 @@
                             <div class="grid-xs-12">
                                 <div class="post post-single">
 
-                                    @include('partials.blog.post-header')
-                                    @if (isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
-                                        @if ($postMeta['application_end_date'][0] < date('Y-m-d'))
-                                            <button class="btn btn-lg btn-contrasted disabled btn-block">
-                                                <?php _e('The application period has ended', 'job-listings'); ?>
-                                            </button>
-                                        @else
-
-                                            <a target="_blank"
-                                               class="btn btn-lg btn-block btn-primary btn-outline"
-                                               href="{{get_field('apply_button_url','option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here',
-                                                    'job-listings'); ?> ({{$diff->format("%r%a")}} <?php _e('days left',
-                                                    'job-listings'); ?>)
-                                            </a>
-                                        @endif
-                                    @endif
-                                    <br/>
                                     <article class="u-mb-5" id="article">
-                                        @if (post_password_required($post))
-                                            {!! get_the_password_form() !!}
-                                        @else
 
-                                            {!! apply_filters('the_content', $post->post_content) !!}
+                                        <div class="box box-card">
+                                            <div class="box-content">
+
+                                                @include('partials.blog.post-header')
+                                            
+                                                @if (post_password_required($post))
+                                                    {!! get_the_password_form() !!}
+                                                @else
+
+                                                @if (isset($postMeta['preamble'][0]) && !empty($postMeta['preamble'][0]))
+                                                    <p class="lead">
+                                                        {{$postMeta['preamble'][0]}}
+                                                    </p>
+                                                @endif
+
+                                                {!! apply_filters('the_content', $post->post_content) !!}
+
+                                            </div>
+                                        </div>
+
+                                            @if (isset($postMeta['legal_details'][0]) && !empty($postMeta['legal_details'][0]))
+                                                <div class="box box-card">
+                                                    <div class="box-content">
+                                                        <p class="small">
+                                                            {{$postMeta['legal_details'][0]}}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if (isset($postMeta['contact_person'][0]) && !empty($postMeta['contact_person'][0]))
+                                                {{$postMeta['contact_person'][0]}}
+                                            @endif
 
                                         @endif
                                     </article>
@@ -102,7 +114,7 @@
 
                                 @if (isset($postMeta['ad_reference_nbr'][0]) && !empty($postMeta['ad_reference_nbr'][0]))
                                     <li>
-                                        <b><?php _e('Ref nr:', 'job-listings'); ?></b><br/>
+                                        <b><?php _e('Reference:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['ad_reference_nbr'][0]}}
 
                                     </li>
@@ -119,7 +131,7 @@
 
                                 @if (isset($postMeta['number_of_positions'][0]) && !empty($postMeta['number_of_positions'][0]))
                                     <li>
-                                        <b><?php _e('Number of applicants:', 'job-listings'); ?></b><br/>
+                                        <b><?php _e('Number of positions:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['number_of_positions'][0]}}
 
                                     </li>
@@ -135,7 +147,7 @@
 
                                 @if (isset($postMeta['employment_type'][0]) && !empty($postMeta['employment_type'][0]))
                                     <li>
-                                        <b><?php _e('Employee:', 'job-listings'); ?></b><br/>
+                                        <b><?php _e('Employment type:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['employment_type'][0]}}
 
                                     </li>
@@ -150,7 +162,7 @@
                                 @endif
 
                                 @if (isset($postMeta['employment_grade'][0]) && !empty($postMeta['employment_grade'][0]))
-                                    <li><b><?php _e('Municipality:', 'job-listings'); ?></b><br/>
+                                    <li><b><?php _e('Location:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['location_name'][0]}}</li>
 
                                 @endif

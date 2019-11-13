@@ -3,7 +3,7 @@
 if (function_exists('acf_add_local_field_group')) {
     acf_add_local_field_group(array(
     'key' => 'group_5c9de924499d4',
-    'title' => 'Import settings',
+    'title' => __('Import settings', 'job-listings'),
     'fields' => array(
         0 => array(
             'key' => 'field_5c9deb7c5c643',
@@ -72,7 +72,7 @@
     'label_placement' => 'top',
     'instruction_placement' => 'label',
     'hide_on_screen' => '',
-    'active' => 1,
+    'active' => true,
     'description' => '',
 ));
 }
