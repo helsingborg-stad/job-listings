@@ -43,6 +43,7 @@ class ReachmeeImport extends Import
             date_create(date("Y-m-d", time())), 
             date_create($item->pubDateTo)
         )->days;
+        $item->link = str_replace("rmpage=job", "rmpage=apply", $item->link); 
 
         return $item; 
     }
