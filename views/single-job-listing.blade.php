@@ -15,10 +15,27 @@
                     </div>
                 @endif
 
+                
+
+                
+                        
+                    
+
                 <div class="grid">
                     <div class="grid-sm-12">
                         {!! the_post() !!}
                         <?php $postMeta = get_post_meta(get_the_ID());?>
+
+                        @if(isset($postMeta['has_expired'][0]))
+                            @if ($postMeta['has_expired'][0] === '1')
+                            <div class="gutter gutter-bottom">
+                                <div class="notice warning">
+                                    <i class="pricon pricon-notice-warning"></i> <?php _e("The application period for this reqruitment has ended."); ?>
+                                </div>
+                            </div>
+                            @endif
+                        @endif
+
                         <div class="grid">
                             <div class="grid-xs-12">
                                 <div class="post post-single">

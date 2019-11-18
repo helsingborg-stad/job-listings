@@ -80,12 +80,12 @@
                     @endif
 
                         @if (have_posts())
-                            <?php $postNum = 0;?>
                             <table class="table table-striped table-hover">
                                 <tr>
                                     <th><?php _e('Position', 'job-listings'); ?></th>
                                     <th class="hidden-sm hidden-xs"><?php _e('Published', 'job-listings'); ?></th>
                                     <th class="hidden-sm hidden-xs"><?php _e('Apply by', 'job-listings'); ?></th>
+                                    <th class="hidden-sm hidden-xs"><?php _e('Category', 'job-listings'); ?></th>
                                 </tr>
 
                                 @while(have_posts())
@@ -94,62 +94,43 @@
                                     $postMeta = get_post_meta(get_the_ID());
                                     ?>
                                     <tr>
-
-                                        @if(isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]) && date('Y-m-d') < substr($postMeta['application_end_date'][0], 0,
-                                                            strpos($postMeta['application_end_date'][0], "T")))
-                                            @if (in_array($template, array('full', 'compressed', 'collapsed', 'horizontal-cards')))
-                                                <td>
-                                                    <a href="{{ the_permalink() }}"
-                                                       class="box box-news box-news-horizontal">
-                                                        {{ the_title() }}
-                                                        <span class="hidden-lg hidden-md text-sm">
-                                                            <br />
-                                                            <?php _e('Published', 'job-listings'); ?>:
-
-                                                            @if(isset($postMeta['publish_start_date'][0]) && !empty($postMeta['publish_start_date'][0]))
-                                                                {{substr($postMeta['publish_start_date'][0], 0,
-                                                                    strpos($postMeta['publish_start_date'][0], "T"))}}
-                                                            @endif
-
-                                                        </span>
-                                                        <span class="hidden-lg hidden-md text-sm">
-                                                            <br />
-                                                            <?php _e('Apply by', 'job-listings'); ?>:
-                                                            @if(isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
-
-                                                                @if(date('Y-m-d') > substr($postMeta['application_end_date'][0], 0,
-                                                                    strpos($postMeta['application_end_date'][0], "T")))
-                                                                    Ansökninsdag har passerat.
-                                                                @else
-                                                                    {{substr($postMeta['application_end_date'][0], 0,
-                                                                    strpos($postMeta['application_end_date'][0], "T"))}}
-                                                                @endif
-
-                                                            @endif
-                                                        </span>
-                                                    </a>
-                                                <td class="hidden-sm hidden-xs">
-                                                    @if(isset($postMeta['publish_start_date'][0]) && !empty($postMeta['publish_start_date'][0]))
-                                                        {{substr($postMeta['publish_start_date'][0], 0,
-                                                            strpos($postMeta['publish_start_date'][0], "T"))}}
-                                                    @endif
-                                                </td>
-                                                </td>
-                                                <td class="hidden-sm hidden-xs">
-                                                    @if(isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
-                                                        @if(date('Y-m-d') > substr($postMeta['application_end_date'][0], 0,
-                                                            strpos($postMeta['application_end_date'][0], "T")))
-                                                                Ansökninsdag har passerat.
-                                                        @else
-                                                            {{substr($postMeta['application_end_date'][0], 0,
-                                                            strpos($postMeta['application_end_date'][0], "T"))}}
+                                        @if (in_array($template, array('full', 'compressed', 'collapsed', 'horizontal-cards')))
+                                            <td>
+                                                <a href="{{ the_permalink() }}" class="box box-news box-news-horizontal">
+                                                    {{ the_title() }}
+                                                    <br/>
+                                                    <span class="hidden-lg hidden-md text-sm display-block">
+                                                    <?php _e('Published on', 'job-listings'); ?> <strong>{{ $postMeta['publish_start_date'][0] }}</strong> <?php _e('to', 'job-listings'); ?> <strong>{{ $postMeta['application_end_date'][0] }}</strong> <?php _e('in', 'job-listings'); ?> <strong>{{ $postMeta['occupationclassifications'][0] }}</strong>.
+                                                    </span>
+                                                </a>
+                                            <td class="hidden-sm hidden-xs">
+                                                @if(isset($postMeta['publish_start_date'][0]) && !empty($postMeta['publish_start_date'][0]))
+                                                    {{ $postMeta['publish_start_date'][0] }}
+                                                @endif
+                                            </td>
+                                            </td>
+                                            <td class="hidden-sm hidden-xs">
+                                                @if(isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
+                                                    @if(isset($postMeta['has_expired'][0]))
+                                                        
+                                                        @if ($postMeta['has_expired'][0] === '1')
+                                                            <?php _e('Expired', 'job-listings'); ?>
                                                         @endif
+
+                                                        @if ($postMeta['has_expired'][0] === '0')
+                                                            {{ $postMeta['application_end_date'][0] }}
+                                                        @endif
+
                                                     @endif
-                                                </td>
-                                            @endif
+                                                @endif
+                                            </td>
+                                            <td class="hidden-sm hidden-xs">
+                                                @if (isset($postMeta['occupationclassifications'][0]))
+                                                    {{ $postMeta['occupationclassifications'][0] }}
+                                                @endif
+                                            </td>
+                                        @endif
                                     </tr>
-                                    @endif
-                                    <?php $postNum++; ?>
                                 @endwhile
                             </table>
                         @else

@@ -11,13 +11,8 @@ class ReachmeeImport extends Import
     public $uuid = ""; //The unique identifier of each item in XML
 
     public $curlMethod = "GET"; 
-    public $baseUrl = "https://site106.reachmee.com/Public/rssfeed/external.ashx";
-    public $queryParams = array(
-        'id' => '9',
-        'InstallationID' => 'I017',
-        'CustomerName' => 'helsingborg',
-        'lang' => 'SE'
-    ); 
+    public $baseUrl = "";
+    public $queryParams = array(); 
 
     public $baseNode = "channel";
     public $subNode = "item";
@@ -25,9 +20,13 @@ class ReachmeeImport extends Import
     /**
      * Import constructor.
      */
-    public function __construct()
+    public function __construct($baseUrl, $queryParams)
     {
-        //Run constructor
+        //Assign parameters
+        $this->baseUrl = $baseUrl; 
+        $this->queryParams = $queryParams; 
+
+        //Construct parent class
         parent::__construct();
     }
 

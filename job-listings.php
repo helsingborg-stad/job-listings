@@ -36,8 +36,6 @@ $loader->register();
 // Start application
 new JobListings\App();
 new JobListings\Admin\Settings();
-new JobListings\Cron\VismaImport();
-new JobListings\Cron\ReachmeeImport();
 
 // Acf auto import and export
 add_action('plugins_loaded', function () {
@@ -45,7 +43,7 @@ add_action('plugins_loaded', function () {
     $acfExportManager->setTextdomain('job-listings');
     $acfExportManager->setExportFolder(JOBLISTINGS_PATH . 'source/php/AcfFields/');
     $acfExportManager->autoExport(array(
-        'settings'          => 'group_5c9de924499d4'
+        'settings'          => 'group_5dd2a034a4f0c'
     ));
     $acfExportManager->import();
 });

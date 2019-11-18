@@ -60,7 +60,7 @@ class Import
      */
     public function objectToArray($data)
     {
-        if ((!is_array($data)) and (!is_object($data))) {
+        if ((!is_array($data)) && (!is_object($data))) {
             return false;
         }
 

@@ -12,10 +12,9 @@ class VismaImport extends Import
     public $uuid = ""; //The unique identifier of each item in XML
 
     public $curlMethod = "GET";
-    public $baseUrl = "https://recruit.visma.com/External/Feeds/AssignmentList.ashx";
-    public $queryParams = array(
-        'guidGroup' => '67794f6d-af82-43a1-b5dc-bb414fd3eab1',
-    ); 
+    public $baseUrl = "";
+    public $queryParams = array();
+    public $baseAdLink = "";
 
     public $baseNode = "Assignments";
     public $subNode = "Assignment";
@@ -23,8 +22,13 @@ class VismaImport extends Import
     /**
      * Import constructor.
      */
-    public function __construct()
+    public function __construct($baseUrl, $queryParams)
     {
+        //Assign parameters 
+        $this->baseUrl = $baseUrl; 
+        $this->queryParams = $queryParams; 
+
+        //Construct parent class 
         parent::__construct();
     }
 
@@ -54,7 +58,6 @@ class VismaImport extends Import
      * Add manual import button
      * @return bool|null
      */
-
     public function addImportButton() {
         global $wp;
         $queryArgs = array_merge($wp->query_vars, array(__CLASS__ => 'true')); 

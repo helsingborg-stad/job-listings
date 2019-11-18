@@ -76,6 +76,49 @@ class App
         );
 
         add_action('wp_enqueue_scripts', array($this, 'enqueueStyles'), 14);
+
+        add_action('pre_get_posts', array($this, 'removeInactiveAds')); 
+
+        add_action('init', array($this, 'initializeImporters')); 
+    }
+
+    /** Initialize importers
+     * @return array
+     */
+    public function initializeImporters() {
+        $importers = get_field('job_listings_importers', 'option'); 
+        
+        if(is_array($importers) && !empty($importers)) {
+            foreach($importers as $importer) {
+
+                var_dump($importer); 
+
+                //Init visma import
+                if(isset($importer['acf_fc_layout']) && $importer['acf_fc_layout'] == "visma") {
+                    new \JobListings\Cron\VismaImport(
+                        $importer['baseUrl'], 
+                        array(
+                            'guidGroup' => $importer['guidGroup']
+                        ) 
+                    );
+                    continue; 
+                }
+
+                //Init reachmee import
+                if(isset($importer['acf_fc_layout']) && $importer['acf_fc_layout'] == "reachmee") {
+                    new \JobListings\Cron\ReachmeeImport(
+                        $importer['baseUrl'], 
+                        array(
+                            'id' => $importer['id'],
+                            'InstallationID' => $importer['InstallationID'],
+                            'CustomerName' => $importer['CustomerName'],
+                            'lang' => $importer['lang']
+                        )
+                    );
+                    continue; 
+                }
+            } 
+        }
     }
 
     /**
@@ -111,5 +154,19 @@ class App
             JOBLISTINGS_URL . '/dist/' . \JobListings\Helper\CacheBust::name('js/job-listings.js'));
     }
 
-
+    /**
+     * Remove inactive ads from archive
+     * @return void
+     */
+    public function removeInactiveAds($query) {
+        if (!is_admin() && $query->is_main_query()) {
+            $query->set('meta_query', array(
+                array(
+                   'key'=>'number_of_days_left',
+                   'value'=>'0',
+                   'compare'=>'!=',
+                ),
+            ));
+        }
+    }
 }
