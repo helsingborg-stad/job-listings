@@ -1,14 +1,16 @@
-.job-listings td a {
-  border: none !important; }
+.single-job-listing article {
+  position: relative; }
 
-.job-listings .u-mb-7 {
-  padding-top: 16px; }
+.single-job-listing article a.btn-floating-application {
+  position: absolute;
+  top: -3px;
+  right: 0;
+  border-radius: 0 2px 0 5px;
+  text-transform: uppercase;
+  font-weight: 400; }
 
-.job-listings .btn-lg {
-  max-width: 700px; }
+@media screen and (max-width: 900px) {
+  .single-job-listing article .box-content {
+    padding-top: 60px; } }
 
-.job-listings .sidebar-left-sidebar .btn {
-  margin-top: 16px;
-  max-width: 100%; }
-
-/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImpvYi1saXN0aW5ncy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBRVEsd0JBQXVCLEVBQzFCOztBQUhMO0VBS1Esa0JBQWlCLEVBQ3BCOztBQU5MO0VBUVEsaUJBQWdCLEVBQ25COztBQVRMO0VBV1EsaUJBQWdCO0VBQ2hCLGdCQUFlLEVBQ2xCIiwiZmlsZSI6ImpvYi1saXN0aW5ncy5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuam9iLWxpc3RpbmdzIHtcbiAgICB0ZCBhIHtcbiAgICAgICAgYm9yZGVyOm5vbmUgIWltcG9ydGFudDtcbiAgICB9XG4gICAgLnUtbWItNyB7XG4gICAgICAgIHBhZGRpbmctdG9wOjE2cHg7XG4gICAgfVxuICAgIC5idG4tbGcge1xuICAgICAgICBtYXgtd2lkdGg6NzAwcHg7XG4gICAgfVxuICAgIC5zaWRlYmFyLWxlZnQtc2lkZWJhciAuYnRuIHtcbiAgICAgICAgbWFyZ2luLXRvcDoxNnB4O1xuICAgICAgICBtYXgtd2lkdGg6MTAwJTtcbiAgICB9XG59XG4iXX0= */
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImpvYi1saXN0aW5ncy5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksbUJBQW1CLEVBQ3RCOztBQUVEO0VBQ0ksbUJBQW1CO0VBQ25CLFVBQVU7RUFDVixTQUFTO0VBQ1QsMkJBQTJCO0VBQzNCLDBCQUEwQjtFQUMxQixpQkFBaUIsRUFDcEI7O0FBQ0Q7RUFDSTtJQUNJLGtCQUFrQixFQUNyQixFQUFBIiwiZmlsZSI6ImpvYi1saXN0aW5ncy5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuc2luZ2xlLWpvYi1saXN0aW5nIGFydGljbGUge1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbn1cblxuLnNpbmdsZS1qb2ItbGlzdGluZyBhcnRpY2xlIGEuYnRuLWZsb2F0aW5nLWFwcGxpY2F0aW9uIHtcbiAgICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gICAgdG9wOiAtM3B4OyBcbiAgICByaWdodDogMDtcbiAgICBib3JkZXItcmFkaXVzOiAwIDJweCAwIDVweDtcbiAgICB0ZXh0LXRyYW5zZm9ybTogdXBwZXJjYXNlO1xuICAgIGZvbnQtd2VpZ2h0OiA0MDA7XG59XG5AbWVkaWEgc2NyZWVuIGFuZCAobWF4LXdpZHRoOiA5MDBweCkge1xuICAgIC5zaW5nbGUtam9iLWxpc3RpbmcgYXJ0aWNsZSAuYm94LWNvbnRlbnQge1xuICAgICAgICBwYWRkaW5nLXRvcDogNjBweDtcbiAgICB9XG59Il19 */

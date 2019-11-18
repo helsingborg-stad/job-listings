@@ -151,7 +151,7 @@
                 @endif
 
                 <div class="grid">
-                    <div class="grid-sm-12 text-center u-mb-7">
+                    <div class="grid-sm-12 text-center gutter gutter">
                         {!!
                             paginate_links(array(
                                 'type' => 'list'

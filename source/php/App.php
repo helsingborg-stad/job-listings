@@ -91,8 +91,6 @@ class App
         if(is_array($importers) && !empty($importers)) {
             foreach($importers as $importer) {
 
-                var_dump($importer); 
-
                 //Init visma import
                 if(isset($importer['acf_fc_layout']) && $importer['acf_fc_layout'] == "visma") {
                     new \JobListings\Cron\VismaImport(

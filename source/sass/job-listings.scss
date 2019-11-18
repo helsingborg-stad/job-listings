@@ -1,15 +1,17 @@
-.job-listings {
-    td a {
-        border:none !important;
-    }
-    .u-mb-7 {
-        padding-top:16px;
-    }
-    .btn-lg {
-        max-width:700px;
-    }
-    .sidebar-left-sidebar .btn {
-        margin-top:16px;
-        max-width:100%;
+.single-job-listing article {
+    position: relative;
+}
+
+.single-job-listing article a.btn-floating-application {
+    position: absolute;
+    top: -3px; 
+    right: 0;
+    border-radius: 0 2px 0 5px;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+@media screen and (max-width: 900px) {
+    .single-job-listing article .box-content {
+        padding-top: 60px;
     }
 }

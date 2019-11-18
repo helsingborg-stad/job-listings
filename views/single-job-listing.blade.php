@@ -15,12 +15,6 @@
                     </div>
                 @endif
 
-                
-
-                
-                        
-                    
-
                 <div class="grid">
                     <div class="grid-sm-12">
                         {!! the_post() !!}
@@ -44,6 +38,16 @@
 
                                         <div class="box box-card">
                                             <div class="box-content">
+
+                                                @if(isset($postMeta['has_expired'][0]))
+                                                    @if ($postMeta['has_expired'][0] === '0')
+                                                        <a target="_blank"
+                                                        class="btn btn-lg btn-primary btn-floating-application"
+                                                        href="{{$postMeta['external_url'][0]}}">
+                                                            <?php _e('Apply now', 'job-listings'); ?>
+                                                        </a>
+                                                    @endif
+                                                @endif
 
                                                 @include('partials.blog.post-header')
                                             
@@ -94,17 +98,17 @@
                         <div class="box-content">
                             <ul class="unlist job-listing-sidenav">
                                 @if (isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
-                                    <li class="gutter gutter-top"><b><?php _e('Deadline for applications:', 'job-listings'); ?></b><br/>
+                                    <li><b><?php _e('Deadline for applications:', 'job-listings'); ?></b><br/>
                                         @if ($postMeta['has_expired'][0] === '1')
                                             <button class="btn btn-lg btn-contrasted disabled btn-block">
                                                 <?php _e('The application period has ended', 'job-listings'); ?>
                                             </button>
                                         @else
-                                        {{ $postMeta['application_end_date'][0] }}
-                                        <span class="text-sm">
-                                            ({{ $postMeta['number_of_days_left'][0] }} 
-                                            <?php _e('days left','job-listings'); ?>)
-                                        </span>
+                                            {{ $postMeta['application_end_date'][0] }}
+                                            <span class="text-sm">
+                                                ({{ $postMeta['number_of_days_left'][0] }} 
+                                                <?php _e('days left','job-listings'); ?>)
+                                            </span>
                                         @endif
 
                                     </li>
@@ -232,16 +236,20 @@
 
                     @if(isset($postMeta['has_expired'][0]))
                         @if ($postMeta['has_expired'][0] === '1')
-                            <button class="btn btn-lg btn-contrasted disabled btn-block">
-                                <?php _e('The application period has ended', 'job-listings'); ?>
-                            </button>
+                            <div class="gutter gutter-top">
+                                <button class="btn btn-lg btn-contrasted disabled btn-block">
+                                    <?php _e('The application period has ended', 'job-listings'); ?>
+                                </button>
+                            </div>
                         @else
-                            <a target="_blank"
-                               class="btn btn-lg btn-block btn-primary btn-outline"
-                               href="{{get_field('apply_button_url','option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here',
-                                    'job-listings'); ?> ({{ $postMeta['number_of_days_left'][0] }} <?php _e('days left',
-                                    'job-listings'); ?>)
-                            </a>
+                            <div class="gutter gutter-top">
+                                <a target="_blank"
+                                class="btn btn-lg btn-block btn-primary btn-outline"
+                                href="{{$postMeta['external_url'][0]}}"><?php _e('Apply here',
+                                        'job-listings'); ?> ({{ $postMeta['number_of_days_left'][0] }} <?php _e('days left',
+                                        'job-listings'); ?>)
+                                </a>
+                            </div>
                         @endif
                     @endif
 
