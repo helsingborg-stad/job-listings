@@ -6,144 +6,59 @@ namespace JobListings\Cron;
  * Class Import
  * @package JobListings\Cron
  */
-class VismaImport
+class VismaImport extends Import
 {
 
-    private $uuid = ""; //The unique identifier of each item in XML
-    //private $guidGroup = "67794f6d-af82-43a1-b5dc-bb414fd3eab1";
-    //private $baseUrl = "https://site106.reachmee.com/Public/rssfeed/external.ashx?id=6&InstallationID=I017&CustomerName=helsingborg&lang=SE";
-    private $postType = "job-listing";
-    private $baseNode = "Assignments";
-    private $subNode = "Assignment";
+    public $uuid = ""; //The unique identifier of each item in XML
 
-    private $cacheTTL = 60 * 60; //Minutes
+    public $curlMethod = "GET";
+    public $baseUrl = "https://recruit.visma.com/External/Feeds/AssignmentList.ashx";
+    public $queryParams = array(
+        'guidGroup' => '67794f6d-af82-43a1-b5dc-bb414fd3eab1',
+    ); 
+
+    public $baseNode = "Assignments";
+    public $subNode = "Assignment";
 
     /**
      * Import constructor.
      */
     public function __construct()
     {
-        //Manual trigger
-        add_action('admin_init', array($this, 'importXmlTrigger'));
-
-        //Cron trigger
-        add_action('import_avalable_job_list', array($this, 'importXml'));
-
-        //Cron schedule
-        add_action('admin_init', array($this, 'scheduleCronJob'));
+        parent::__construct();
     }
 
     /**
-     * Schedule Cron
+     * Normalize
+     * @return $item array
      */
-    public function scheduleCronJob()
-    {
-        if (!wp_next_scheduled('import_avalable_job_list_visma')) {
-            wp_schedule_event(time(), 'twicedaily', 'import_avalable_job_list_visma');
-        }
+    public function normalize($item) {
+
+        $item->PublishStartDate = date("Y-m-d", strtotime($item->PublishStartDate));
+        $item->PublishEndDate = date("Y-m-d", strtotime($item->PublishEndDate));
+        $item->ApplicationEndDate = date("Y-m-d", strtotime($item->ApplicationEndDate));
+        $item->EmploymentStartDate = date("Y-m-d", strtotime($item->EmploymentStartDate));
+        $item->EmploymentEndDate = date("Y-m-d", strtotime($item->EmploymentEndDate));
+        $item->EmploymentEndDate = date("Y-m-d", strtotime($item->EmploymentEndDate));
+        $item->Modified = date("Y-m-d", strtotime($item->Modified));
+        $item->hasExpired = strtotime($item->PublishEndDate) >= time() ? '0' : '1';
+        $item->numberOfDaysLeft = date_diff(
+            date_create(date("Y-m-d", time())), 
+            date_create($item->ApplicationEndDate)
+        )->days;
+
+        return $item; 
     }
 
     /**
-     * import XML trigger
-     */
-    public function importXmlTrigger()
-    {
-        if (isset($_GET['jobListingImport'])) {
-            $this->importXml();
-            die("Visma data has been imported.");
-        }
-    }
-
-    /**
-     * Convert Object to array
-     * @param $data
-     * @return array|bool
-     */
-    public function objectToArray($data)
-    {
-        if ((!is_array($data)) and (!is_object($data))) {
-            return false;
-        }
-
-        $result = array();
-
-        $data = (array)$data;
-        foreach ($data as $key => $value) {
-            if (is_object($value)) {
-                $value = (array)$value;
-            }
-            if (is_array($value)) {
-                $result[$key] = $this->objectToArray($value);
-            } else {
-                $result[$key] = $value;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Import XML
+     * Add manual import button
      * @return bool|null
      */
-    public function importXml()
-    {
 
-        //Get curl helper
-        $curl = new \JobListings\Helper\Curl(true, $this->cacheTTL);
-
-        //Fetch data
-        $data = $curl->request(
-            'GET',
-            get_field('job_listing_xml_api_url', 'option'),
-            array(
-                'guidGroup' => get_field('job_listing_xml_api_url_id', 'option')
-            )
-        );
-
-        //Create array with simple xml
-        try {
-            $data = simplexml_load_string($data);
-        } catch (Exception $e) {
-            if (!strstr($e->getMessage(), 'XML')) {
-                throw $e;
-            }
-        }
-
-        //Get main node
-        $data = json_decode(json_encode($data->{$this->baseNode}), false)->{$this->subNode};
-        
-        //Check if valid list, update jobs
-        if (isset($data) && !empty($data)) {
-
-            foreach ($data as $item) {
-                if ($item) {
-                    $this->updateItem($item);
-                }
-            }
-            return true;
-        }
-
-        return null; //Unsuccessfull, no new data
-    }
-
-    /**
-     * Checking how many levels in multidimensional array
-     * @param $array
-     * @return float|int
-     */
-    function getArrayDepth($array)
-    {
-        $maxIndentation = 1;
-        $array_str = print_r($array, true);
-        $lines = explode("\n", $array_str);
-        foreach ($lines as $line) {
-            $indentation = (strlen($line) - strlen(ltrim($line))) / 4;
-            if ($indentation > $maxIndentation) {
-                $maxIndentation = $indentation;
-            }
-        }
-        return ceil(($maxIndentation - 1) / 2) + 1;
+    public function addImportButton() {
+        global $wp;
+        $queryArgs = array_merge($wp->query_vars, array(__CLASS__ => 'true')); 
+        echo '<a href="' . add_query_arg($queryArgs, home_url($wp->request)) . '" class="button-primary extraspace" style="float: right; margin-right: 10px;">'. __("Start Visma Import") .'</a>'; 
     }
 
     /**
@@ -151,7 +66,7 @@ class VismaImport
      * @param $item
      * @return bool
      */
-    private function updateItem($item)
+    public function updateItem($item)
     {
         if (isset($item) && is_object($item) && !empty($item)) {
 
@@ -160,6 +75,16 @@ class VismaImport
 
             //Gather data
             foreach ($this->metaKeyMap() as $key => $target) {
+
+                //Check if is default val
+                if(!is_array($target)) {
+                    
+                    //Assign default val
+                    $dataObject[$key] = $target; 
+
+                    //Skip to next
+                    continue; 
+                }
 
                 if (count($target) == 1) {
                     $val = $item->{$target[0]};
@@ -222,10 +147,8 @@ class VismaImport
                 )
             );
 
-            $postId = $postObject->ID;
-
             //Not existing, create new
-            if (is_null($postId)) {
+            if (!isset($postObject->ID)) {
                 $postId = wp_insert_post(
                     array(
                         'post_title' => $dataObject['post_title'],
@@ -237,6 +160,9 @@ class VismaImport
                 );
 
             } else {
+
+                //Get post object id
+                $postId = $postObject->ID;
 
                 //Create diffable array
                 $updateDiff = array(
@@ -259,43 +185,13 @@ class VismaImport
             }
 
             // Taxonomies - Work categories
-            if (isset($dataObject['occupationclassifications']) && !empty($dataObject['occupationclassifications'])) {
+            $this->updateTaxonomy($postId, 'occupationclassifications', 'job-listing-category'); 
 
-                // Checking terms
-                $term = term_exists($dataObject['occupationclassifications'], 'job-listing-category');
+            // Taxonomys source system
+            $this->updateTaxonomy($postId, 'source_system', 'job-listing-source'); 
 
-                if (0 === $term || null === $term) {
-                    // Adding terms
-                    $term = wp_insert_term(
-                        $dataObject['occupationclassifications'],
-                        'job-listing-category',
-                        array(
-                            'description' => $dataObject['occupationclassifications'],
-                            'slug' => sanitize_title($dataObject['occupationclassifications'])
-                        )
-                    );
-                } else {
-                    $term = $dataObject['occupationclassifications'];
-                }
-
-                // Connecting term to post
-                wp_set_post_terms($postId, $term, 'job-listing-category', true);
-
-            }
-
-            //Update if there is data
-            if (is_array($dataObject) && !empty($dataObject)) {
-                foreach ($dataObject as $metaKey => $metaValue) {
-
-                    if ($metaKey == "") {
-                        continue;
-                    }
-
-                    if ($metaValue != get_post_meta($postId, $metaKey, true)) {
-                        update_post_meta($postId, $metaKey, $metaValue);
-                    }
-                }
-            }
+            //Update post with meta
+            $this->updatePostMeta($postId, $dataObject); 
 
             return true;
         }
@@ -307,7 +203,7 @@ class VismaImport
      * Mapping meta keys
      * @return array
      */
-    private function metaKeyMap()
+    public function metaKeyMap()
     {
         return array(
             'uuid' => array("@attributes", "AssignmentId"),
@@ -337,35 +233,10 @@ class VismaImport
                 "OccupationClassifications",
                 "OccupationClassification",
                 "Name"
-            )
+            ),
+            'source_system' => 'Visma',
+            'has_expired' => array("hasExpired"),
+            'number_of_days_left' => array("numberOfDaysLeft"),
         );
-    }
-
-    /**
-     *  Get posts
-     * @param $search
-     * @return mixed|null
-     */
-    private function getPost($search)
-    {
-        $post = get_posts(
-            array(
-                'meta_query' => array(
-                    array(
-                        'key' => $search['key'],
-                        'value' => $search['value']
-                    )
-                ),
-                'post_type' => $this->postType,
-                'posts_per_page' => 1,
-                'post_status' => 'all'
-            )
-        );
-
-        if (!empty($post) && is_array($post)) {
-            return array_pop($post);
-        }
-
-        return null;
     }
 }

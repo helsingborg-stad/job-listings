@@ -27,7 +27,9 @@ class Import
 
         //Add manual import button(s)
         add_action('restrict_manage_posts', array($this, 'addImportButton'), 100);
- 
+
+        // Filter data from external party
+        add_filter(str_replace("\\", "/", get_class($this))."/Item", array($this, 'normalize')); 
     }
 
     /**
@@ -112,6 +114,9 @@ class Import
         if (isset($data) && !empty($data)) {
 
             foreach ($data as $item) {
+
+                $item = apply_filters(str_replace("\\", "/", get_class($this))."/Item", $item); 
+
                 if ($item) {
                     $this->updateItem($item);
                 }
@@ -169,6 +174,68 @@ class Import
         }
 
         return null;
+    }
+
+    /**
+     *  Update taxonmy
+     * @param $postId
+     * @param $termSourceKey
+     * @param $termId
+     * @return mixed
+     */
+    public function updateTaxonomy($postId, $termSourceKey, $termId) {
+        if (isset($dataObject[$termSourceKey]) && !empty($dataObject[$termSourceKey])) {
+
+            // Checking terms
+            $term = term_exists($dataObject[$termSourceKey], $termId);
+
+            if (0 === $term || null === $term) {
+                // Adding terms
+                $term = wp_insert_term(
+                    $dataObject[$termSourceKey],
+                    'job-listing-category',
+                    array(
+                        'description' => $dataObject[$termSourceKey],
+                        'slug' => sanitize_title($dataObject[$termSourceKey])
+                    )
+                );
+            } else {
+                $term = $dataObject[$termSourceKey];
+            }
+
+            // Remove previous connections
+            wp_delete_object_term_relationships($postId, $termId); 
+
+            // Connecting term to post
+            return wp_set_post_terms($postId, $term, $termId, true);
+        }
+
+        return false; 
+    }
+
+    /**
+     *  Update post meta
+     * @param $postId
+     * @param $dataObject
+     * @return bool
+     */
+    public function updatePostMeta($postId, $dataObject) {
+        if (is_array($dataObject) && !empty($dataObject)) {
+            foreach ($dataObject as $metaKey => $metaValue) {
+
+                if ($metaKey == "") {
+                    continue;
+                }
+
+                if ($metaValue != get_post_meta($postId, $metaKey, true)) {
+                    update_post_meta($postId, $metaKey, $metaValue);
+                }
+            }
+
+            return true; 
+        }
+
+        return false; 
     }
 
     public function isMultidimensionalArray($a) {

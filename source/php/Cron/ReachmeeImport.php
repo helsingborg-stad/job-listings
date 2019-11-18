@@ -9,7 +9,6 @@ namespace JobListings\Cron;
 class ReachmeeImport extends Import
 {
     public $uuid = ""; //The unique identifier of each item in XML
-    //private $guidGroup = "67794f6d-af82-43a1-b5dc-bb414fd3eab1";
 
     public $curlMethod = "GET"; 
     public $baseUrl = "https://site106.reachmee.com/Public/rssfeed/external.ashx";
@@ -28,18 +27,35 @@ class ReachmeeImport extends Import
      */
     public function __construct()
     {
+        //Run constructor
         parent::__construct();
+    }
+
+    /**
+     * Normalize
+     * @return $item array
+     */
+    public function normalize($item) {
+
+        $item->pubDate = date("Y-m-d", strtotime($item->pubDate));
+        $item->pubDateTo = date("Y-m-d", strtotime($item->pubDateTo));
+        $item->hasExpired = strtotime($item->pubDateTo) >= time() ? '0' : '1';
+        $item->numberOfDaysLeft = date_diff(
+            date_create(date("Y-m-d", time())), 
+            date_create($item->pubDateTo)
+        )->days;
+
+        return $item; 
     }
 
     /**
      * Add manual import button
      * @return bool|null
      */
-
     public function addImportButton() {
         global $wp;
         $queryArgs = array_merge($wp->query_vars, array(__CLASS__ => 'true')); 
-        echo '<a href="' . add_query_arg($queryArgs, home_url($wp->request)) . '" class="button-primary extraspace" style="float: right;">'. __("Start Reachmee Import") .'</a>'; 
+        echo '<a href="' . add_query_arg($queryArgs, home_url($wp->request)) . '" class="button-primary extraspace" style="float: right; margin-right: 10px;">'. __("Start Reachmee Import") .'</a>'; 
     }
 
     /**
@@ -88,7 +104,12 @@ class ReachmeeImport extends Import
                 }
 
                 //If not multi
-                $dataObject[$key] = $item->{$target[0]}; 
+                if(isset($item->{$target[0]})) {
+                    $dataObject[$key] = $item->{$target[0]}; 
+                } else {
+                    $dataObject[$key] = ""; 
+                }
+                
             }
 
             //Get matching post
@@ -137,44 +158,15 @@ class ReachmeeImport extends Import
             }
 
             // Taxonomies - Work categories
-            if (isset($dataObject['occupationclassifications']) && !empty($dataObject['occupationclassifications'])) {
+            $this->updateTaxonomy($postId, 'occupationclassifications', 'job-listing-category'); 
 
-                // Checking terms
-                $term = term_exists($dataObject['occupationclassifications'], 'job-listing-category');
+            // Taxonomys source system
+            $this->updateTaxonomy($postId, 'source_system', 'job-listing-source'); 
 
-                if (0 === $term || null === $term) {
-                    // Adding terms
-                    $term = wp_insert_term(
-                        $dataObject['occupationclassifications'],
-                        'job-listing-category',
-                        array(
-                            'description' => $dataObject['occupationclassifications'],
-                            'slug' => sanitize_title($dataObject['occupationclassifications'])
-                        )
-                    );
-                } else {
-                    $term = $dataObject['occupationclassifications'];
-                }
+            //Update post with meta
+            $this->updatePostMeta($postId, $dataObject); 
 
-                // Connecting term to post
-                wp_set_post_terms($postId, $term, 'job-listing-category', true);
-
-            }
-
-            //Update if there is data
-            if (is_array($dataObject) && !empty($dataObject)) {
-                foreach ($dataObject as $metaKey => $metaValue) {
-
-                    if ($metaKey == "") {
-                        continue;
-                    }
-
-                    if ($metaValue != get_post_meta($postId, $metaKey, true)) {
-                        update_post_meta($postId, $metaKey, $metaValue);
-                    }
-                }
-            }
-
+            //Done
             return true;
         }
 
@@ -207,13 +199,25 @@ class ReachmeeImport extends Import
             'is_internal' => array("hideApplyButton"),
             'location_name' => array(array("Area1"), array("Area2")),
             'work_experience' => array("Befattning"),
-            'employment_type' => array("occupationDegree"),
+            'employment_type' => array(array("occupationDegree"), array("Befattning")),
             'employment_grade' => array("employmentLevel"),
             'departments' => array(array("Org2"), array("Org3")),
             'occupationclassifications' => array("occupationArea"),
+            
+            'contact_person' => array("contactPerson"),
             'contact_person_name' => array("contactPersonFullName"),
             'contact_person_phone' => array("contactPersonTelephone"),
-            'contact_person_position' => array("contactPersonPosition")
+            'contact_person_position' => array("contactPersonPosition"),
+
+            'contact_person_union' => array("contactPersonUnion"),
+            'contact_person_union_name' => array("contactPersonUnionFullName"),
+            'contact_person_union_phone' => array("contactPersonUnionTelephone"),
+            'contact_person_union_position' => array("contactPersonUnionPosition"),
+
+            'source_system' => 'ReachMee',
+
+            'has_expired' => array("hasExpired"),
+            'number_of_days_left' => array("numberOfDaysLeft"),
         );
     }
 
@@ -226,7 +230,8 @@ class ReachmeeImport extends Import
         $delimiters =  array(
             'post_content' => array( PHP_EOL . PHP_EOL . "  <!--more-->". PHP_EOL . PHP_EOL , " "),
             'location_name' => array(", "),
-            'departments' => array(" - ")
+            'departments' => array(" - "),
+            'employment_type' => array(" - ")
         );
 
         return array_merge(array(""), $delimiters[$key]); 

@@ -54,6 +54,27 @@ class App
             )
         );
 
+
+        new \JobListings\Entity\Taxonomy(
+            __('Sources', 'job-listings'),
+            __('Source', 'job-listings'),
+            'job-listing-source',
+            'job-listing',
+            array(
+                'label' => __('Job Categories', 'job-listings'),
+                'public' => true,
+                'description' => '',
+                'show_in_nav_menus' => true,
+                'show_admin_column' => true,
+                'hierarchical' => false,
+                'show_tagcloud' => false,
+                'show_ui' => true,
+                'query_var' => true,
+                'rewrite' => true,
+                'show_in_rest' => true,
+            )
+        );
+
         add_action('wp_enqueue_scripts', array($this, 'enqueueStyles'), 14);
     }
 

@@ -36,7 +36,7 @@ $loader->register();
 // Start application
 new JobListings\App();
 new JobListings\Admin\Settings();
-//new JobListings\Cron\VismaImport();
+new JobListings\Cron\VismaImport();
 new JobListings\Cron\ReachmeeImport();
 
 // Acf auto import and export

@@ -2,6 +2,8 @@
 
 @section('content')
 
+    <?php global $post; ?>
+
     <div class="container main-container job-listings">
         @include('partials.breadcrumbs')
 
@@ -16,25 +18,7 @@
                 <div class="grid">
                     <div class="grid-sm-12">
                         {!! the_post() !!}
-                        <?php
-
-                        //Fetching Postmeta
-                        // Diffing dates
-                        $postMeta = get_post_meta(get_the_ID());
-                        global $post;
-
-                        if (isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0])) {
-                            $todaysDate = date_create(date('Y-m-d'));
-                            $endDate = date_create(substr($postMeta['application_end_date'][0], 0,
-                                strpos($postMeta['application_end_date'][0], "T")));
-                            $diff = date_diff($todaysDate, $endDate);
-
-                            $days = (int)$diff->format("%r%a");
-
-                        }
-
-
-                        ?>
+                        <?php $postMeta = get_post_meta(get_the_ID());?>
                         <div class="grid">
                             <div class="grid-xs-12">
                                 <div class="post post-single">
@@ -46,7 +30,7 @@
 
                                                 @include('partials.blog.post-header')
                                             
-                                                @if (post_password_required($post))
+                                                @if (post_password_required(get_post()))
                                                     {!! get_the_password_form() !!}
                                                 @else
 
@@ -56,7 +40,7 @@
                                                     </p>
                                                 @endif
 
-                                                {!! apply_filters('the_content', $post->post_content) !!}
+                                                {!! apply_filters('the_content', get_post()->post_content) !!}
 
                                             </div>
                                         </div>
@@ -64,17 +48,12 @@
                                             @if (isset($postMeta['legal_details'][0]) && !empty($postMeta['legal_details'][0]))
                                                 <div class="box box-card">
                                                     <div class="box-content">
-                                                        <p class="small">
+                                                        <div class="small">
                                                             {{$postMeta['legal_details'][0]}}
-                                                        </p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             @endif
-
-                                            @if (isset($postMeta['contact_person'][0]) && !empty($postMeta['contact_person'][0]))
-                                                {{$postMeta['contact_person'][0]}}
-                                            @endif
-
                                         @endif
                                     </article>
 
@@ -98,22 +77,24 @@
                         <div class="box-content">
                             <ul class="unlist job-listing-sidenav">
                                 @if (isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
-                                    <li><b><?php _e('Deadline for applications:', 'job-listings'); ?></b><br/>
-                                        @if ($postMeta['application_end_date'][0] > date('Y-m-d'))
-                                            {{substr($postMeta['application_end_date'][0], 0,
-                                                        strpos($postMeta['application_end_date'][0], "T"))}}
-                                            <span class="text-sm">({{$diff->format("%r%a")}} <?php _e('days left',
-                                                    'job-listings'); ?>)</span>
+                                    <li class="gutter gutter-top"><b><?php _e('Deadline for applications:', 'job-listings'); ?></b><br/>
+                                        @if ($postMeta['has_expired'][0] === '1')
+                                            <button class="btn btn-lg btn-contrasted disabled btn-block">
+                                                <?php _e('The application period has ended', 'job-listings'); ?>
+                                            </button>
                                         @else
-                                            {{substr($postMeta['application_end_date'][0], 0,
-                                                        strpos($postMeta['application_end_date'][0], "T"))}}
+                                        {{ $postMeta['application_end_date'][0] }}
+                                        <span class="text-sm">
+                                            ({{ $postMeta['number_of_days_left'][0] }} 
+                                            <?php _e('days left','job-listings'); ?>)
+                                        </span>
                                         @endif
 
                                     </li>
                                 @endif
 
                                 @if (isset($postMeta['ad_reference_nbr'][0]) && !empty($postMeta['ad_reference_nbr'][0]))
-                                    <li>
+                                    <li class="gutter gutter-top">
                                         <b><?php _e('Reference:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['ad_reference_nbr'][0]}}
 
@@ -121,8 +102,9 @@
                                 @endif
 
                                 @if (isset($postMeta['publish_start_date'][0]) && !empty($postMeta['publish_start_date'][0]))
-                                    <li>
+                                    <li class="gutter gutter-top">
                                         <b><?php _e('Published:', 'job-listings'); ?></b><br/>
+                                        {{ $postMeta['publish_start_date'][0] }}
                                         {{substr($postMeta['publish_start_date'][0], 0,
                                                   strpos($postMeta['publish_start_date'][0], "T"))}}
 
@@ -130,7 +112,7 @@
                                 @endif
 
                                 @if (isset($postMeta['number_of_positions'][0]) && !empty($postMeta['number_of_positions'][0]))
-                                    <li>
+                                    <li class="gutter gutter-top">
                                         <b><?php _e('Number of positions:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['number_of_positions'][0]}}
 
@@ -138,7 +120,7 @@
                                 @endif
 
                                 @if (isset($postMeta['work_experience'][0]) && !empty($postMeta['work_experience'][0]))
-                                    <li>
+                                    <li class="gutter gutter-top">
                                         <b><?php _e('Experience:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['work_experience'][0]}}
 
@@ -146,7 +128,7 @@
                                 @endif
 
                                 @if (isset($postMeta['employment_type'][0]) && !empty($postMeta['employment_type'][0]))
-                                    <li>
+                                    <li class="gutter gutter-top">
                                         <b><?php _e('Employment type:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['employment_type'][0]}}
 
@@ -154,7 +136,7 @@
                                 @endif
 
                                 @if (isset($postMeta['employment_grade'][0]) && !empty($postMeta['employment_grade'][0]))
-                                    <li>
+                                    <li class="gutter gutter-top">
                                         <b><?php _e('Extent:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['employment_grade'][0]}}
 
@@ -162,13 +144,13 @@
                                 @endif
 
                                 @if (isset($postMeta['employment_grade'][0]) && !empty($postMeta['employment_grade'][0]))
-                                    <li><b><?php _e('Location:', 'job-listings'); ?></b><br/>
+                                    <li class="gutter gutter-top"><b><?php _e('Location:', 'job-listings'); ?></b><br/>
                                         {{$postMeta['location_name'][0]}}</li>
 
                                 @endif
 
                                 @if(isset($postMeta['departments'][0]) && !empty($postMeta['departments'][0]))
-                                    <li>
+                                    <li class="gutter gutter-top">
                                         <b><?php _e('Company:', 'job-listings'); ?></b><br/>
                                         {{ucfirst(mb_strtolower($postMeta['departments'][0]))}}
                                     </li>
@@ -178,25 +160,74 @@
                         </div>
 
                     </div>
-                    @if(isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
 
-                        @if ($postMeta['application_end_date'][0] < date('Y-m-d'))
+                    @if(isset($postMeta['contact_person'][0]) && !empty($postMeta['contact_person'][0]))
+
+                        <div class="box box-card">
+                            <div class="box-content">
+
+                                <h3><?php _e('Contact', 'job-listings'); ?></h3>
+                                <ul class="unlist job-listing-sidenav">
+
+                                    @if (isset($postMeta['contact_person_name'][0]) && !empty($postMeta['contact_person_name'][0]))
+                                        <li class="strong">{{$postMeta['contact_person_name'][0]}}</li>
+                                    @endif
+
+                                    @if (isset($postMeta['contact_person_position'][0]) && !empty($postMeta['contact_person_position'][0]))
+                                        <li class="small gutter gutter-bottom">{{$postMeta['contact_person_position'][0]}}</li>
+                                    @endif
+
+                                    @if (isset($postMeta['contact_person_phone'][0]) && !empty($postMeta['contact_person_phone'][0]))
+                                        <li><a class="link-item link-item-phone" href="tel:{{ preg_replace('/\D/', '', $postMeta['contact_person_phone'][0]) }}">{{$postMeta['contact_person_phone'][0]}}</a></li>
+                                    @endif
+
+                                </ul>
+                            </div>
+                        </div>
+
+                    @endif
+
+                    @if(isset($postMeta['contact_person_union'][0]) && !empty($postMeta['contact_person_union'][0]))
+
+                        <div class="box box-card">
+                            <div class="box-content">
+
+                                <h3><?php _e('Contact', 'job-listings'); ?></h3>
+                                <ul class="unlist job-listing-sidenav">
+
+                                    @if (isset($postMeta['contact_person_union_name'][0]) && !empty($postMeta['contact_person_union_name'][0]))
+                                        <li class="strong">{{$postMeta['contact_person_union_name'][0]}}</li>
+                                    @endif
+
+                                    @if (isset($postMeta['contact_person_union_position'][0]) && !empty($postMeta['contact_person_union_position'][0]))
+                                        <li class="small gutter gutter-bottom">{{$postMeta['contact_person_union_position'][0]}}</li>
+                                    @endif
+
+                                    @if (isset($postMeta['contact_person_union_phone'][0]) && !empty($postMeta['contact_person_union_phone'][0]))
+                                        <li><a class="link-item link-item-phone" href="tel:{{ preg_replace('/\D/', '', $postMeta['contact_person_union_phone'][0]) }}">{{$postMeta['contact_person_union_phone'][0]}}</a></li>
+                                    @endif
+
+                                </ul>
+                            </div>
+                        </div>
+
+                    @endif
+
+                    @if(isset($postMeta['has_expired'][0]))
+                        @if ($postMeta['has_expired'][0] === '1')
                             <button class="btn btn-lg btn-contrasted disabled btn-block">
                                 <?php _e('The application period has ended', 'job-listings'); ?>
                             </button>
                         @else
-
                             <a target="_blank"
                                class="btn btn-lg btn-block btn-primary btn-outline"
                                href="{{get_field('apply_button_url','option')}}{{$postMeta['guid'][0]}}"><?php _e('Apply here',
-                                    'job-listings'); ?> ({{$diff->format("%r%a")}} <?php _e('days left',
+                                    'job-listings'); ?> ({{ $postMeta['number_of_days_left'][0] }} <?php _e('days left',
                                     'job-listings'); ?>)
                             </a>
                         @endif
-
                     @endif
 
-                </div>
             </aside>
         </div>
     </div>
