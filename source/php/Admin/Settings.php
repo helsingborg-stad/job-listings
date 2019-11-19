@@ -29,8 +29,8 @@ class Settings
         //Register page 
         acf_add_options_sub_page(
             array(
-                'page_title' 	=> __("Import job settings", 'job-listings'),
-                'menu_title'	=> __("Import settings", 'job-listings'),
+                'page_title' 	=> "Import job settings",
+                'menu_title'	=> "Import settings",
                 'parent_slug'	=> 'edit.php?post_type=job-listing',
             )
         );
