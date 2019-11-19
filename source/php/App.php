@@ -157,7 +157,7 @@ class App
      * @return void
      */
     public function removeInactiveAds($query) {
-        if (!is_admin() && $query->is_main_query()) {
+        if (!is_admin() && $query->is_main_query() && is_post_type_archive('job-listing')) {
             $query->set('meta_query', array(
                 array(
                    'key'=>'number_of_days_left',
