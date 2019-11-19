@@ -26,6 +26,9 @@ load_plugin_textdomain('job-listings', false, plugin_basename(dirname(__FILE__))
 
 require_once JOBLISTINGS_PATH . 'source/php/Vendor/Psr4ClassLoader.php';
 require_once JOBLISTINGS_PATH . 'Public.php';
+if (file_exists(JOBLISTINGS_PATH . 'vendor/autoload.php')) {
+    require_once JOBLISTINGS_PATH . 'vendor/autoload.php';
+}
 
 // Instantiate and register the autoloader
 $loader = new JobListings\Vendor\Psr4ClassLoader();
@@ -47,3 +50,6 @@ add_action('plugins_loaded', function () {
     ));
     $acfExportManager->import();
 });
+
+
+
