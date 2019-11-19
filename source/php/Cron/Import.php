@@ -38,7 +38,7 @@ class Import
     public function scheduleCronJob()
     {
         if (!wp_next_scheduled('import_avalable_job_list_' . get_class($this))) {
-            wp_schedule_event(time(), 'twicedaily', 'import_avalable_job_list_' . get_class($this));
+            wp_schedule_event(time(), 'hourly', 'import_avalable_job_list_' . get_class($this));
         }
     }
 
