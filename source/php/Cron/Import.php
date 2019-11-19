@@ -188,15 +188,15 @@ class Import
         if (isset($dataObject[$termSourceKey]) && !empty($dataObject[$termSourceKey])) {
 
             // Checking terms
-            $term = term_exists($dataObject[$termSourceKey], $termId);
+            $term = term_exists(ucfirst($dataObject[$termSourceKey]), $termId);
 
             if (is_null($term)) {
                 // Adding terms
                 $term = wp_insert_term(
-                    $dataObject[$termSourceKey],
+                    ucfirst($dataObject[$termSourceKey]),
                     $termId,
                     array(
-                        'description' => $dataObject[$termSourceKey],
+                        'description' => ucfirst($dataObject[$termSourceKey]),
                         'slug' => sanitize_title($dataObject[$termSourceKey])
                     )
                 );
@@ -206,7 +206,7 @@ class Import
             wp_delete_object_term_relationships($postId, $termId); 
 
             // Connecting term to post
-            return wp_set_post_terms($postId, $dataObject[$termSourceKey], $termId, true);
+            return wp_set_post_terms($postId, ucfirst($dataObject[$termSourceKey]), $termId, true);
 
         }
 
