@@ -1,0 +1,208 @@
+[{
+    "key": "group_5dd2a034a4f0c",
+    "title": "Job Listing Sources",
+    "fields": [
+        {
+            "key": "field_5dd2a0450405f",
+            "label": "Job listing sources",
+            "name": "job_listings_importers",
+            "type": "flexible_content",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layouts": {
+                "layout_5dd2a0647e711": {
+                    "key": "layout_5dd2a0647e711",
+                    "name": "visma",
+                    "label": "Visma",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_5dd2a0d3149e2",
+                            "label": "Url",
+                            "name": "baseUrl",
+                            "type": "url",
+                            "instructions": "The basic url for the feed, without querystrings.",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "https:\/\/recruit.visma.com\/External\/Feeds\/AssignmentList.ashx",
+                            "placeholder": "https:\/\/recruit.visma.com\/External\/Feeds\/AssignmentList.ashx"
+                        },
+                        {
+                            "key": "field_5dd2a3b97c71c",
+                            "label": "guidGroup",
+                            "name": "guidGroup",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "67794f6d-af82-43a1-b5dc-bb414fd3eab1",
+                            "placeholder": "",
+                            "prepend": "?guidGroup=",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_5dd3bf4985106",
+                            "label": "Apply base link",
+                            "name": "apply_base_link",
+                            "type": "url",
+                            "instructions": "The base url for external apply links",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": ""
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_5dd2a08204060": {
+                    "key": "layout_5dd2a08204060",
+                    "name": "reachmee",
+                    "label": "ReachMee",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_5dd2a119149e3",
+                            "label": "Url",
+                            "name": "baseUrl",
+                            "type": "url",
+                            "instructions": "The basic url for the feed, without querystrings.",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "https:\/\/site106.reachmee.com\/Public\/rssfeed\/external.ashx",
+                            "placeholder": "https:\/\/site106.reachmee.com\/Public\/rssfeed\/external.ashx"
+                        },
+                        {
+                            "key": "field_5dd2a256bc3ca",
+                            "label": "Id",
+                            "name": "id",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 9,
+                            "placeholder": 9,
+                            "prepend": "?id=",
+                            "append": "",
+                            "min": "",
+                            "max": "",
+                            "step": ""
+                        },
+                        {
+                            "key": "field_5dd2a28fbc3cb",
+                            "label": "InstallationID",
+                            "name": "InstallationID",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "I017",
+                            "placeholder": "",
+                            "prepend": "&InstallationID=",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_5dd2a2b8bc3cc",
+                            "label": "CustomerName",
+                            "name": "CustomerName",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "helsingborg",
+                            "placeholder": "",
+                            "prepend": "&CustomerName=",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_5dd2a2ddbc3cd",
+                            "label": "lang",
+                            "name": "lang",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "SE",
+                            "placeholder": "",
+                            "prepend": "&lang=",
+                            "append": "",
+                            "maxlength": ""
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                }
+            },
+            "button_label": "Add Source",
+            "min": "",
+            "max": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "acf-options-import-settings"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": ""
+}]
+

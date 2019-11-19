@@ -5,7 +5,7 @@
  * Plugin URI:        (#plugin_url#)
  * Description:       
  * Version:           1.0.0
- * Author:            Nikolas Ramstedt
+ * Author:            Nikolas Ramstedt, Sebastian Thulin & Johan Silvergrund
  * Author URI:        
  * License:           MIT
  * License URI:       https://opensource.org/licenses/MIT
@@ -35,3 +35,15 @@ $loader->register();
 
 // Start application
 new JobListings\App();
+new JobListings\Admin\Settings();
+
+// Acf auto import and export
+add_action('plugins_loaded', function () {
+    $acfExportManager = new \AcfExportManager\AcfExportManager();
+    $acfExportManager->setTextdomain('job-listings');
+    $acfExportManager->setExportFolder(JOBLISTINGS_PATH . 'source/php/AcfFields/');
+    $acfExportManager->autoExport(array(
+        'settings'          => 'group_5dd2a034a4f0c'
+    ));
+    $acfExportManager->import();
+});
