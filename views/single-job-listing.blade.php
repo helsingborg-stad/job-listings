@@ -182,56 +182,30 @@
 
                     </div>
 
-                    @if(isset($postMeta['contact_person'][0]) && !empty($postMeta['contact_person'][0]))
+                    @if(isset($postMeta['contact'][0]) && !empty($postMeta['contact'][0]))
+                        @foreach(unserialize($postMeta['contact'][0]) as $person)
+                            <div class="box box-card">
+                                <div class="box-content">
 
-                        <div class="box box-card">
-                            <div class="box-content">
+                                    <h3><?php _e('Contact', 'job-listings'); ?></h3>
+                                    <ul class="unlist job-listing-sidenav">
 
-                                <h3><?php _e('Contact', 'job-listings'); ?></h3>
-                                <ul class="unlist job-listing-sidenav">
+                                        @if (isset($person['name']) && !empty($person['name']))
+                                            <li class="strong">{{$person['name']}}</li>
+                                        @endif
 
-                                    @if (isset($postMeta['contact_person_name'][0]) && !empty($postMeta['contact_person_name'][0]))
-                                        <li class="strong">{{$postMeta['contact_person_name'][0]}}</li>
-                                    @endif
+                                        @if (isset($person['position']) && !empty($person['position']))
+                                            <li class="small gutter gutter-bottom">{{$person['position']}}</li>
+                                        @endif
 
-                                    @if (isset($postMeta['contact_person_position'][0]) && !empty($postMeta['contact_person_position'][0]))
-                                        <li class="small gutter gutter-bottom">{{$postMeta['contact_person_position'][0]}}</li>
-                                    @endif
+                                        @if (isset($person['phone']) && !empty($person['phone']))
+                                            <li class="link-item link-item-phone"><a href="tel:{{$person['phone_sanitized']}}">{{$person['phone']}}</a></li>
+                                        @endif
 
-                                    @if (isset($postMeta['contact_person_phone'][0]) && !empty($postMeta['contact_person_phone'][0]))
-                                        <li><a class="link-item link-item-phone" href="tel:{{ preg_replace('/\D/', '', $postMeta['contact_person_phone'][0]) }}">{{$postMeta['contact_person_phone'][0]}}</a></li>
-                                    @endif
-
-                                </ul>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-
-                    @endif
-
-                    @if(isset($postMeta['contact_person_union'][0]) && !empty($postMeta['contact_person_union'][0]))
-
-                        <div class="box box-card">
-                            <div class="box-content">
-
-                                <h3><?php _e('Contact', 'job-listings'); ?></h3>
-                                <ul class="unlist job-listing-sidenav">
-
-                                    @if (isset($postMeta['contact_person_union_name'][0]) && !empty($postMeta['contact_person_union_name'][0]))
-                                        <li class="strong">{{$postMeta['contact_person_union_name'][0]}}</li>
-                                    @endif
-
-                                    @if (isset($postMeta['contact_person_union_position'][0]) && !empty($postMeta['contact_person_union_position'][0]))
-                                        <li class="small gutter gutter-bottom">{{$postMeta['contact_person_union_position'][0]}}</li>
-                                    @endif
-
-                                    @if (isset($postMeta['contact_person_union_phone'][0]) && !empty($postMeta['contact_person_union_phone'][0]))
-                                        <li><a class="link-item link-item-phone" href="tel:{{ preg_replace('/\D/', '', $postMeta['contact_person_union_phone'][0]) }}">{{$postMeta['contact_person_union_phone'][0]}}</a></li>
-                                    @endif
-
-                                </ul>
-                            </div>
-                        </div>
-
+                        @endforeach
                     @endif
 
                     @if(isset($postMeta['has_expired'][0]))

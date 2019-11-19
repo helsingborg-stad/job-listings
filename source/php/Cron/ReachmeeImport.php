@@ -45,6 +45,26 @@ class ReachmeeImport extends Import
         )->days;
         $item->link = str_replace("rmpage=job", "rmpage=apply", $item->link); 
 
+        //Contacts
+        $item->contact = array(); 
+        if(isset($item->contactPerson) && is_array($item->contactPerson) && !empty($item->contactPerson)) {
+            foreach($item->contactPerson as $key => $detail) {
+                $item->contact[] = array(
+                    'name' => isset($item->contactPersonFullName[$key]) ? $item->contactPersonFullName[$key] : '',
+                    'phone' => isset($item->contactPersonTelephone[$key]) ? preg_replace('/\D/', '', $item->contactPersonTelephone[$key]) : '',
+                    'phone_sanitized' => isset($item->contactPersonTelephone[$key]) ? preg_replace('/\D/', '', $item->contactPersonTelephone[$key]) : '',
+                    'position' => isset($item->contactPersonPosition[$key]) ? $item->contactPersonPosition[$key] : ''
+                ); 
+            }
+        } elseif(isset($item->contactPerson)) {
+            $item->contact[] = array(
+                'name' => isset($item->contactPersonFullName) ? $item->contactPersonFullName : '',
+                'phone' => isset($item->contactPersonTelephone) ? $item->contactPersonTelephone : '',
+                'phone_sanitized' => isset($item->contactPersonTelephone) ? preg_replace('/\D/', '', $item->contactPersonTelephone) : '',
+                'position' => isset($item->contactPersonPosition) ? $item->contactPersonPosition : ''
+            );
+        }
+        
         return $item; 
     }
 
@@ -158,10 +178,10 @@ class ReachmeeImport extends Import
             }
 
             // Taxonomies - Work categories
-            $this->updateTaxonomy($postId, 'occupationclassifications', 'job-listing-category'); 
+            $this->updateTaxonomy($postId, 'occupationclassifications', 'job-listing-category', $dataObject); 
 
             // Taxonomys source system
-            $this->updateTaxonomy($postId, 'source_system', 'job-listing-source'); 
+            $this->updateTaxonomy($postId, 'source_system', 'job-listing-source', $dataObject); 
 
             //Update post with meta
             $this->updatePostMeta($postId, $dataObject); 
@@ -218,6 +238,7 @@ class ReachmeeImport extends Import
 
             'has_expired' => array("hasExpired"),
             'number_of_days_left' => array("numberOfDaysLeft"),
+            'contact' => array("contact")
         );
     }
 

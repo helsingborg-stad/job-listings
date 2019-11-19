@@ -183,31 +183,31 @@ class Import
      * @param $termId
      * @return mixed
      */
-    public function updateTaxonomy($postId, $termSourceKey, $termId) {
+    public function updateTaxonomy($postId, $termSourceKey, $termId, $dataObject) {
+
         if (isset($dataObject[$termSourceKey]) && !empty($dataObject[$termSourceKey])) {
 
             // Checking terms
             $term = term_exists($dataObject[$termSourceKey], $termId);
 
-            if (0 === $term || null === $term) {
+            if (is_null($term)) {
                 // Adding terms
                 $term = wp_insert_term(
                     $dataObject[$termSourceKey],
-                    'job-listing-category',
+                    $termId,
                     array(
                         'description' => $dataObject[$termSourceKey],
                         'slug' => sanitize_title($dataObject[$termSourceKey])
                     )
                 );
-            } else {
-                $term = $dataObject[$termSourceKey];
             }
 
             // Remove previous connections
             wp_delete_object_term_relationships($postId, $termId); 
 
             // Connecting term to post
-            return wp_set_post_terms($postId, $term, $termId, true);
+            return wp_set_post_terms($postId, $dataObject[$termSourceKey], $termId, true);
+
         }
 
         return false; 

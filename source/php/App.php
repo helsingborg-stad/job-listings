@@ -135,8 +135,6 @@ class App
      */
     public function enqueueStyles()
     {
-
-
         wp_register_style('job-listings-css',
             JOBLISTINGS_URL . '/dist/' . \JobListings\Helper\CacheBust::name('css/job-listings.css'));
         wp_enqueue_style('job-listings-css');

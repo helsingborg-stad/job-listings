@@ -188,10 +188,10 @@ class VismaImport extends Import
             }
 
             // Taxonomies - Work categories
-            $this->updateTaxonomy($postId, 'occupationclassifications', 'job-listing-category'); 
+            $this->updateTaxonomy($postId, 'occupationclassifications', 'job-listing-category', $dataObject); 
 
             // Taxonomys source system
-            $this->updateTaxonomy($postId, 'source_system', 'job-listing-source'); 
+            $this->updateTaxonomy($postId, 'source_system', 'job-listing-source', $dataObject); 
 
             //Update post with meta
             $this->updatePostMeta($postId, $dataObject); 
