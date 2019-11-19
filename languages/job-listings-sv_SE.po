@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Job Listings\n"
-"POT-Creation-Date: 2019-05-27 16:33+0200\n"
-"PO-Revision-Date: 2019-05-27 16:33+0200\n"
+"POT-Creation-Date: 2019-11-19 12:03+0100\n"
+"PO-Revision-Date: 2019-11-19 12:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -15,26 +15,30 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
+#: source/php/AcfFields/php/settings.php:6
+msgid "Job Listing Sources"
+msgstr "Källor"
+
 #: source/php/AcfFields/php/settings.php:10
-msgid "XML Api URL"
-msgstr "XML Api URL"
+msgid "Job listing sources"
+msgstr "Källor"
 
-#: source/php/AcfFields/php/settings.php:26
-msgid "Guid group"
-msgstr "Guid grupp"
+#: source/php/AcfFields/php/settings.php:25
+msgid "Visma"
+msgstr "Visma"
 
-#: source/php/AcfFields/php/settings.php:29
-msgid "Import identifier (called guidGroup) in visma."
-msgstr "Importera från Visma"
+#: source/php/AcfFields/php/settings.php:86
+msgid "ReachMee"
+msgstr "Reachmee"
 
-#: source/php/AcfFields/php/settings.php:45
-msgid "Apply button URL"
-msgstr "Ansök knapp"
+#: source/php/AcfFields/php/settings.php:188
+msgid "Add Source"
+msgstr "Lägg till källa"
 
 #: source/php/Admin/Settings.php:32
 msgid "Import job settings"
@@ -64,9 +68,25 @@ msgstr "Jobb kategorier"
 msgid "Job category"
 msgstr "Jobb kategori"
 
-#: source/php/App.php:43
+#: source/php/App.php:43 source/php/App.php:64
 msgid "Job Categories"
 msgstr "Jobb Kategorier"
+
+#: source/php/App.php:59
+msgid "Sources"
+msgstr "Källor"
+
+#: source/php/App.php:60
+msgid "Source"
+msgstr "Källa"
+
+#: source/php/Cron/ReachmeeImport.php:78
+msgid "Start Reachmee Import"
+msgstr "Starta Reachmee import"
+
+#: source/php/Cron/VismaImport.php:68
+msgid "Start Visma Import"
+msgstr "Starta Visma import"
 
 #: source/php/Entity/PostType.php:50 source/php/Entity/PostType.php:51
 #, php-format
@@ -129,72 +149,112 @@ msgstr "Lägg till Ny %s"
 msgid "New %s Name"
 msgstr "Nytt %s namn"
 
-#: views/archive-job-listing.blade.php:86
+#: vendor/helsingborg-stad/acf-export-manager/src/AcfExportManager.php:364
+msgid "Export with AcfExportManager"
+msgstr ""
+
+#: vendor/helsingborg-stad/acf-export-manager/src/AcfExportManager.php:408
+#, php-format
+msgid "Exported %d fieldgroup(s)."
+msgstr ""
+
+#: views/archive-job-listing.blade.php:85
 msgid "Position"
 msgstr "Tjänst"
 
-#: views/archive-job-listing.blade.php:87
-#: views/archive-job-listing.blade.php:107
+#: views/archive-job-listing.blade.php:86
 msgid "Published"
 msgstr "Publicerad"
 
-#: views/archive-job-listing.blade.php:88
-#: views/archive-job-listing.blade.php:117
+#: views/archive-job-listing.blade.php:87
 msgid "Apply by"
 msgstr "Ansök senast"
 
-#: views/archive-job-listing.blade.php:157
+#: views/archive-job-listing.blade.php:88
+msgid "Category"
+msgstr "Kategori"
+
+#: views/archive-job-listing.blade.php:103
+msgid "Published on"
+msgstr "Publicerat "
+
+#: views/archive-job-listing.blade.php:103
+msgid "to"
+msgstr "till"
+
+#: views/archive-job-listing.blade.php:103
+msgid "in"
+msgstr "i"
+
+#: views/archive-job-listing.blade.php:117
+msgid "Expired"
+msgstr "Utgången"
+
+#: views/archive-job-listing.blade.php:138
 msgid "No posts to show"
 msgstr "Inga poster att visa"
 
-#: views/single-job-listing.blade.php:46 views/single-job-listing.blade.php:173
-msgid "The application period has ended"
-msgstr "Ansökningstiden har gått ut."
+#: views/single-job-listing.blade.php:27
+msgid "The application period for this reqruitment has ended."
+msgstr "Ansökningsperioden för den här rekryteringen har passerat. "
 
-#: views/single-job-listing.blade.php:52 views/single-job-listing.blade.php:179
-msgid "Apply here"
-msgstr "Ansök här"
+#: views/single-job-listing.blade.php:47
+msgid "Apply now"
+msgstr "Ansök"
 
-#: views/single-job-listing.blade.php:53 views/single-job-listing.blade.php:93
-#: views/single-job-listing.blade.php:180
-msgid "days left"
-msgstr "dagar kvar"
-
-#: views/single-job-listing.blade.php:89
+#: views/single-job-listing.blade.php:101
 msgid "Deadline for applications:"
 msgstr "Sista ansökningsdatum:"
 
-#: views/single-job-listing.blade.php:105
-msgid "Ref nr:"
-msgstr "Referensnummer:"
+#: views/single-job-listing.blade.php:104
+#: views/single-job-listing.blade.php:215
+msgid "The application period has ended"
+msgstr "Ansökningstiden har gått ut."
 
-#: views/single-job-listing.blade.php:113
+#: views/single-job-listing.blade.php:110
+#: views/single-job-listing.blade.php:223
+msgid "days left"
+msgstr "dagar kvar"
+
+#: views/single-job-listing.blade.php:119
+msgid "Reference:"
+msgstr "Referens:"
+
+#: views/single-job-listing.blade.php:127
 msgid "Published:"
 msgstr "Publicerad:"
 
-#: views/single-job-listing.blade.php:122
-msgid "Number of applicants:"
+#: views/single-job-listing.blade.php:137
+msgid "Number of positions:"
 msgstr "Antal tjänster:"
 
-#: views/single-job-listing.blade.php:130
+#: views/single-job-listing.blade.php:145
 msgid "Experience:"
 msgstr "Erfarenhet:"
 
-#: views/single-job-listing.blade.php:138
-msgid "Employee:"
+#: views/single-job-listing.blade.php:153
+msgid "Employment type:"
 msgstr "Anställningsform:"
 
-#: views/single-job-listing.blade.php:146
+#: views/single-job-listing.blade.php:161
 msgid "Extent:"
 msgstr "Omfattning:"
 
-#: views/single-job-listing.blade.php:153
-msgid "Municipality:"
-msgstr "Kommun:"
+#: views/single-job-listing.blade.php:168
+msgid "Location:"
+msgstr "Ort:"
 
-#: views/single-job-listing.blade.php:160
+#: views/single-job-listing.blade.php:175
 msgid "Company:"
 msgstr "Förvaltning:"
+
+#: views/single-job-listing.blade.php:190
+msgid "Contact"
+msgstr "Kontakt"
+
+#: views/single-job-listing.blade.php:222
+msgid "Apply here"
+msgstr "Ansök här"
 
 #. Plugin Name of the plugin/theme
 msgid "Job Listings"
@@ -207,6 +267,30 @@ msgstr "(# Plugin_url #)"
 #. Author of the plugin/theme
 msgid "Nikolas Ramstedt, Sebastian Thulin & Johan Silvergrund"
 msgstr ""
+
+#~ msgid "XML Api URL"
+#~ msgstr "XML Api URL"
+
+#~ msgid "Guid group"
+#~ msgstr "Guid grupp"
+
+#~ msgid "Import identifier (called guidGroup) in visma."
+#~ msgstr "Importera från Visma"
+
+#~ msgid "Apply button URL"
+#~ msgstr "Ansök knapp"
+
+#~ msgid "Ref nr:"
+#~ msgstr "Referensnummer:"
+
+#~ msgid "Number of applicants:"
+#~ msgstr "Antal tjänster:"
+
+#~ msgid "Employee:"
+#~ msgstr "Anställningsform:"
+
+#~ msgid "Municipality:"
+#~ msgstr "Kommun:"
 
 #~ msgid "Apply here "
 #~ msgstr "Ansök här "
