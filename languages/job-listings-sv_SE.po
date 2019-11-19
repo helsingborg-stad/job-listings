@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Job Listings\n"
 "POT-Creation-Date: 2019-11-19 12:03+0100\n"
-"PO-Revision-Date: 2019-11-19 12:10+0100\n"
+"PO-Revision-Date: 2019-11-19 14:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -46,7 +46,7 @@ msgstr "Importera jobb inställningar"
 
 #: source/php/Admin/Settings.php:33
 msgid "Import settings"
-msgstr "Import inställningar"
+msgstr ""
 
 #: source/php/App.php:17
 msgid "Jobs"
