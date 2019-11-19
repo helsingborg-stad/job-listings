@@ -20,7 +20,7 @@ class ReachmeeImport extends Import
     /**
      * Import constructor.
      */
-    public function __construct($baseUrl, $queryParams)
+    public function __construct($baseUrl, $queryParams, $settings = array())
     {
         //Assign parameters
         $this->baseUrl = $baseUrl; 

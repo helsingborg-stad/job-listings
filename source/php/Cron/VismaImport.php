@@ -16,17 +16,20 @@ class VismaImport extends Import
     public $queryParams = array();
     public $baseAdLink = "";
 
+    public $settings; 
+
     public $baseNode = "Assignments";
     public $subNode = "Assignment";
 
     /**
      * Import constructor.
      */
-    public function __construct($baseUrl, $queryParams)
+    public function __construct($baseUrl, $queryParams, $settings = array())
     {
         //Assign parameters 
         $this->baseUrl = $baseUrl; 
         $this->queryParams = $queryParams; 
+        $this->settings = $settings; 
 
         //Construct parent class 
         parent::__construct();
@@ -50,6 +53,7 @@ class VismaImport extends Import
             date_create(date("Y-m-d", time())), 
             date_create($item->ApplicationEndDate)
         )->days;
+        $item->ReadMoreUrl = $this->settings['apply_base_link'] . $item->Guid; 
 
         return $item; 
     }
@@ -157,7 +161,6 @@ class VismaImport extends Import
                         'post_title' => $dataObject['post_title'],
                         'post_content' => $dataObject['post_content'],
                         'post_type' => $this->postType,
-
                         'post_status' => 'publish'
                     )
                 );

@@ -97,7 +97,8 @@ class App
                         $importer['baseUrl'], 
                         array(
                             'guidGroup' => $importer['guidGroup']
-                        ) 
+                        ),
+                        $importer
                     );
                     continue; 
                 }
@@ -111,7 +112,8 @@ class App
                             'InstallationID' => $importer['InstallationID'],
                             'CustomerName' => $importer['CustomerName'],
                             'lang' => $importer['lang']
-                        )
+                        ),
+                        $importer
                     );
                     continue; 
                 }
