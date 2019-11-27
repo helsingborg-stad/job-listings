@@ -45,6 +45,10 @@ class ReachmeeImport extends Import
         )->days;
         $item->link = str_replace("rmpage=job", "rmpage=apply", $item->link); 
 
+        $item->description = html_entity_decode(
+            html_entity_decode($item->description)
+        ); 
+
         //Contacts
         $item->contact = array(); 
         if(isset($item->contactPerson) && is_array($item->contactPerson) && !empty($item->contactPerson)) {
@@ -112,7 +116,11 @@ class ReachmeeImport extends Import
 
                     //Get multiple values and create array
                     foreach($target as $subkey => $subtarget) {
-                        $result .= $this->metaImplodeLimiters($key)[$i] . $item->{$target[$subkey][0]};
+                        
+                        if(is_string($item->{$target[$subkey][0]})) {
+                            $result .= $this->metaImplodeLimiters($key)[$i] . $item->{$target[$subkey][0]};
+                        }
+                        
                         $i++;
                     }
 
@@ -167,13 +175,13 @@ class ReachmeeImport extends Import
 
                 //Diff data
                 if (count(array_unique($updateDiff)) != count($updateDiff)) {
-                    wp_update_post(
+                    /*wp_update_post(
                         array(
                             'ID' => $postId,
                             'post_title' => $dataObject['post_title'],
                             'post_content' => $dataObject['post_content']
                         )
-                    );
+                    );*/ 
                 }
             }
 
