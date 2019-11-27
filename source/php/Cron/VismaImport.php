@@ -15,6 +15,8 @@ class VismaImport extends Import
     public $baseUrl = "";
     public $queryParams = array();
     public $baseAdLink = "";
+    
+    public $detailsUrl = "https://recruit.visma.com/External/Feeds/AssignmentItem.ashx";
 
     public $settings; 
 
@@ -54,6 +56,32 @@ class VismaImport extends Import
             date_create($item->ApplicationEndDate)
         )->days;
         $item->ReadMoreUrl = $this->settings['apply_base_link'] . $item->Guid; 
+
+        //Get full text
+        $details = $this->getDetails($item->Guid);
+        $item->Localization->AssignmentLoc->WorkDescr = implode("\r\n", array(
+            $details->Assignment->Localization->AssignmentLoc->DepartmentDescr,
+            PHP_EOL . PHP_EOL . "  <!--more-->". PHP_EOL . PHP_EOL,
+            '<h2>'. __('Work Description', 'job-listings') .'</h2>',
+            $details->Assignment->Localization->AssignmentLoc->WorkDescr,
+            '<h2>'. __('Qualifications', 'job-listings') .'</h2>',
+            $details->Assignment->Localization->AssignmentLoc->Qualifications,
+            '<h2>'. __('Other', 'job-listings') .'</h2>',
+            $details->Assignment->Localization->AssignmentLoc->AdditionalInfo
+        ));
+
+        //Contacts
+        $item->contact = array(); 
+        if(isset($details->Assignment->Localization->AssignmentLoc->ContactPersons->ContactPerson) && is_object($details->Assignment->Localization->AssignmentLoc->ContactPersons->ContactPerson) && !empty($details->Assignment->Localization->AssignmentLoc->ContactPersons->ContactPerson)) {
+            foreach($details->Assignment->Localization->AssignmentLoc->ContactPersons->ContactPerson as $key => $detail) {
+                $item->contact[] = array(
+                    'name' => isset($detail->ContactName) ? reset($detail->ContactName) : '',
+                    'phone' => isset($detail->Telephone) ? (string) $detail->Telephone : '',
+                    'phone_sanitized' => isset($detail->Telephone) ? preg_replace('/\D/', '', (string) $detail->Telephone) : '',
+                    'position' => isset($detail->Title) ? reset($detail->Title) : ''
+                );
+            }
+        }
 
         return $item; 
     }
@@ -243,6 +271,34 @@ class VismaImport extends Import
             'source_system' => 'Visma',
             'has_expired' => array("hasExpired"),
             'number_of_days_left' => array("numberOfDaysLeft"),
+            'contact' => array("contact")
         );
+    }
+
+    public function getDetails($guid) {
+
+        //Get curl helper
+        $curl = new \JobListings\Helper\Curl(true, $this->cacheTTL);
+
+        //Fetch data
+        $data = $curl->request(
+            (string) $this->curlMethod,
+            (string) $this->detailsUrl,
+            (array) array(
+                'guidGroup' => $this->queryParams['guidGroup'],
+                'guidAssignment' => $guid
+            )
+        );
+
+        //Create array with simple xml
+        try {
+            $data = simplexml_load_string($data);
+        } catch (Exception $e) {
+            if (!strstr($e->getMessage(), 'XML')) {
+                throw $e;
+            }
+        }
+
+        return $data; 
     }
 }
