@@ -193,7 +193,8 @@ class Import
      * @param $termId
      * @return mixed
      */
-    public function updateTaxonomy($postId, $termSourceKey, $termId, $dataObject) {
+    public function updateTaxonomy($postId, $termSourceKey, $termId, $dataObject)
+    {
 
         if (isset($dataObject[$termSourceKey]) && !empty($dataObject[$termSourceKey])) {
 
@@ -231,7 +232,8 @@ class Import
      * @param $dataObject
      * @return bool
      */
-    public function updatePostMeta($postId, $dataObject) {
+    public function updatePostMeta($postId, $dataObject)
+    {
         if (is_array($dataObject) && !empty($dataObject)) {
             foreach ($dataObject as $metaKey => $metaValue) {
 
@@ -250,7 +252,8 @@ class Import
         return false; 
     }
 
-    public function isMultidimensionalArray($a) {
+    public function isMultidimensionalArray($a)
+    {
 
       if(!is_array($a)) {
         return false; 
