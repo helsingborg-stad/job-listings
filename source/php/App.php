@@ -85,7 +85,8 @@ class App
     /** Initialize importers
      * @return array
      */
-    public function initializeImporters() {
+    public function initializeImporters()
+    {
         $importers = get_field('job_listings_importers', 'option'); 
         
         if(is_array($importers) && !empty($importers)) {
@@ -156,7 +157,8 @@ class App
      * Remove inactive ads from archive
      * @return void
      */
-    public function removeInactiveAds($query) {
+    public function removeInactiveAds($query)
+    {
         if (!is_admin() && $query->is_main_query() && is_post_type_archive('job-listing')) {
             $query->set('meta_query', array(
                 array(

@@ -20,7 +20,8 @@ class Settings
     /**
      * register settings page
      */
-    public function registerSettingsPage() {
+    public function registerSettingsPage()
+    {
         //Check if acf pro
         if (!function_exists('acf_add_options_sub_page')) {
             return; 
