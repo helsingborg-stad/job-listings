@@ -76,10 +76,11 @@ class App
         );
 
         add_action('wp_enqueue_scripts', array($this, 'enqueueStyles'), 14);
+        add_action('wp_enqueue_scripts', array($this, 'enqueueScripts'));
 
-        add_action('pre_get_posts', array($this, 'removeInactiveAds')); 
+        add_action('pre_get_posts', array($this, 'removeInactiveAds'));
 
-        add_action('init', array($this, 'initializeImporters')); 
+        add_action('init', array($this, 'initializeImporters'));
     }
 
     /** Initialize importers
@@ -95,19 +96,19 @@ class App
                 //Init visma import
                 if(isset($importer['acf_fc_layout']) && $importer['acf_fc_layout'] == "visma") {
                     new \JobListings\Cron\VismaImport(
-                        $importer['baseUrl'], 
+                        $importer['baseUrl'],
                         array(
                             'guidGroup' => $importer['guidGroup']
                         ),
                         $importer
                     );
-                    continue; 
+                    continue;
                 }
 
                 //Init reachmee import
                 if(isset($importer['acf_fc_layout']) && $importer['acf_fc_layout'] == "reachmee") {
                     new \JobListings\Cron\ReachmeeImport(
-                        $importer['baseUrl'], 
+                        $importer['baseUrl'],
                         array(
                             'id' => $importer['id'],
                             'InstallationID' => $importer['InstallationID'],
@@ -116,9 +117,9 @@ class App
                         ),
                         $importer
                     );
-                    continue; 
+                    continue;
                 }
-            } 
+            }
         }
     }
 
@@ -138,9 +139,7 @@ class App
      */
     public function enqueueStyles()
     {
-        wp_register_style('job-listings-css',
-            JOBLISTINGS_URL . '/dist/' . \JobListings\Helper\CacheBust::name('css/job-listings.css'));
-        wp_enqueue_style('job-listings-css');
+        wp_enqueue_style('job-listings-css', JOBLISTINGS_URL . '/dist/' . Helper\CacheBust::name('css/job-listings.css'));
     }
 
     /**
@@ -149,8 +148,25 @@ class App
      */
     public function enqueueScripts()
     {
+        $postType = get_post_type();
+
         wp_register_script('job-listings-js',
-            JOBLISTINGS_URL . '/dist/' . \JobListings\Helper\CacheBust::name('js/job-listings.js'));
+            JOBLISTINGS_URL . '/dist/' . Helper\CacheBust::name('js/job-listings.js'), array(), false, true);
+        if (is_single() && $postType === 'job-listing') {
+          wp_enqueue_script('job-listings-js');
+
+            $postMeta = get_post_meta(get_the_ID());
+            $applyUrl = $postMeta['external_url'][0] ?? '';
+            parse_str(htmlspecialchars_decode($applyUrl), $output);
+
+            wp_localize_script(
+              'job-listings-js',
+              'jobListings',
+              array(
+                'jobId' => $output['rmjob'] ?? '',
+              )
+            );
+        }
     }
 
     /**
