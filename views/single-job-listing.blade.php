@@ -41,16 +41,15 @@
 
                                                 @if(isset($postMeta['has_expired'][0]))
                                                     @if ($postMeta['has_expired'][0] === '0')
-                                                        <a target="_blank"
-                                                        class="btn btn-lg btn-primary btn-floating-application"
-                                                        href="{{$postMeta['external_url'][0]}}">
-                                                            <?php _e('Apply now', 'job-listings'); ?>
+                                                        <a class="btn btn-lg btn-primary btn-floating-application job-listings-application"
+                                                        href="#job-listings-modal">
+                                                          <?php _e('Apply now', 'job-listings'); ?>
                                                         </a>
                                                     @endif
                                                 @endif
 
                                                 @include('partials.blog.post-header')
-                                            
+
                                                 @if (post_password_required(get_post()))
                                                     {!! get_the_password_form() !!}
                                                 @else
@@ -106,7 +105,7 @@
                                         @else
                                             {{ $postMeta['application_end_date'][0] }}
                                             <span class="text-sm">
-                                                ({{ $postMeta['number_of_days_left'][0] }} 
+                                                ({{ $postMeta['number_of_days_left'][0] }}
                                                 <?php _e('days left','job-listings'); ?>)
                                             </span>
                                         @endif
@@ -166,7 +165,7 @@
 
                                 @if (isset($postMeta['employment_grade'][0]) && !empty($postMeta['employment_grade'][0]))
                                     <li class="gutter gutter-top"><b><?php _e('Location:', 'job-listings'); ?></b><br/>
-                                        {{$postMeta['location_name'][0]}}</li>
+                                        {{$postMeta['location_name'][0] ?? ''}}</li>
 
                                 @endif
 
@@ -217,11 +216,14 @@
                             </div>
                         @else
                             <div class="gutter gutter-top">
-                                <a target="_blank"
-                                class="btn btn-lg btn-block btn-primary btn-outline"
-                                href="{{$postMeta['external_url'][0]}}"><?php _e('Apply here',
+                                <a class="btn btn-lg btn-block btn-primary btn-outline job-listings-application"
+                                href="#job-listings-modal"><?php _e('Apply here',
                                         'job-listings'); ?> ({{ $postMeta['number_of_days_left'][0] }} <?php _e('days left',
                                         'job-listings'); ?>)
+                                </a>
+
+                                <a id="job-listings-login" class="btn btn-lg btn-block btn-primary btn-outline"
+                                href="#job-listings-modal"><?php _e('View application', 'job-listings'); ?>
                                 </a>
                             </div>
                         @endif
@@ -230,6 +232,19 @@
             </aside>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div id="job-listings-modal" class="modal modal-backdrop-4 modal-small" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-content material-shadow-lg">
+            <div id="job-listings-modal-body">
+            </div>
+            <div class="modal-footer">
+                <a href="#close" class="btn btn-default"><?php _e('Close', 'job-listings') ?></a>
+            </div>
+          </div>
+        <a href="#close" class="backdrop"></a>
+    </div>
+    <!-- /modal -->
 
 @stop
 
