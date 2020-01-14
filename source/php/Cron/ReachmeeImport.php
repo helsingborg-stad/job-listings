@@ -34,7 +34,8 @@ class ReachmeeImport extends Import
      * Normalize
      * @return $item array
      */
-    public function normalize($item) {
+    public function normalize($item)
+    {
 
         $item->pubDate = date("Y-m-d", strtotime($item->pubDate));
         $item->pubDateTo = date("Y-m-d", strtotime($item->pubDateTo));
@@ -76,7 +77,8 @@ class ReachmeeImport extends Import
      * Add manual import button
      * @return bool|null
      */
-    public function addImportButton() {
+    public function addImportButton()
+    {
         global $wp;
         if(isset(get_current_screen()->post_type) && get_current_screen()->post_type == "job-listing") {
             $queryArgs = array_merge($wp->query_vars, array(__CLASS__ => 'true')); 

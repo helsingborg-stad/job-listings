@@ -41,7 +41,8 @@ class VismaImport extends Import
      * Normalize
      * @return $item array
      */
-    public function normalize($item) {
+    public function normalize($item)
+    {
 
         $item->PublishStartDate = date("Y-m-d", strtotime($item->PublishStartDate));
         $item->PublishEndDate = date("Y-m-d", strtotime($item->PublishEndDate));

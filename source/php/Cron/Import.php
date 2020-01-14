@@ -20,7 +20,7 @@ class Import
         add_action('admin_init', array($this, 'importXmlTrigger'));
 
         //Cron trigger
-        add_action('import_avalable_job_list' . get_class($this), array($this, 'importXml'));
+        add_action($this->getHookName(), array($this, 'importXml'));
 
         //Cron schedule
         add_action('admin_init', array($this, 'scheduleCronJob'));
@@ -29,7 +29,20 @@ class Import
         add_action('restrict_manage_posts', array($this, 'addImportButton'), 100);
 
         // Filter data from external party
-        add_filter(str_replace("\\", "/", get_class($this))."/Item", array($this, 'normalize')); 
+        add_filter(str_replace("\\", "/", get_class($this)) . '/Item', array($this, 'normalize')); 
+    }
+
+    /**
+     * Generate hook name
+     * @param $prefix
+     * @return string
+     */
+    public function getHookName(string $prefix = 'import_avalable_job_list_') : string
+    {
+        $searchFor = '\\';
+        $replaceWith = '_';
+
+        return $prefix . str_replace($searchFor, $replaceWith, get_class($this));
     }
 
     /**
@@ -37,8 +50,8 @@ class Import
      */
     public function scheduleCronJob()
     {
-        if (!wp_next_scheduled('import_avalable_job_list_' . get_class($this))) {
-            wp_schedule_event(time(), 'hourly', 'import_avalable_job_list_' . get_class($this));
+        if (!wp_next_scheduled($this->getHookName())) {
+            wp_schedule_event(time(), 'hourly', $this->getHookName());
         }
     }
 
@@ -193,7 +206,8 @@ class Import
      * @param $termId
      * @return mixed
      */
-    public function updateTaxonomy($postId, $termSourceKey, $termId, $dataObject) {
+    public function updateTaxonomy($postId, $termSourceKey, $termId, $dataObject)
+    {
 
         if (isset($dataObject[$termSourceKey]) && !empty($dataObject[$termSourceKey])) {
 
@@ -231,7 +245,8 @@ class Import
      * @param $dataObject
      * @return bool
      */
-    public function updatePostMeta($postId, $dataObject) {
+    public function updatePostMeta($postId, $dataObject)
+    {
         if (is_array($dataObject) && !empty($dataObject)) {
             foreach ($dataObject as $metaKey => $metaValue) {
 
@@ -250,7 +265,8 @@ class Import
         return false; 
     }
 
-    public function isMultidimensionalArray($a) {
+    public function isMultidimensionalArray($a)
+    {
 
       if(!is_array($a)) {
         return false; 
