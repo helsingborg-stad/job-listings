@@ -223,7 +223,7 @@
                                 </a>
 
                                 <a id="job-listings-login" class="btn btn-lg btn-block btn-primary btn-outline"
-                                href="#job-listings-modal"><?php _e('View application', 'job-listings'); ?>
+                                href="#job-listings-modal"><?php _e('Log in'); ?>
                                 </a>
                             </div>
                         @endif
