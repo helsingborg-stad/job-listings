@@ -12,10 +12,6 @@ class CacheBust
      */
     public static function name($name, $returnName = true)
     {
-        if ($returnName == true && defined('DEV_MODE') && DEV_MODE == true) {
-            return $name;
-        }
-
         $revManifest = self::getRevManifest();
 
         if (!isset($revManifest[$name])) {
@@ -31,7 +27,7 @@ class CacheBust
      */
     public static function getRevManifest()
     {
-        $jsonPath = JOBLISTINGS_PATH . apply_filters('JobListings/Helper/CacheBust/RevManifestPath', 'dist/rev-manifest.json');
+        $jsonPath = JOBLISTINGS_PATH . apply_filters('jobListings/Helper/CacheBust/RevManifestPath', 'dist/rev-manifest.json');
 
         if (file_exists($jsonPath)) {
             return json_decode(file_get_contents($jsonPath), true);

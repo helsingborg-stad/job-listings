@@ -1,3 +1,0 @@
-var JobListings = {};
-
-//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImpvYi1saXN0aW5ncy5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQUNBIiwiZmlsZSI6ImpvYi1saXN0aW5ncy5qcyIsInNvdXJjZXNDb250ZW50IjpbInZhciBKb2JMaXN0aW5ncyA9IHt9O1xuIl19
