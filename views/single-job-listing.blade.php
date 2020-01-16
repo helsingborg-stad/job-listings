@@ -19,6 +19,20 @@
                     <div class="grid-sm-12">
                         {!! the_post() !!}
                         <?php $postMeta = get_post_meta(get_the_ID());?>
+                        <?php 
+                            $term = get_the_terms(get_the_ID(), 'job-listing-source'); 
+                            if(is_array($term)) {
+                                $termSlug = array_pop($term)->slug; 
+                            } else {
+                                $termSlug = null; 
+                            }
+
+                            if($termSlug == "reachmee") {
+                                $applicationLink = "#job-listings-modal"; 
+                            } else {
+                                $applicationLink = $postMeta['external_url'][0];
+                            }
+                        ?>
 
                         @if(isset($postMeta['has_expired'][0]))
                             @if ($postMeta['has_expired'][0] === '1')
@@ -42,7 +56,7 @@
                                                 @if(isset($postMeta['has_expired'][0]))
                                                     @if ($postMeta['has_expired'][0] === '0')
                                                         <a class="btn btn-lg btn-primary btn-floating-application job-listings-application"
-                                                        href="#job-listings-modal">
+                                                            href="{{ $applicationLink }}">
                                                           <?php _e('Apply now', 'job-listings'); ?>
                                                         </a>
                                                     @endif
@@ -217,14 +231,15 @@
                         @else
                             <div class="gutter gutter-top">
                                 <a class="btn btn-lg btn-block btn-primary btn-outline job-listings-application"
-                                href="#job-listings-modal"><?php _e('Apply here',
+                                href="{{ $applicationLink }}"><?php _e('Apply here',
                                         'job-listings'); ?> ({{ $postMeta['number_of_days_left'][0] }} <?php _e('days left',
                                         'job-listings'); ?>)
                                 </a>
-
-                                <a id="job-listings-login" class="btn btn-lg btn-block btn-primary btn-outline"
-                                href="#job-listings-modal"><?php _e('Log in'); ?>
-                                </a>
+                                <?php if($termSlug == "reachmee") { ?> 
+                                    <a id="job-listings-login" class="btn btn-lg btn-block btn-primary btn-outline"
+                                    href="#job-listings-modal"><?php _e('Log in'); ?>
+                                    </a>
+                                <?php } ?>
                             </div>
                         @endif
                     @endif
@@ -233,18 +248,20 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="job-listings-modal" class="modal modal-backdrop-4 modal-small" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-content material-shadow-lg">
-            <div id="job-listings-modal-body">
+    <?php if($termSlug == "reachmee") { ?> 
+        <!-- Modal -->
+        <div id="job-listings-modal" class="modal modal-backdrop-4 modal-small" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content material-shadow-lg">
+                <div id="job-listings-modal-body">
+                </div>
+                <div class="modal-footer">
+                    <a href="#close" class="btn btn-default"><?php _e('Close', 'job-listings') ?></a>
+                </div>
             </div>
-            <div class="modal-footer">
-                <a href="#close" class="btn btn-default"><?php _e('Close', 'job-listings') ?></a>
-            </div>
-          </div>
-        <a href="#close" class="backdrop"></a>
-    </div>
-    <!-- /modal -->
+            <a href="#close" class="backdrop"></a>
+        </div>
+        <!-- /modal -->
+    <?php } ?>
 
 @stop
 
