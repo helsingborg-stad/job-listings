@@ -75,6 +75,8 @@ class App
             )
         );
 
+        new Controller(); 
+
         add_action('wp_enqueue_scripts', array($this, 'enqueueStyles'), 14);
         add_action('wp_enqueue_scripts', array($this, 'enqueueScripts'));
 

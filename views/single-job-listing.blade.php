@@ -2,8 +2,6 @@
 
 @section('content')
 
-    <?php global $post; ?>
-
     <div class="container main-container job-listings">
         @include('partials.breadcrumbs')
 
@@ -18,30 +16,13 @@
                 <div class="grid">
                     <div class="grid-sm-12">
                         {!! the_post() !!}
-                        <?php $postMeta = get_post_meta(get_the_ID());?>
-                        <?php 
-                            $term = get_the_terms(get_the_ID(), 'job-listing-source'); 
-                            if(is_array($term)) {
-                                $termSlug = array_pop($term)->slug; 
-                            } else {
-                                $termSlug = null; 
-                            }
 
-                            if($termSlug == "reachmee") {
-                                $applicationLink = "#job-listings-modal"; 
-                            } else {
-                                $applicationLink = $postMeta['external_url'][0];
-                            }
-                        ?>
-
-                        @if(isset($postMeta['has_expired'][0]))
-                            @if ($postMeta['has_expired'][0] === '1')
+                        @if($isExpired)
                             <div class="gutter gutter-bottom">
                                 <div class="notice warning">
                                     <i class="pricon pricon-notice-warning"></i> <?php _e("The application period for this reqruitment has ended."); ?>
                                 </div>
                             </div>
-                            @endif
                         @endif
 
                         <div class="grid">
@@ -52,14 +33,11 @@
 
                                         <div class="box box-card">
                                             <div class="box-content">
-
-                                                @if(isset($postMeta['has_expired'][0]))
-                                                    @if ($postMeta['has_expired'][0] === '0')
-                                                        <a class="btn btn-lg btn-primary btn-floating-application job-listings-application"
-                                                            href="{{ $applicationLink }}">
-                                                          <?php _e('Apply now', 'job-listings'); ?>
-                                                        </a>
-                                                    @endif
+                                                @if(!$isExpired)
+                                                    <a class="btn btn-lg btn-primary btn-floating-application job-listings-application"
+                                                        href="{{ $applyLink }}">
+                                                        <?php _e('Apply now', 'job-listings'); ?>
+                                                    </a>
                                                 @endif
 
                                                 @include('partials.blog.post-header')
@@ -68,26 +46,26 @@
                                                     {!! get_the_password_form() !!}
                                                 @else
 
-                                                @if (isset($postMeta['preamble'][0]) && !empty($postMeta['preamble'][0]))
+                                                @isset($preamble)
                                                     <p class="lead">
-                                                        {{$postMeta['preamble'][0]}}
+                                                        {{ $preamble }}
                                                     </p>
-                                                @endif
+                                                @endisset
 
-                                                {!! apply_filters('the_content', get_post()->post_content) !!}
+                                                {!! $content !!}
 
                                             </div>
                                         </div>
 
-                                            @if (isset($postMeta['legal_details'][0]) && !empty($postMeta['legal_details'][0]))
+                                            @isset($legal)
                                                 <div class="box box-card">
                                                     <div class="box-content">
                                                         <div class="small">
-                                                            {{$postMeta['legal_details'][0]}}
+                                                            {{ $legal }}
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endif
+                                            @endisset
                                         @endif
                                     </article>
 
@@ -110,83 +88,79 @@
                     <div class="box box-card">
                         <div class="box-content">
                             <ul class="unlist job-listing-sidenav">
-                                @if (isset($postMeta['application_end_date'][0]) && !empty($postMeta['application_end_date'][0]))
-                                    <li><b><?php _e('Deadline for applications:', 'job-listings'); ?></b><br/>
-                                        @if ($postMeta['has_expired'][0] === '1')
-                                            <button class="btn btn-lg btn-contrasted disabled btn-block">
-                                                <?php _e('The application period has ended', 'job-listings'); ?>
-                                            </button>
-                                        @else
-                                            {{ $postMeta['application_end_date'][0] }}
-                                            <span class="text-sm">
-                                                ({{ $postMeta['number_of_days_left'][0] }}
-                                                <?php _e('days left','job-listings'); ?>)
-                                            </span>
-                                        @endif
-
+                                
+                                @if($endDate && !$isExpired)
+                                    <li>
+                                        <b><?php _e('Deadline for applications:', 'job-listings'); ?></b>
+                                        <br/>
+                                        {{ $endDate }}
+                                        <span class="text-sm">
+                                            ({{ $daysLeft }} <?php _e('days left','job-listings'); ?>)
+                                        </span>
                                     </li>
                                 @endif
 
-                                @if (isset($postMeta['ad_reference_nbr'][0]) && !empty($postMeta['ad_reference_nbr'][0]))
+                                @if($referenceId)
                                     <li class="gutter gutter-top">
-                                        <b><?php _e('Reference:', 'job-listings'); ?></b><br/>
-                                        {{$postMeta['ad_reference_nbr'][0]}}
-
+                                        <b><?php _e('Reference:', 'job-listings'); ?></b>
+                                        <br/>
+                                        {{ $referenceId }}
                                     </li>
                                 @endif
 
-                                @if (isset($postMeta['publish_start_date'][0]) && !empty($postMeta['publish_start_date'][0]))
+                                @if($startDate)
                                     <li class="gutter gutter-top">
-                                        <b><?php _e('Published:', 'job-listings'); ?></b><br/>
-                                        {{ $postMeta['publish_start_date'][0] }}
-                                        {{substr($postMeta['publish_start_date'][0], 0,
-                                                  strpos($postMeta['publish_start_date'][0], "T"))}}
-
+                                        <b><?php _e('Published:', 'job-listings'); ?></b>
+                                        <br/>
+                                        {{ $startDate }}
                                     </li>
                                 @endif
 
-                                @if (isset($postMeta['number_of_positions'][0]) && !empty($postMeta['number_of_positions'][0]))
+                                @if($numberOfPositions)
                                     <li class="gutter gutter-top">
-                                        <b><?php _e('Number of positions:', 'job-listings'); ?></b><br/>
-                                        {{$postMeta['number_of_positions'][0]}}
-
+                                        <b><?php _e('Number of positions:', 'job-listings'); ?></b>
+                                        <br/>
+                                        {{ $numberOfPositions }}
                                     </li>
                                 @endif
 
-                                @if (isset($postMeta['work_experience'][0]) && !empty($postMeta['work_experience'][0]))
+                                @if($expreience)
                                     <li class="gutter gutter-top">
-                                        <b><?php _e('Experience:', 'job-listings'); ?></b><br/>
-                                        {{$postMeta['work_experience'][0]}}
-
+                                        <b><?php _e('Experience:', 'job-listings'); ?></b>
+                                        <br/>
+                                        {{ $expreience }}
                                     </li>
                                 @endif
 
-                                @if (isset($postMeta['employment_type'][0]) && !empty($postMeta['employment_type'][0]))
+                                @if($employmentType)
                                     <li class="gutter gutter-top">
-                                        <b><?php _e('Employment type:', 'job-listings'); ?></b><br/>
-                                        {{$postMeta['employment_type'][0]}}
-
+                                        <b><?php _e('Employment type:', 'job-listings'); ?></b>
+                                        <br/>
+                                        {{ $employmentType }}
                                     </li>
                                 @endif
 
-                                @if (isset($postMeta['employment_grade'][0]) && !empty($postMeta['employment_grade'][0]))
+                                @if($employmentGrade)
                                     <li class="gutter gutter-top">
-                                        <b><?php _e('Extent:', 'job-listings'); ?></b><br/>
-                                        {{$postMeta['employment_grade'][0]}}
-
+                                        <b><?php _e('Extent:', 'job-listings'); ?></b>
+                                        <br/>
+                                        {{ $employmentGrade }}
                                     </li>
                                 @endif
 
-                                @if (isset($postMeta['employment_grade'][0]) && !empty($postMeta['employment_grade'][0]))
-                                    <li class="gutter gutter-top"><b><?php _e('Location:', 'job-listings'); ?></b><br/>
-                                        {{$postMeta['location_name'][0] ?? ''}}</li>
-
+                                @if($location)
+                                    <li class="gutter gutter-top">
+                                        <b><?php _e('Location:', 'job-listings'); ?></b>
+                                        <br/>
+                                        {{ $location }}
+                                    </li>
                                 @endif
 
-                                @if(isset($postMeta['departments'][0]) && !empty($postMeta['departments'][0]))
+                                @if($department)
                                     <li class="gutter gutter-top">
-                                        <b><?php _e('Company:', 'job-listings'); ?></b><br/>
-                                        {{ucfirst(mb_strtolower($postMeta['departments'][0]))}}
+                                        <b><?php _e('Company:', 'job-listings'); ?></b>
+                                        <br/>
+                                        {{ $department }}
                                     </li>
                                 @endif
 
@@ -195,24 +169,28 @@
 
                     </div>
 
-                    @if(isset($postMeta['contact'][0]) && !empty($postMeta['contact'][0]))
-                        @foreach(unserialize($postMeta['contact'][0]) as $person)
+                    @if($contacts)
+                        @foreach($contacts as $contact)
                             <div class="box box-card">
                                 <div class="box-content">
 
                                     <h3><?php _e('Contact', 'job-listings'); ?></h3>
                                     <ul class="unlist job-listing-sidenav">
 
-                                        @if (isset($person['name']) && !empty($person['name']))
-                                            <li class="strong">{{$person['name']}}</li>
+                                        @if ($contact->name)
+                                            <li class="strong">{{$contact->name}}</li>
                                         @endif
 
-                                        @if (isset($person['position']) && !empty($person['position']))
-                                            <li class="small gutter gutter-bottom">{{$person['position']}}</li>
+                                        @if ($contact->position)
+                                            <li class="small gutter gutter-bottom">{{$contact->position}}</li>
                                         @endif
 
-                                        @if (isset($person['phone']) && !empty($person['phone']))
-                                            <li class="link-item link-item-phone"><a href="tel:{{$person['phone_sanitized']}}">{{$person['phone']}}</a></li>
+                                        @if ($contact->phone && $contact->phone_sanitized)
+                                            <li class="link-item link-item-phone">
+                                                <a href="tel:{{ $contact->phone_sanitized }}">
+                                                    {{ $contact->phone }}
+                                                </a>
+                                            </li>
                                         @endif
 
                                     </ul>
@@ -221,34 +199,35 @@
                         @endforeach
                     @endif
 
-                    @if(isset($postMeta['has_expired'][0]))
-                        @if ($postMeta['has_expired'][0] === '1')
-                            <div class="gutter gutter-top">
-                                <button class="btn btn-lg btn-contrasted disabled btn-block">
-                                    <?php _e('The application period has ended', 'job-listings'); ?>
-                                </button>
-                            </div>
-                        @else
-                            <div class="gutter gutter-top">
-                                <a class="btn btn-lg btn-block btn-primary btn-outline job-listings-application"
-                                href="{{ $applicationLink }}"><?php _e('Apply here',
-                                        'job-listings'); ?> ({{ $postMeta['number_of_days_left'][0] }} <?php _e('days left',
-                                        'job-listings'); ?>)
+                    @if($isExpired)
+                        <div class="gutter gutter-top">
+                            <button class="btn btn-lg btn-contrasted disabled btn-block">
+                                <?php _e('The application period has ended', 'job-listings'); ?>
+                            </button>
+                        </div>
+                    @else
+                        <div class="gutter gutter-top">
+                            <a class="btn btn-lg btn-block btn-primary btn-outline job-listings-application"
+                            href="{{ $applyLink }}"><?php _e('Apply here',
+                                    'job-listings'); ?> ({{ $daysLeft }} <?php _e('days left',
+                                    'job-listings'); ?>)
+                            </a>
+                            <?php if($sourceSystem == "reachmee") { ?> 
+                                <a id="job-listings-login" class="btn btn-lg btn-block btn-primary btn-outline"
+                                href="#job-listings-modal"><?php _e('Log in'); ?>
                                 </a>
-                                <?php if($termSlug == "reachmee") { ?> 
-                                    <a id="job-listings-login" class="btn btn-lg btn-block btn-primary btn-outline"
-                                    href="#job-listings-modal"><?php _e('Log in'); ?>
-                                    </a>
-                                <?php } ?>
-                            </div>
-                        @endif
+                            <?php } ?>
+                        </div>
                     @endif
+                
+                    
+                </div>
 
             </aside>
         </div>
     </div>
 
-    <?php if($termSlug == "reachmee") { ?> 
+    <?php if($sourceSystem == "reachmee") { ?> 
         <!-- Modal -->
         <div id="job-listings-modal" class="modal modal-backdrop-4 modal-small" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content material-shadow-lg">
