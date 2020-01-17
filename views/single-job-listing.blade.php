@@ -227,7 +227,7 @@
         </div>
     </div>
 
-    <?php if($sourceSystem == "reachmee") { ?> 
+    @if($sourceSystem == "reachmee") {
         <!-- Modal -->
         <div id="job-listings-modal" class="modal modal-backdrop-4 modal-small" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content material-shadow-lg">
@@ -240,7 +240,7 @@
             <a href="#close" class="backdrop"></a>
         </div>
         <!-- /modal -->
-    <?php } ?>
+    @endif
 
 @stop
 
