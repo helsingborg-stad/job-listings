@@ -180,10 +180,17 @@ class App
         if (!is_admin() && $query->is_main_query() && is_post_type_archive('job-listing')) {
             $query->set('meta_query', array(
                 array(
-                   'key'=>'number_of_days_left',
-                   'value'=>'0',
-                   'compare'=>'!=',
+                   'key'=>'publish_end_date',
+                   'value'=> date("Y-m-d"),
+                   'compare'=>'>',
+                   'type' => 'DATE'
                 ),
+                array(
+                    'key'=>'publish_start_date',
+                    'value'=> date("Y-m-d"),
+                    'compare'=>'<=',
+                    'type' => 'DATE'
+                 ),
             ));
         }
     }
