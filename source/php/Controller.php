@@ -18,10 +18,9 @@ class Controller
       add_filter('Municipio/viewData', array($this, 'singleViewData'));
     }
 
-
     /**
-     * Remove inactive ads from archive
-     * @return void
+     * Get single view data 
+     * @return array
      */
     public function singleViewData($data)
     {
@@ -58,10 +57,18 @@ class Controller
       return $data; 
     }
 
+    /**
+     * Get meta key, simplified
+     * @return mixed
+     */
     public function getMeta($key, $single = true) {
       return get_post_meta($this->post->ID, $key, $single); 
     } 
 
+    /**
+     * Check if ad is expired
+     * @return boolean
+     */
     public function isExpired() {
       if($this->daysLeft() < 0) {
         return true; 
@@ -69,6 +76,10 @@ class Controller
       return false; 
     }
 
+    /**
+     * Calculate days left for ad
+     * @return integer
+     */
     public function daysLeft() {
       return (int) round((
         strtotime($this->getMeta('publish_end_date')) - 
@@ -76,6 +87,10 @@ class Controller
       );
     }
 
+    /**
+     * Get source system name
+     * @return string/null
+     */
     public function getSourceSystem() {
       $term = get_the_terms($this->post->ID, 'job-listing-source');
       
@@ -86,6 +101,10 @@ class Controller
       }
     }
 
+    /**
+     * Get contacts
+     * @return array
+     */
     public function getContacts() {
       $contacts = $this->getMeta('contact');
 
@@ -96,9 +115,12 @@ class Controller
       return $contacts; 
     }
 
+    /**
+     * Check if is single ad page
+     * @return void
+     */
     public function isSingleAd() {
-      
-      if($this->post->post_type == "job-listing") {
+      if($this->post->post_type == "job-listing" && is_single()) {
         return true; 
       }
       return false; 
