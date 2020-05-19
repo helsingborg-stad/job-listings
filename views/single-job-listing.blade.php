@@ -100,12 +100,11 @@
                                     </li>
                                 @endif
 
-                                @if($referenceId)
+                                @if($projectNr)
                                     <li class="gutter gutter-top">
                                         <b><?php _e('Reference:', 'job-listings'); ?></b>
                                         <br/>
-                                        {{ $referenceId }}
-                                    </li>
+                                        {{ $projectNr }}                                     </li>
                                 @endif
 
                                 @if($startDate)

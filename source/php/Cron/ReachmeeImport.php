@@ -225,7 +225,7 @@ class ReachmeeImport extends Import
             'employment_end_date' => array("pubDateTo"),
             'ad_created' => array("pubDate"),
             'ad_modified' => array("pubDate"),
-            'ad_reference_nbr' => array("projectName"),
+            'ad_reference_nbr'=> array("projectName"),
             //'number_of_positions' => "1",
             'external_url' => array("link"),
             'is_internal' => array("hideApplyButton"),
