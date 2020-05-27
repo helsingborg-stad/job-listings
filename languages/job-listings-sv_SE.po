@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Job Listings\n"
-"POT-Creation-Date: 2020-01-14 10:36+0100\n"
-"PO-Revision-Date: 2020-01-14 10:36+0100\n"
+"POT-Creation-Date: 2020-05-27 14:43+0200\n"
+"PO-Revision-Date: 2020-05-27 14:44+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
-"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
@@ -54,15 +54,15 @@ msgstr "Lediga jobb"
 
 #: source/php/App.php:38
 msgid "Job categories"
-msgstr "Jobb kategorier"
+msgstr "Jobbkategorier"
 
 #: source/php/App.php:39
 msgid "Job category"
-msgstr "Jobb kategori"
+msgstr "Jobbkategori"
 
 #: source/php/App.php:43 source/php/App.php:64
 msgid "Job Categories"
-msgstr "Jobb Kategorier"
+msgstr "Jobbkategorier"
 
 #: source/php/App.php:59
 msgid "Sources"
@@ -72,23 +72,23 @@ msgstr "Källor"
 msgid "Source"
 msgstr "Källa"
 
-#: source/php/Cron/ReachmeeImport.php:83
+#: source/php/Cron/ReachmeeImport.php:85
 msgid "Start Reachmee Import"
 msgstr "Starta Reachmee import"
 
-#: source/php/Cron/VismaImport.php:65
+#: source/php/Cron/VismaImport.php:66
 msgid "Work Description"
 msgstr "Arbetsuppgifter"
 
-#: source/php/Cron/VismaImport.php:67
+#: source/php/Cron/VismaImport.php:68
 msgid "Qualifications"
 msgstr "Kvalifikationer"
 
-#: source/php/Cron/VismaImport.php:69
+#: source/php/Cron/VismaImport.php:70
 msgid "Other"
 msgstr "Övrigt"
 
-#: source/php/Cron/VismaImport.php:97
+#: source/php/Cron/VismaImport.php:98
 msgid "Start Visma Import"
 msgstr "Starta Visma import"
 
@@ -153,6 +153,15 @@ msgstr "Lägg till Ny %s"
 msgid "New %s Name"
 msgstr "Nytt %s namn"
 
+#: vendor/helsingborg-stad/acf-export-manager/src/AcfExportManager.php:364
+msgid "Export with AcfExportManager"
+msgstr ""
+
+#: vendor/helsingborg-stad/acf-export-manager/src/AcfExportManager.php:408
+#, php-format
+msgid "Exported %d fieldgroup(s)."
+msgstr ""
+
 #: views/archive-job-listing.blade.php:85
 msgid "Position"
 msgstr "Tjänst"
@@ -189,73 +198,71 @@ msgstr "Utgången"
 msgid "No posts to show"
 msgstr "Inga poster att visa"
 
-#: views/single-job-listing.blade.php:26
+#: views/single-job-listing.blade.php:23
 msgid "The application period for this reqruitment has ended."
 msgstr "Ansökningsperioden för den här rekryteringen har passerat. "
 
-#: views/single-job-listing.blade.php:45
+#: views/single-job-listing.blade.php:39
 msgid "Apply now"
 msgstr "Ansök"
 
-#: views/single-job-listing.blade.php:99
+#: views/single-job-listing.blade.php:94
 msgid "Deadline for applications:"
 msgstr "Sista ansökningsdatum:"
 
-#: views/single-job-listing.blade.php:102
-#: views/single-job-listing.blade.php:213
-msgid "The application period has ended"
-msgstr "Ansökningstiden har gått ut."
-
-#: views/single-job-listing.blade.php:108
-#: views/single-job-listing.blade.php:220
+#: views/single-job-listing.blade.php:98 views/single-job-listing.blade.php:211
 msgid "days left"
 msgstr "dagar kvar"
 
-#: views/single-job-listing.blade.php:117
+#: views/single-job-listing.blade.php:105
 msgid "Reference:"
 msgstr "Referens:"
 
-#: views/single-job-listing.blade.php:125
+#: views/single-job-listing.blade.php:112
 msgid "Published:"
 msgstr "Publicerad:"
 
-#: views/single-job-listing.blade.php:135
+#: views/single-job-listing.blade.php:120
 msgid "Number of positions:"
 msgstr "Antal tjänster:"
 
-#: views/single-job-listing.blade.php:143
+#: views/single-job-listing.blade.php:128
 msgid "Experience:"
 msgstr "Erfarenhet:"
 
-#: views/single-job-listing.blade.php:151
+#: views/single-job-listing.blade.php:136
 msgid "Employment type:"
 msgstr "Anställningsform:"
 
-#: views/single-job-listing.blade.php:159
+#: views/single-job-listing.blade.php:144
 msgid "Extent:"
 msgstr "Omfattning:"
 
-#: views/single-job-listing.blade.php:166
+#: views/single-job-listing.blade.php:152
 msgid "Location:"
 msgstr "Ort:"
 
-#: views/single-job-listing.blade.php:173
+#: views/single-job-listing.blade.php:160
 msgid "Company:"
 msgstr "Förvaltning:"
 
-#: views/single-job-listing.blade.php:188
+#: views/single-job-listing.blade.php:176
 msgid "Contact"
 msgstr "Kontakt"
 
-#: views/single-job-listing.blade.php:219
+#: views/single-job-listing.blade.php:204
+msgid "The application period has ended"
+msgstr "Ansökningstiden har gått ut."
+
+#: views/single-job-listing.blade.php:210
 msgid "Apply here"
 msgstr "Ansök här"
 
-#: views/single-job-listing.blade.php:225
-msgid "View application"
-msgstr "Visa ansökan"
+#: views/single-job-listing.blade.php:216
+msgid "Log in"
+msgstr "Logga in"
 
-#: views/single-job-listing.blade.php:241
+#: views/single-job-listing.blade.php:236
 msgid "Close"
 msgstr "Stäng"
 
@@ -270,6 +277,9 @@ msgstr "(# Plugin_url #)"
 #. Author of the plugin/theme
 msgid "Nikolas Ramstedt, Sebastian Thulin & Johan Silvergrund"
 msgstr ""
+
+#~ msgid "View application"
+#~ msgstr "Visa ansökan"
 
 #~ msgid "Import job settings"
 #~ msgstr "Importera jobb inställningar"
