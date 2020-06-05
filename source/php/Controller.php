@@ -83,8 +83,8 @@ class Controller
      */
     public function daysLeft() {
       return (int) round((
-        strtotime($this->getMeta('publish_end_date')) - 
-        time()) / 86400
+          strtotime('+1 day', strtotime($this->getMeta('publish_end_date')) -
+        time()) / 86400)
       );
     }
 

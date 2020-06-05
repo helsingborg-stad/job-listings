@@ -200,18 +200,20 @@ class Import
     }
 
     /**
-     *  Update taxonmy
+     * Update taxonmy
      * @param $postId
      * @param $termSourceKey
      * @param $termId
-     * @return mixed
+     * @param $dataObject
+     * @return array|bool|false|\WP_Error
      */
     public function updateTaxonomy($postId, $termSourceKey, $termId, $dataObject)
     {
 
         if (isset($dataObject[$termSourceKey]) && !empty($dataObject[$termSourceKey])) {
 
-            $dataObject[$termSourceKey] = ucfirst(str_replace(", ", " - ", $dataObject[$termSourceKey])); 
+            $dataObject[$termSourceKey] =  ucfirst(str_replace(", ", " - ",
+                $dataObject[$termSourceKey]));
 
             // Checking terms
             $term = term_exists($dataObject[$termSourceKey], $termId);
