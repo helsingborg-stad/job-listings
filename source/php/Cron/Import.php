@@ -61,8 +61,13 @@ class Import
     public function importXmlTrigger()
     {
       if (isset($_GET[str_replace("\\", "", get_class($this))])) {
-          $this->importXml();
-          die("Data has been imported with; " . get_class($this));
+
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+
+        $this->importXml();
+        die("Data has been imported with_ " . get_class($this) . ' <a href="#" onClick="window.history.go(-1); return false;">Go back to archive</a>');
       }
     }
 

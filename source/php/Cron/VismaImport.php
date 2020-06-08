@@ -94,7 +94,7 @@ class VismaImport extends Import
     public function addImportButton() {
         global $wp;
         if(isset(get_current_screen()->post_type) && get_current_screen()->post_type == "job-listing") {
-            $queryArgs = array_merge($wp->query_vars, array(__CLASS__ => 'true')); 
+            $queryArgs = array_merge($wp->query_vars, array(str_replace("\\", "", __CLASS__) => 'true')); 
             echo '<a href="' . add_query_arg($queryArgs, home_url($wp->request)) . '" class="button-primary extraspace" style="float: right; margin-right: 10px;">'. __("Start Visma Import") .'</a>'; 
         }
     }
