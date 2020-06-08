@@ -182,7 +182,7 @@ class App
                 array(
                    'key'=>'publish_end_date',
                    'value'=> date("Y-m-d"),
-                   'compare'=>'>',
+                   'compare'=>'>=',
                    'type' => 'DATE'
                 ),
                 array(
