@@ -111,13 +111,6 @@ class Import
             (array) $this->queryParams
         );
 
-        //Decode html entities (reachmee somtimes stores double encoded data)
-        /*$data = html_entity_decode(
-                    html_entity_decode(
-                            html_entity_decode($data)
-                        )
-                    );*/ 
-
         //Translate url's & to &amp; 
         $data = str_replace("&", "&amp;", $data); 
 
