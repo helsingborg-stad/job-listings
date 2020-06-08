@@ -58,7 +58,7 @@ class ReachmeeImport extends Import
                     'name' => isset($item->contactPersonFullName[$key]) ? $item->contactPersonFullName[$key] : '',
                     'phone' => isset($item->contactPersonTelephone[$key]) ? preg_replace('/\D/', '', $item->contactPersonTelephone[$key]) : '',
                     'phone_sanitized' => isset($item->contactPersonTelephone[$key]) ? preg_replace('/\D/', '', $item->contactPersonTelephone[$key]) : '',
-                    'position' => is_array($item->contactPersonPosition) && isset($item->contactPersonPosition[$key]) ? $item->contactPersonPosition[$key] : ''
+                    'position' => is_array($item->contactPersonPosition) && isset($item->contactPersonPosition[$key]) ? $item->contactPersonPosition[$key] : ($key == 0 ? $item->contactPersonPosition : '')
                 ); 
             }
         } elseif(isset($item->contactPerson)) {
