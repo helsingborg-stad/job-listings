@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Job Listings\n"
-"POT-Creation-Date: 2020-05-27 14:43+0200\n"
-"PO-Revision-Date: 2020-05-27 14:44+0200\n"
+"POT-Creation-Date: 2020-06-08 12:08+0200\n"
+"PO-Revision-Date: 2020-06-08 12:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -71,6 +71,12 @@ msgstr "Källor"
 #: source/php/App.php:60
 msgid "Source"
 msgstr "Källa"
+
+#: source/php/Cron/Import.php:72
+#, php-format
+msgid "%sImport done%s %s Data has been imported with %s method. %s"
+msgstr ""
+"%sImport genomförd%s %s Informationen har importerats med metoden %s. %s"
 
 #: source/php/Cron/ReachmeeImport.php:85
 msgid "Start Reachmee Import"

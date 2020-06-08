@@ -67,7 +67,12 @@ class Import
         header("Pragma: no-cache");
 
         $this->importXml();
-        die("Data has been imported with_ " . get_class($this) . ' <a href="#" onClick="window.history.go(-1); return false;">Go back to archive</a>');
+
+        wp_die(
+            sprintf(__("%sImport done%s %s Data has been imported with %s method. %s", 'job-listings'), "<h1>", "</h1>", "<p>", '<strong>'.get_class($this) . '</strong>',"</p>"),
+            "Import",
+            array('back_link' => true)
+        );
       }
     }
 
