@@ -61,8 +61,18 @@ class Import
     public function importXmlTrigger()
     {
       if (isset($_GET[str_replace("\\", "", get_class($this))])) {
-          $this->importXml();
-          die("Data has been imported with; " . get_class($this));
+
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Pragma: no-cache");
+
+        $this->importXml();
+
+        wp_die(
+            sprintf(__("%sImport done%s %s Data has been imported with %s method. %s", 'job-listings'), "<h1>", "</h1>", "<p>", '<strong>'.get_class($this) . '</strong>',"</p>"),
+            "Import",
+            array('back_link' => true)
+        );
       }
     }
 
@@ -110,13 +120,6 @@ class Import
             (string) $this->baseUrl,
             (array) $this->queryParams
         );
-
-        //Decode html entities (reachmee somtimes stores double encoded data)
-        /*$data = html_entity_decode(
-                    html_entity_decode(
-                            html_entity_decode($data)
-                        )
-                    );*/ 
 
         //Translate url's & to &amp; 
         $data = str_replace("&", "&amp;", $data); 

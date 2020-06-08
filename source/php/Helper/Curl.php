@@ -149,7 +149,7 @@ class Curl
      */
     public function createCacheKey($type, $url, $data = null, $contentType = 'json', $headers = null)
     {
-        $this->cacheKey = "curl_cache_".md5($type.$url.(is_array($data) ? implode($data, "") : $data).$contentType.(is_array($headers) ? implode($headers, "") : $headers));
+        $this->cacheKey = "curl_cache_".md5($type.$url.(is_array($data) ? implode("", $data) : $data).$contentType.(is_array($headers) ? implode("", $headers) : $headers));
         return $this->cacheKey;
     }
 
