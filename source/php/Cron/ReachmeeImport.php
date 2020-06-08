@@ -39,10 +39,10 @@ class ReachmeeImport extends Import
 
         $item->pubDate = date("Y-m-d", strtotime($item->pubDate));
         $item->pubDateTo = date("Y-m-d", strtotime($item->pubDateTo));
-        $item->hasExpired = strtotime($item->pubDateTo) >= time() ? '0' : '1';
+        $item->hasExpired = strtotime('+1 day', strtotime($item->pubDateTo)) >= time() ? '0' : '1';
         $item->numberOfDaysLeft = date_diff(
             date_create(date("Y-m-d", time())), 
-            date_create($item->pubDateTo)
+            date_create(strtotime('+1 day', strtotime($item->pubDateTo)))
         )->days;
         $item->link = str_replace("rmpage=job", "rmpage=apply", $item->link); 
 
@@ -58,7 +58,7 @@ class ReachmeeImport extends Import
                     'name' => isset($item->contactPersonFullName[$key]) ? $item->contactPersonFullName[$key] : '',
                     'phone' => isset($item->contactPersonTelephone[$key]) ? preg_replace('/\D/', '', $item->contactPersonTelephone[$key]) : '',
                     'phone_sanitized' => isset($item->contactPersonTelephone[$key]) ? preg_replace('/\D/', '', $item->contactPersonTelephone[$key]) : '',
-                    'position' => isset($item->contactPersonPosition[$key]) ? $item->contactPersonPosition[$key] : ''
+                    'position' => is_array($item->contactPersonPosition) && isset($item->contactPersonPosition[$key]) ? $item->contactPersonPosition[$key] : ''
                 ); 
             }
         } elseif(isset($item->contactPerson)) {
