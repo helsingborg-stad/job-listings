@@ -10,7 +10,8 @@ class Import
 {
     public $postType = "job-listing";
     public $cacheTTL = 60 * 60; //Minutes
-
+    public $activePosts = [];
+    public $importedUuids = [];
     /**
      * Import constructor.
      */
@@ -121,10 +122,10 @@ class Import
             (array) $this->queryParams
         );
 
-        //Translate url's & to &amp; 
-        $data = str_replace("&", "&amp;", $data); 
+        // Translate url's & to &amp;
+        $data = str_replace("&", "&amp;", $data);
 
-        //Create array with simple xml
+        // Create array with simple xml
         try {
             $data = simplexml_load_string($data);
         } catch (Exception $e) {
@@ -133,24 +134,42 @@ class Import
             }
         }
 
-        //Get main node
+
+        // Get main node
         $data = json_decode(json_encode($data->{$this->baseNode}), false)->{$this->subNode};
-
-        //Check if valid list, update jobs
+        
+        // Check if valid list, update jobs
         if (isset($data) && !empty($data)) {
-
             foreach ($data as $item) {
-
-                $item = apply_filters(str_replace("\\", "/", get_class($this))."/Item", $item); 
+                $item = apply_filters(str_replace("\\", "/", get_class($this))."/Item", $item);
 
                 if ($item) {
                     $this->updateItem($item);
                 }
             }
+            
+            // Deactivate missing jobs ads.
+            $this->deactivateMissingJobs();
             return true;
         }
 
-        return null; //Unsuccessfull, no new data
+        return null; // Unsuccessfull, no new data.
+    }
+
+    /**
+     * Unpublish job ads that is missing from feed and exclude form Algolia search.
+     */
+    public function deactivateMissingJobs()
+    {
+        foreach ($this->getActivePosts() as $activePost) {
+            if (!in_array($activePost->uuid, $this->importedUuids)) {
+                update_post_meta($activePost->ID, 'exclude_from_search', 1);
+                update_post_meta($activePost->ID, 'has_expired', 1);
+                update_post_meta($activePost->ID, 'publish_end_date', date('Y-m-d', strtotime('-1 day')));
+                update_post_meta($activePost->ID, 'application_end_date', date('Y-m-d', strtotime('-1 day')));
+                update_post_meta($activePost->ID, 'employment_end_date', date('Y-m-d', strtotime('-1 day')));
+            }
+        }
     }
 
     /**
@@ -264,24 +283,58 @@ class Import
                 }
             }
 
-            return true; 
+            return true;
         }
 
-        return false; 
+        return false;
     }
 
     public function isMultidimensionalArray($a)
     {
 
-      if(!is_array($a)) {
-        return false; 
-      }
+        if (!is_array($a)) {
+            return false;
+        }
 
-      $rv = array_filter($a,'is_array');
-      if(count($rv)>0) {
-        return true;
-      }
+        $rv = array_filter($a, 'is_array');
+        if (count($rv)>0) {
+            return true;
+        }
 
-      return false;
+        return false;
+    }
+
+    /**
+     * Get currently active job ads.
+     * @return array
+     */
+    public function getActivePosts()
+    {
+        $metaQuery = [
+            [
+                'key' => 'publish_end_date',
+                'value' => date("Y-m-d"),
+                'compare' => '>=',
+                'type' => 'DATE'
+            ],
+            [
+                 'key' => 'publish_start_date',
+                 'value' => date("Y-m-d"),
+                 'compare' => '<=',
+                 'type' => 'DATE'
+            ]
+        ];
+
+        $posts = get_posts([
+            'post_type' => $this->postType,
+            'numberposts' => -1,
+            'meta_query' => $metaQuery
+        ]);
+
+        foreach ($posts as $post) {
+            $post->uuid = get_post_meta($post->ID, 'uuid', true);
+        }
+
+        return $posts;
     }
 }

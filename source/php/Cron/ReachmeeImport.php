@@ -8,11 +8,9 @@ namespace JobListings\Cron;
  */
 class ReachmeeImport extends Import
 {
-    public $uuid = ""; //The unique identifier of each item in XML
-
-    public $curlMethod = "GET"; 
+    public $curlMethod = "GET";
     public $baseUrl = "";
-    public $queryParams = array(); 
+    public $queryParams = array();
 
     public $baseNode = "channel";
     public $subNode = "item";
@@ -23,8 +21,8 @@ class ReachmeeImport extends Import
     public function __construct($baseUrl, $queryParams, $settings = array())
     {
         //Assign parameters
-        $this->baseUrl = $baseUrl; 
-        $this->queryParams = $queryParams; 
+        $this->baseUrl = $baseUrl;
+        $this->queryParams = $queryParams;
 
         //Construct parent class
         parent::__construct();
@@ -136,13 +134,15 @@ class ReachmeeImport extends Import
                 }
 
                 //If not multi
-                if(isset($item->{$target[0]})) {
-                    $dataObject[$key] = $item->{$target[0]}; 
+                if (isset($item->{$target[0]})) {
+                    $dataObject[$key] = $item->{$target[0]};
                 } else {
-                    $dataObject[$key] = ""; 
+                    $dataObject[$key] = "";
                 }
-                
             }
+
+            // Store for later comparison.
+            $this->importedUuids[] = $dataObject['uuid'];
 
             //Get matching post
             $postObject = $this->getPost(
@@ -190,13 +190,13 @@ class ReachmeeImport extends Import
             }
 
             // Taxonomies - Work categories
-            $this->updateTaxonomy($postId, 'occupationclassifications', 'job-listing-category', $dataObject); 
+            $this->updateTaxonomy($postId, 'occupationclassifications', 'job-listing-category', $dataObject);
 
             // Taxonomys source system
-            $this->updateTaxonomy($postId, 'source_system', 'job-listing-source', $dataObject); 
+            $this->updateTaxonomy($postId, 'source_system', 'job-listing-source', $dataObject);
 
             //Update post with meta
-            $this->updatePostMeta($postId, $dataObject); 
+            $this->updatePostMeta($postId, $dataObject);
 
             //Done
             return true;
@@ -267,6 +267,6 @@ class ReachmeeImport extends Import
             'employment_type' => array(" - ")
         );
 
-        return array_merge(array(""), $delimiters[$key]); 
+        return array_merge(array(""), $delimiters[$key]);
     }
 }
