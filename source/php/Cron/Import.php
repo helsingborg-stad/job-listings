@@ -162,7 +162,7 @@ class Import
     public function deactivateMissingJobs()
     {
         $activePosts = $this->getActivePosts();
-        if (is_array($posts) && !empty($posts)) {
+        if (is_array($activePosts) && !empty($activePosts)) {
             foreach ($activePosts as $activePost) {
                 if (!in_array($activePost->uuid, $this->importedUuids)) {
                     update_post_meta($activePost->ID, 'exclude_from_search', 1);
