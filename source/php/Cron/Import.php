@@ -158,6 +158,7 @@ class Import
 
     /**
      * Unpublish job ads that is missing from feed and exclude form Algolia search.
+     * @return void
      */
     public function deactivateMissingJobs()
     {
