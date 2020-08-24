@@ -10,7 +10,6 @@ class Import
 {
     public $postType = "job-listing";
     public $cacheTTL = 60 * 60; //Minutes
-    public $activePosts = [];
     public $importedUuids = [];
     /**
      * Import constructor.
@@ -162,13 +161,15 @@ class Import
      */
     public function deactivateMissingJobs()
     {
-        foreach ($this->getActivePosts() as $activePost) {
-            if (!in_array($activePost->uuid, $this->importedUuids)) {
-                update_post_meta($activePost->ID, 'exclude_from_search', 1);
-                update_post_meta($activePost->ID, 'has_expired', 1);
-                update_post_meta($activePost->ID, 'publish_end_date', date('Y-m-d', strtotime('-1 day')));
-                update_post_meta($activePost->ID, 'application_end_date', date('Y-m-d', strtotime('-1 day')));
-                update_post_meta($activePost->ID, 'employment_end_date', date('Y-m-d', strtotime('-1 day')));
+        $activePosts = $this->getActivePosts();
+        if (is_array($posts) && !empty($posts)) {
+            foreach ($activePosts as $activePost) {
+                if (!in_array($activePost->uuid, $this->importedUuids)) {
+                    update_post_meta($activePost->ID, 'exclude_from_search', 1);
+                    update_post_meta($activePost->ID, 'has_expired', 1);
+                    update_post_meta($activePost->ID, 'publish_end_date', date('Y-m-d', strtotime('-1 day')));
+                    update_post_meta($activePost->ID, 'application_end_date', date('Y-m-d', strtotime('-1 day')));
+                }
             }
         }
     }
