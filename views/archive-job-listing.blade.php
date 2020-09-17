@@ -1,5 +1,5 @@
 @extends('templates.master')
-
+BLA 2
 @section('content')
 
     @if (get_field('archive_' . sanitize_title($postType) . '_filter_position', 'option') == 'top')

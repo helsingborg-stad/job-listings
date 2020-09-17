@@ -9,7 +9,7 @@ class JobListings {
   handleEvents = () => {
     const { jobId } = jobListings;
     const applyButtons = document.getElementsByClassName('job-listings-application');
-    const loginButton = document.getElementById('job-listings-login');
+    const loginButton = document.querySelector('[js-trigger-btn-id]');
 
     for (let i = 0; i < applyButtons.length; i++) {
       const button = applyButtons.item(i);
@@ -212,11 +212,13 @@ class JobListings {
       iframe.setAttribute('height', height);
       iframe.setAttribute('frameborder', '0');
       iframe.setAttribute('src', iFrameUrl);
+      console.log(iFrameUrl);
       const wrap = document.createElement('div');
       wrap.appendChild(iframe);
 
       // document.write(wrap.innerHTML); // <- Old code
-      const modalBody = document.getElementById('job-listings-modal-body');
+      const modalBody = document.getElementById('job-listings-modal').getElementsByClassName('c-modal__content')[0];
+
       modalBody.innerHTML = '';
       modalBody.appendChild(wrap);
 
