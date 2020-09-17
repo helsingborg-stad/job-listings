@@ -114,7 +114,7 @@
                         @listing([
                             'list' => $preparedListData['employeList'],
                             'elementType' => "ul",
-                            'classList' => ['unlist', 'job-listing-sidenav']
+                            'classList' => ['unlist', 'job-listing-sidenav', 'job-listing-employees']
                         ])
                         @endlisting
                     @endcard
@@ -129,7 +129,7 @@
                                 @listing([
                                     'list' => $preparedListData['contacts'],
                                     'elementType' => "ul",
-                                    'classList' => ['unlist', 'job-listing-sidenav']
+                                    'classList' => ['unlist', 'job-listing-sidenav', 'job-listing-contacts']
                                 ])
                                 @endlisting
 

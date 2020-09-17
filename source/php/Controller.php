@@ -67,49 +67,50 @@ class Controller
     {
         $prepList = [];
         // prepare data for List
-        if($data['isExpired']) {
-            array_push($prepList, ['label' => '<b>'.__('Deadline for applications:', 'job-listings').'</b>' ]);
-            array_push($prepList, ['label' => $data['isExpired'] . ' (' . $data['daysLeft'] . ')']);
+        if ($data['isExpired']) {
+            array_push($prepList, [
+                'label' => '<b>'.__('Deadline for applications:', 'job-listings').'</b><br />
+                    ' . $data['isExpired'] . ' (' . $data['daysLeft'] . ')']);
         }
 
-        if($data['projectNr']) {
-            array_push($prepList, ['label' => '<b>'.__('Reference:', 'job-listings').'</b>' ]);
-            array_push($prepList, ['label' => $data['projectNr'] ]);
+        if ($data['projectNr']) {
+            array_push($prepList, ['label' => '<b>'.__('Reference:', 'job-listings').'</b> <br />'.
+                $data['projectNr'] ]);
         }
 
-        if($data['startDate']) {
-            array_push($prepList, ['label' => '<b>'.__('Published:', 'job-listings').'</b>' ]);
-            array_push($prepList, ['label' => $data['startDate'] ]);
+        if ($data['startDate']) {
+            array_push($prepList, ['label' => '<b>'.__('Published:', 'job-listings').'</b><br />'.
+                $data['startDate'] ]);
         }
 
-        if($data['numberOfPositions']) {
-            array_push($prepList, ['label' => '<b>'.__('Number of positions:', 'job-listings').'</b>' ]);
-            array_push($prepList, ['label' => $data['numberOfPositions'] ]);
+        if ($data['numberOfPositions']) {
+            array_push($prepList, ['label' => '<b>'.__('Number of positions:', 'job-listings').'</b><br />'.
+                $data['numberOfPositions'] ]);
         }
 
-        if($data['expreience']) {
-            array_push($prepList, ['label' => '<b>'.__('Experience:', 'job-listings').'</b>' ]);
-            array_push($prepList, ['label' => $data['expreience'] ]);
+        if ($data['expreience']) {
+            array_push($prepList, ['label' => '<b>'.__('Experience:', 'job-listings').'</b><br />'.
+                $data['expreience'] ]);
         }
 
-        if($data['employmentType']) {
-            array_push($prepList, ['label' => '<b>'.__('Employment type:', 'job-listings').'</b>' ]);
-            array_push($prepList, ['label' => $data['employmentType']]);
+        if ($data['employmentType']) {
+            array_push($prepList, ['label' => '<b>'.__('Employment type:', 'job-listings').'</b> <br />' .
+                $data['employmentType'] ]);
         }
 
-        if($data['employmentGrade']) {
-            array_push($prepList, ['label' => '<b>'.__('Extent:', 'job-listings').'</b>' ]);
-            array_push($prepList, ['label' => $data['employmentGrade'] ]);
+        if ($data['employmentGrade']) {
+            array_push($prepList, ['label' => '<b>'.__('Extent:', 'job-listings').'</b> <br />' .
+                $data['employmentGrade'] ]);
         }
 
-        if($data['location']) {
-            array_push($prepList, ['label' => '<b>'.__('Location:', 'job-listings').'</b>' ]);
-            array_push($prepList, ['label' => $data['location']]);
+        if ($data['location']) {
+            array_push($prepList, ['label' => '<b>'.__('Location:', 'job-listings').'</b> <br />' .
+                $data['location']]);
         }
 
-        if($data['department']) {
-            array_push($prepList, ['label' => '<b>'.__('Company:', 'job-listings').'</b>' ]);
-            array_push($prepList, ['label' => $data['department'] ]);
+        if ($data['department']) {
+            array_push($prepList, ['label' => '<b>'.__('Company:', 'job-listings').'</b> <br />'.
+                $data['department'] ]);
         }
 
         $prepData['employeList'] = $prepList;
@@ -121,19 +122,19 @@ class Controller
             foreach ($data['contacts'] as $contact) {
 
                 if($contact->name ){
-                    array_push($prepContact, ['label' => '<b>'.__('Contactperson:', 'job-listings').'</b>' ]);
-                    array_push($prepContact, ['label' => $contact->name]);
+                    array_push($prepContact, ['label' => '<b>'.__('Contactperson:', 'job-listings').'</b> <br />'.
+                        $contact->name ]);
+
                 }
 
-                if($contact->position){
-                    array_push($prepContact, ['label' => '<b>'.__('Position:', 'job-listings').'</b>' ]);
-                    array_push($prepContact, ['label' => $contact->position]);
+                if ($contact->position){
+                    array_push($prepContact, ['label' => '<b>'.__('Position:', 'job-listings').'</b> <br />'.
+                        $contact->position ]);
                 }
 
-                if($contact->phone){
-                    array_push($prepContact, ['label' => '<b>'.__('Phone:', 'job-listings').'</b>' ]);
-                    array_push($prepContact, ['label' => '<a href="tel:' . $contact->phone_sanitized . ' '
-                        . $contact->phone.'">'.$contact->phone.'</a>']);
+                if ($contact->phone){
+                    array_push($prepContact, ['label' => '<b>'.__('Phone:', 'job-listings').'</b> <br />'.
+                        '<a href="tel:' . $contact->phone_sanitized . ' ' . $contact->phone.'">'.$contact->phone.'</a>']);
                 }
             }
         }
