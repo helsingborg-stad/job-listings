@@ -24,7 +24,10 @@
             padding-bottom:20px;
         }
     }
+    .c-buttongroup:first-child {
+        min-width:300px;
 
+    }
     @media screen and (max-width: 900px) {
         .single-job-listing article .box-content {
             padding-top: 60px;

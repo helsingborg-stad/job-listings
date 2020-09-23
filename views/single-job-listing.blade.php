@@ -44,16 +44,32 @@
                                     <article class="u-mb-5" id="article">
 
                                                 @if(!$isExpired)
+                                                    @if($applyLink === '#job-listings-modal')
 
-                                                    @button([
-                                                        'text' => __('Apply now', 'job-listings'),
-                                                        'color' => 'primary',
-                                                        'style' => 'filled',
-                                                        'href' => $applyLink,
-                                                        'size' => 'lg'
-                                                    ])
-                                                    @endbutton
+                                                        @button([
+                                                            'color' => 'primary',
+                                                            'style' => 'filled',
+                                                            'id' => 'job-listings-apply',
+                                                            'attributeList' => [
+                                                                'data-open' => 'job-listings-modal',
+                                                                'js-trigger-btn-id' => 'true'
+                                                            ]
+                                                        ])
+                                                            {{__('Apply now', 'job-listings')}}
+                                                        @endbutton
 
+                                                    @else
+
+                                                        @button([
+                                                            'text' => __('Apply now', 'job-listings'),
+                                                            'color' => 'primary',
+                                                            'style' => 'filled',
+                                                            'href' => $applyLink,
+                                                            'size' => 'lg'
+                                                        ])
+                                                        @endbutton
+
+                                                    @endif
                                                 @endif
 
                                                 @if (post_password_required(get_post()))
@@ -121,7 +137,7 @@
 
                     <div class="gutter gutter-top">
                     @if($contacts)
-                        @foreach($contacts as $contact)
+
                             @card([
                                 'heading' => __('Contact', 'job-listings')
                             ])
@@ -135,7 +151,7 @@
 
                             @endcard
 
-                        @endforeach
+
                     @endif
                     </div>
                     @if($isExpired)
@@ -153,15 +169,27 @@
                     @else
                         <div class="gutter gutter-top">
 
-                                @button([
-                                    'color' => 'primary',
-                                    'style' => 'filled',
-                                    'href' => $applyLink
-                                ])
-                                    {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
-
-                                @endbutton
-
+                                @if($applyLink === '#job-listings-modal')
+                                    @button([
+                                        'color' => 'primary',
+                                        'style' => 'filled',
+                                        'id' => 'job-listings-apply',
+                                        'attributeList' => [
+                                            'data-open' => 'job-listings-modal',
+                                            'js-trigger-btn-id' => 'true'
+                                        ]
+                                    ])
+                                        {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
+                                    @endbutton
+                                @else
+                                    @button([
+                                        'color' => 'primary',
+                                        'style' => 'filled',
+                                        'href' => $applyLink
+                                    ])
+                                        {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
+                                    @endbutton
+                                @endif
 
                             @if($sourceSystem == "reachmee")
 

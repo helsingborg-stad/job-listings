@@ -9,6 +9,7 @@ namespace JobListings;
 class Controller
 {
     private $post = null;
+    public $list = [];
 
     /**
      * App constructor.
@@ -16,7 +17,10 @@ class Controller
     public function __construct()
     {
         add_filter('Municipio/viewData', array($this, 'singleViewData'));
+        add_filter('Municipio/Controller/Archive/getItems', array($this, 'prepareDataArchive'));
+
     }
+
 
     /**
      * Get single view data
@@ -60,88 +64,155 @@ class Controller
     }
 
     /**
+     * Get archive view data
+     * @param $data
+     * @return array
+     */
+    public function archiveData($data)
+    {
+
+        if (is_null($this->post)) {
+            global $post;
+            $this->post = $post;
+        }
+
+        if (!$this->isArchive()) {
+            return false;
+        }
+
+        $data['tableData'] = (count($this->list) > 0) ? $this->list : [];
+        return $data;
+    }
+
+    /**
      * @param $data
      * @return mixed
      */
     public function prepareData($data)
     {
+
+        $prepData['employeList'] = $this->prepareList($data);
+        $prepData['contacts'] = $this->prepareContacts($data);
+
+        return $prepData;
+    }
+
+    /**
+     * Prepare data for application list
+     * @param $data
+     * @return array
+     */
+    public function prepareList($data)
+    {
         $prepList = [];
         // prepare data for List
         if ($data['isExpired']) {
             array_push($prepList, [
-                'label' => '<b>'.__('Deadline for applications:', 'job-listings').'</b><br />
+                'label' => '<b>' . __('Deadline for applications:', 'job-listings') . '</b><br />
                     ' . $data['isExpired'] . ' (' . $data['daysLeft'] . ')']);
         }
 
         if ($data['projectNr']) {
-            array_push($prepList, ['label' => '<b>'.__('Reference:', 'job-listings').'</b> <br />'.
-                $data['projectNr'] ]);
+            array_push($prepList, ['label' => '<b>' . __('Reference:', 'job-listings') . '</b> <br />' .
+                $data['projectNr']]);
         }
 
         if ($data['startDate']) {
-            array_push($prepList, ['label' => '<b>'.__('Published:', 'job-listings').'</b><br />'.
-                $data['startDate'] ]);
+            array_push($prepList, ['label' => '<b>' . __('Published:', 'job-listings') . '</b><br />' .
+                $data['startDate']]);
         }
 
         if ($data['numberOfPositions']) {
-            array_push($prepList, ['label' => '<b>'.__('Number of positions:', 'job-listings').'</b><br />'.
-                $data['numberOfPositions'] ]);
+            array_push($prepList, ['label' => '<b>' . __('Number of positions:', 'job-listings') . '</b><br />' .
+                $data['numberOfPositions']]);
         }
 
         if ($data['expreience']) {
-            array_push($prepList, ['label' => '<b>'.__('Experience:', 'job-listings').'</b><br />'.
-                $data['expreience'] ]);
+            array_push($prepList, ['label' => '<b>' . __('Experience:', 'job-listings') . '</b><br />' .
+                $data['expreience']]);
         }
 
         if ($data['employmentType']) {
-            array_push($prepList, ['label' => '<b>'.__('Employment type:', 'job-listings').'</b> <br />' .
-                $data['employmentType'] ]);
+            array_push($prepList, ['label' => '<b>' . __('Employment type:', 'job-listings') . '</b> <br />' .
+                $data['employmentType']]);
         }
 
         if ($data['employmentGrade']) {
-            array_push($prepList, ['label' => '<b>'.__('Extent:', 'job-listings').'</b> <br />' .
-                $data['employmentGrade'] ]);
+            array_push($prepList, ['label' => '<b>' . __('Extent:', 'job-listings') . '</b> <br />' .
+                $data['employmentGrade']]);
         }
 
         if ($data['location']) {
-            array_push($prepList, ['label' => '<b>'.__('Location:', 'job-listings').'</b> <br />' .
+            array_push($prepList, ['label' => '<b>' . __('Location:', 'job-listings') . '</b> <br />' .
                 $data['location']]);
         }
 
         if ($data['department']) {
-            array_push($prepList, ['label' => '<b>'.__('Company:', 'job-listings').'</b> <br />'.
-                $data['department'] ]);
+            array_push($prepList, ['label' => '<b>' . __('Company:', 'job-listings') . '</b> <br />' .
+                $data['department']]);
         }
 
-        $prepData['employeList'] = $prepList;
+        return $prepList;
+    }
 
-        // prepare data for Card
+    /**
+     * Prepare data for Contacts
+     * @param $data
+     * @return mixed
+     */
+    public function prepareContacts($data)
+    {
         $prepContact['contacts'] = [];
 
         if ($data['contacts']) {
-            foreach ($data['contacts'] as $contact) {
 
-                if($contact->name ){
-                    array_push($prepContact, ['label' => '<b>'.__('Contactperson:', 'job-listings').'</b> <br />'.
-                        $contact->name ]);
+            foreach ($data['contacts'] as $index => $contact) {
 
+                if ($contact->name) {
+                    array_push($prepContact, ['label' => '<b>' . __('Contactperson:', 'job-listings') . '</b> <br />' .
+                        $contact->name]);
                 }
 
-                if ($contact->position){
-                    array_push($prepContact, ['label' => '<b>'.__('Position:', 'job-listings').'</b> <br />'.
-                        $contact->position ]);
+                if ($contact->position) {
+                    array_push($prepContact, ['label' => '<b>' . __('Position:', 'job-listings') . '</b> <br />' .
+                        $contact->position]);
                 }
 
-                if ($contact->phone){
-                    array_push($prepContact, ['label' => '<b>'.__('Phone:', 'job-listings').'</b> <br />'.
-                        '<a href="tel:' . $contact->phone_sanitized . ' ' . $contact->phone.'">'.$contact->phone.'</a>']);
+                if ($contact->phone) {
+                    array_push($prepContact, ['label' => '<b>' . __('Phone:', 'job-listings') . '</b> <br />' .
+                        '<a href="tel:' . $contact->phone_sanitized . ' ' . $contact->phone . '">' . $contact->phone . '</a>']);
                 }
             }
         }
 
-        $prepData['contacts'] = $prepContact;
-        return $prepData;
+        return $prepContact;
     }
+
+    /**
+     * Prepare data for archive table
+     * @param $archiveItems
+     * @return void
+     */
+    public function prepareDataArchive($archiveItems)
+    {
+
+        if(isset($archiveItems) && !empty($archiveItems)){
+            foreach ($archiveItems as $item) {
+
+                $postMeta = get_post_meta($item->id);
+                $href = $item->permalink ?: '';
+                $title = $item->postTitle ?: '';
+                $published = $postMeta['publish_start_date'][0] ?: '';
+                $endDate = $postMeta['application_end_date'][0] ?: '';
+                $category = $postMeta['occupationclassifications'][0] ?: '';
+
+                array_push($this->list, ['href' => $href ?? '', 'columns' => [$title, $published, $endDate, $category]]);
+            }
+
+            add_filter('Municipio/viewData', array($this, 'archiveData'));
+        }
+    }
+
 
 
     /**
@@ -216,6 +287,20 @@ class Controller
         if ($this->post->post_type == "job-listing" && is_single()) {
             return true;
         }
+        return false;
+    }
+
+    /**
+     * Check if is archive
+     * @return void
+     */
+    public function isArchive()
+    {
+
+        if ($this->post->post_type == "job-listing" && is_archive()) {
+            return true;
+        }
+
         return false;
     }
 }

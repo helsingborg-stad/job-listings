@@ -34,7 +34,7 @@ class App
 
         // Add view paths
         add_filter('Municipio/blade/view_paths', array($this, 'addViewPaths'), 2, 1);
-        //add_filter('Municipio/blade/view_paths', array($this, 'includePluginTemplates'), 10);
+
 
         new \JobListings\Entity\Taxonomy(
             __('Job categories', 'job-listings'),
