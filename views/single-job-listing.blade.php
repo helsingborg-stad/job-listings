@@ -200,10 +200,12 @@
                         <div class="gutter gutter-top">
 
                                 @if($applyLink === '#job-listings-modal')
+
                                     @button([
                                         'color' => 'primary',
                                         'style' => 'filled',
                                         'id' => 'job-listings-apply',
+                                        'classList' => ['c-button--margin-top'],
                                         'attributeList' => [
                                             'data-open' => 'job-listings-modal',
                                             'js-trigger-btn-id' => 'true'
@@ -211,19 +213,22 @@
                                     ])
                                         {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
                                     @endbutton
+
                                 @else
+
                                     @button([
                                         'color' => 'primary',
                                         'style' => 'filled',
-                                        'href' => $applyLink
+                                        'href' => $applyLink,
+                                        'classList' => ['c-button--margin-top']
                                     ])
                                         {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
                                     @endbutton
+
                                 @endif
 
                             @if($sourceSystem == "reachmee")
 
-                                <br /><br />
                                 @button([
                                     'icon' => 'assignment_ind',
                                     'reversePositions' => true,
@@ -233,7 +238,8 @@
                                     'attributeList' => [
                                         'data-open' => 'job-listings-modal',
                                         'js-trigger-btn-id' => 'true'
-                                    ]
+                                    ],
+                                    'classList' => ['c-button--margin-top']
                                 ])
                                 @endbutton
 
