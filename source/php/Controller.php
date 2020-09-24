@@ -162,25 +162,22 @@ class Controller
      */
     public function prepareContacts($data)
     {
-        $prepContact['contacts'] = [];
+        $prepContact = [];
 
         if ($data['contacts']) {
 
             foreach ($data['contacts'] as $index => $contact) {
 
                 if ($contact->name) {
-                    array_push($prepContact, ['label' => '<b>' . __('Contactperson:', 'job-listings') . '</b> <br />' .
-                        $contact->name]);
+                    $prepContact[$index]['contactPerson'] = $contact->name;
                 }
 
                 if ($contact->position) {
-                    array_push($prepContact, ['label' => '<b>' . __('Position:', 'job-listings') . '</b> <br />' .
-                        $contact->position]);
+                    $prepContact[$index]['contactPosition'] = $contact->position;
                 }
 
                 if ($contact->phone) {
-                    array_push($prepContact, ['label' => '<b>' . __('Phone:', 'job-listings') . '</b> <br />' .
-                        '<a href="tel:' . $contact->phone_sanitized . ' ' . $contact->phone . '">' . $contact->phone . '</a>']);
+                    $prepContact[$index]['contactPhone'] = '<a href="tel:' . $contact->phone_sanitized . ' ' . $contact->phone . '">' . $contact->phone . '</a>';
                 }
             }
         }
@@ -242,10 +239,12 @@ class Controller
      */
     public function daysLeft()
     {
-        return (int)round((
+        $daysLeft = (int)round((
             strtotime('+1 day', strtotime($this->getMeta('publish_end_date')) -
                 time()) / 86400)
         );
+
+        return ($daysLeft > 0) ? $daysLeft : 0;
     }
 
     /**

@@ -28,6 +28,13 @@
         min-width:300px;
 
     }
+
+    .c-icon {
+        position: relative;
+        top: 3px;
+        margin-right: 3px;
+    }
+
     @media screen and (max-width: 900px) {
         .single-job-listing article .box-content {
             padding-top: 60px;

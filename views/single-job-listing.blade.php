@@ -137,20 +137,50 @@
 
                     <div class="gutter gutter-top">
                     @if($contacts)
-
-                            @card([
-                                'heading' => __('Contact', 'job-listings')
-                            ])
-
-                                @listing([
-                                    'list' => $preparedListData['contacts'],
-                                    'elementType' => "ul",
-                                    'classList' => ['unlist', 'job-listing-sidenav', 'job-listing-contacts']
+                            @foreach($preparedListData['contacts'] as $contact)
+                                @card([
+                                    'heading' => __('Contact', 'job-listings')
                                 ])
-                                @endlisting
 
-                            @endcard
+                                    @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
 
+                                        @typography([
+                                            'element' => "h4"
+                                        ])
+                                            {{ $contact['contactPerson'] }}
+                                        @endtypography
+
+                                    @endif
+
+                                    @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
+
+                                        @typography([
+                                            'variant' => "meta",
+                                            'element' => "span"
+                                        ])
+                                            {{ $contact['contactPosition'] }}
+                                        @endtypography
+
+                                    @endif
+
+                                    @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
+
+                                        @typography([
+                                            'element' => "p"
+                                        ])
+                                    @icon([
+                                        'icon' => 'phone',
+                                        'size' => 'sm',
+                                        'color' => 'primary'
+                                    ])
+                                    @endicon
+                                    {!! $contact['contactPhone'] !!}
+                                        @endtypography
+
+                                    @endif
+
+                                @endcard
+                            @endforeach
 
                     @endif
                     </div>
@@ -174,6 +204,7 @@
                                         'color' => 'primary',
                                         'style' => 'filled',
                                         'id' => 'job-listings-apply',
+                                        'classList' => ['u-display--block'],
                                         'attributeList' => [
                                             'data-open' => 'job-listings-modal',
                                             'js-trigger-btn-id' => 'true'
@@ -185,7 +216,8 @@
                                     @button([
                                         'color' => 'primary',
                                         'style' => 'filled',
-                                        'href' => $applyLink
+                                        'href' => $applyLink,
+                                        'classList' => ['u-display--block']
                                     ])
                                         {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
                                     @endbutton
@@ -203,7 +235,8 @@
                                     'attributeList' => [
                                         'data-open' => 'job-listings-modal',
                                         'js-trigger-btn-id' => 'true'
-                                    ]
+                                    ],
+                                    'classList' => ['u-display--block']
                                 ])
                                 @endbutton
 
