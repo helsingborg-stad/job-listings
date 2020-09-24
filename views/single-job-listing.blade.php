@@ -204,7 +204,6 @@
                                         'color' => 'primary',
                                         'style' => 'filled',
                                         'id' => 'job-listings-apply',
-                                        'classList' => ['u-display--block'],
                                         'attributeList' => [
                                             'data-open' => 'job-listings-modal',
                                             'js-trigger-btn-id' => 'true'
@@ -216,8 +215,7 @@
                                     @button([
                                         'color' => 'primary',
                                         'style' => 'filled',
-                                        'href' => $applyLink,
-                                        'classList' => ['u-display--block']
+                                        'href' => $applyLink
                                     ])
                                         {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
                                     @endbutton
@@ -235,8 +233,7 @@
                                     'attributeList' => [
                                         'data-open' => 'job-listings-modal',
                                         'js-trigger-btn-id' => 'true'
-                                    ],
-                                    'classList' => ['u-display--block']
+                                    ]
                                 ])
                                 @endbutton
 
