@@ -3,10 +3,11 @@
 @section('content')
 
     <div class="container main-container job-listings">
-        @include('partials.breadcrumbs')
+        @include('partials.navigation.breadcrumb')
 
         <div class="grid  grid--columns">
             <div class="grid-md-12 grid-lg-9">
+
                 @if (is_single() && is_active_sidebar('content-area-top'))
                     <div class="grid grid--columns sidebar-content-area sidebar-content-area-top">
                         <?php dynamic_sidebar('content-area-top'); ?>
@@ -19,9 +20,20 @@
 
                         @if($isExpired)
                             <div class="gutter gutter-bottom">
-                                <div class="notice warning">
-                                    <i class="pricon pricon-notice-warning"></i> <?php _e("The application period for this reqruitment has ended."); ?>
-                                </div>
+                                @notice([
+                                    'type' => 'warning',
+                                        'message' => [
+                                        'text' => _("The application period for this reqruitment has ended."),
+                                        'size' => 'md'
+                                    ],
+                                    'icon' => [
+                                        'name' => 'report',
+                                        'size' => 'md',
+                                        'color' => 'white'
+                                    ]
+                                ])
+                                @endnotice
+
                             </div>
                         @endif
 
@@ -31,41 +43,69 @@
 
                                     <article class="u-mb-5" id="article">
 
-                                        <div class="box box-card">
-                                            <div class="box-content">
                                                 @if(!$isExpired)
-                                                    <a class="btn btn-lg btn-primary btn-floating-application job-listings-application"
-                                                        href="{{ $applyLink }}">
-                                                        <?php _e('Apply now', 'job-listings'); ?>
-                                                    </a>
-                                                @endif
+                                                    @if($applyLink === '#job-listings-modal')
 
-                                                @include('partials.blog.post-header')
+                                                        @button([
+                                                            'color' => 'primary',
+                                                            'style' => 'filled',
+                                                            'id' => 'job-listings-apply',
+                                                            'attributeList' => [
+                                                                'data-open' => 'job-listings-modal',
+                                                                'js-trigger-btn-id' => 'true'
+                                                            ]
+                                                        ])
+                                                            {{__('Apply now', 'job-listings')}}
+                                                        @endbutton
+
+                                                    @else
+
+                                                        @button([
+                                                            'text' => __('Apply now', 'job-listings'),
+                                                            'color' => 'primary',
+                                                            'style' => 'filled',
+                                                            'href' => $applyLink,
+                                                            'size' => 'lg'
+                                                        ])
+                                                        @endbutton
+
+                                                    @endif
+                                                @endif
 
                                                 @if (post_password_required(get_post()))
                                                     {!! get_the_password_form() !!}
                                                 @else
 
-                                                @isset($preamble)
-                                                    <p class="lead">
+                                                @if(isset($preamble) && !empty($preamble))
+
+                                                    @typography([
+                                                        'element' => "p",
+                                                        'classList' => ['lead']
+                                                    ])
                                                         {{ $preamble }}
-                                                    </p>
-                                                @endisset
+                                                    @endtypography
+
+                                                @endif
 
                                                 {!! $content !!}
 
-                                            </div>
-                                        </div>
+                                            @if(isset($legal) && !empty($legal))
 
-                                            @isset($legal)
-                                                <div class="box box-card">
-                                                    <div class="box-content">
-                                                        <div class="small">
-                                                            {{ $legal }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endisset
+                                                @card([
+                                                    'heading' => '',
+                                                    'subHeading' => ''
+                                                ])
+                                                    @typography([
+                                                    'element' => "h5",
+                                                    'classList' => ['legal']
+                                                    ])
+                                                        {{ $legal }}
+                                                    @endtypography
+
+                                                @endcard
+
+                                            @endif
+
                                         @endif
                                     </article>
 
@@ -77,145 +117,133 @@
                                 </div>
                             </div>
                         </div>
-
-                        @include('partials.blog.post-footer')
                     </div>
                 </div>
             </div>
             <aside class="grid-lg-3 grid-md-12 sidebar-left-sidebar">
 
                 <div class="grid--columns">
-                    <div class="box box-card">
-                        <div class="box-content">
-                            <ul class="unlist job-listing-sidenav">
-                                
-                                @if($endDate && !$isExpired)
-                                    <li>
-                                        <b><?php _e('Deadline for applications:', 'job-listings'); ?></b>
-                                        <br/>
-                                        {{ $endDate }}
-                                        <span class="text-sm">
-                                            ({{ $daysLeft }} <?php _e('days left','job-listings'); ?>)
-                                        </span>
-                                    </li>
-                                @endif
 
-                                @if($projectNr)
-                                    <li class="gutter gutter-top">
-                                        <b><?php _e('Reference:', 'job-listings'); ?></b>
-                                        <br/>
-                                        {{ $projectNr }}                                     </li>
-                                @endif
+                    @card([
+                        'heading' => __('Information', 'job-listings')
+                    ])
+                        @listing([
+                            'list' => $preparedListData['employeList'],
+                            'elementType' => "ul",
+                            'classList' => ['unlist', 'job-listing-sidenav', 'job-listing-employees']
+                        ])
+                        @endlisting
+                    @endcard
 
-                                @if($startDate)
-                                    <li class="gutter gutter-top">
-                                        <b><?php _e('Published:', 'job-listings'); ?></b>
-                                        <br/>
-                                        {{ $startDate }}
-                                    </li>
-                                @endif
-
-                                @if($numberOfPositions)
-                                    <li class="gutter gutter-top">
-                                        <b><?php _e('Number of positions:', 'job-listings'); ?></b>
-                                        <br/>
-                                        {{ $numberOfPositions }}
-                                    </li>
-                                @endif
-
-                                @if($expreience)
-                                    <li class="gutter gutter-top">
-                                        <b><?php _e('Experience:', 'job-listings'); ?></b>
-                                        <br/>
-                                        {{ $expreience }}
-                                    </li>
-                                @endif
-
-                                @if($employmentType)
-                                    <li class="gutter gutter-top">
-                                        <b><?php _e('Employment type:', 'job-listings'); ?></b>
-                                        <br/>
-                                        {{ $employmentType }}
-                                    </li>
-                                @endif
-
-                                @if($employmentGrade)
-                                    <li class="gutter gutter-top">
-                                        <b><?php _e('Extent:', 'job-listings'); ?></b>
-                                        <br/>
-                                        {{ $employmentGrade }}
-                                    </li>
-                                @endif
-
-                                @if($location)
-                                    <li class="gutter gutter-top">
-                                        <b><?php _e('Location:', 'job-listings'); ?></b>
-                                        <br/>
-                                        {{ $location }}
-                                    </li>
-                                @endif
-
-                                @if($department)
-                                    <li class="gutter gutter-top">
-                                        <b><?php _e('Company:', 'job-listings'); ?></b>
-                                        <br/>
-                                        {{ $department }}
-                                    </li>
-                                @endif
-
-                            </ul>
-                        </div>
-
-                    </div>
-
+                    <div class="gutter gutter-top">
                     @if($contacts)
-                        @foreach($contacts as $contact)
-                            <div class="box box-card">
-                                <div class="box-content">
+                            @foreach($preparedListData['contacts'] as $contact)
+                                @card([
+                                    'heading' => __('Contact', 'job-listings')
+                                ])
 
-                                    <h3><?php _e('Contact', 'job-listings'); ?></h3>
-                                    <ul class="unlist job-listing-sidenav">
+                                    @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
 
-                                        @if ($contact->name)
-                                            <li class="strong">{{$contact->name}}</li>
-                                        @endif
+                                        @typography([
+                                            'element' => "h4"
+                                        ])
+                                            {{ $contact['contactPerson'] }}
+                                        @endtypography
 
-                                        @if ($contact->position)
-                                            <li class="small gutter gutter-bottom">{{$contact->position}}</li>
-                                        @endif
+                                    @endif
 
-                                        @if ($contact->phone && $contact->phone_sanitized)
-                                            <li class="link-item link-item-phone">
-                                                <a href="tel:{{ $contact->phone_sanitized }}">
-                                                    {{ $contact->phone }}
-                                                </a>
-                                            </li>
-                                        @endif
+                                    @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
 
-                                    </ul>
-                                </div>
-                            </div>
-                        @endforeach
+                                        @typography([
+                                            'variant' => "meta",
+                                            'element' => "span"
+                                        ])
+                                            {{ $contact['contactPosition'] }}
+                                        @endtypography
+
+                                    @endif
+
+                                    @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
+
+                                        @typography([
+                                            'element' => "p"
+                                        ])
+                                    @icon([
+                                        'icon' => 'phone',
+                                        'size' => 'sm',
+                                        'color' => 'primary'
+                                    ])
+                                    @endicon
+                                    {!! $contact['contactPhone'] !!}
+                                        @endtypography
+
+                                    @endif
+
+                                @endcard
+                            @endforeach
+
                     @endif
-
+                    </div>
                     @if($isExpired)
                         <div class="gutter gutter-top">
-                            <button class="btn btn-lg btn-contrasted disabled btn-block">
-                                <?php _e('The application period has ended', 'job-listings'); ?>
-                            </button>
+
+                            @button([
+                                'style' => 'filled',
+                                'attributeList' => ['disabled' => 'true']
+
+                            ])
+                                {{_e('The application period has ended', 'job-listings')}}
+                            @endbutton
+
                         </div>
                     @else
                         <div class="gutter gutter-top">
-                            <a class="btn btn-lg btn-block btn-primary btn-outline job-listings-application"
-                            href="{{ $applyLink }}"><?php _e('Apply here',
-                                    'job-listings'); ?> ({{ $daysLeft }} <?php _e('days left',
-                                    'job-listings'); ?>)
-                            </a>
-                            <?php if($sourceSystem == "reachmee") { ?> 
-                                <a id="job-listings-login" class="btn btn-lg btn-block btn-primary btn-outline"
-                                href="#job-listings-modal"><?php _e('Log in'); ?>
-                                </a>
-                            <?php } ?>
+
+                                @if($applyLink === '#job-listings-modal')
+
+                                    @button([
+                                        'color' => 'primary',
+                                        'style' => 'filled',
+                                        'id' => 'job-listings-apply',
+                                        'classList' => ['c-button--margin-top'],
+                                        'attributeList' => [
+                                            'data-open' => 'job-listings-modal',
+                                            'js-trigger-btn-id' => 'true'
+                                        ]
+                                    ])
+                                        {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
+                                    @endbutton
+
+                                @else
+
+                                    @button([
+                                        'color' => 'primary',
+                                        'style' => 'filled',
+                                        'href' => $applyLink,
+                                        'classList' => ['c-button--margin-top']
+                                    ])
+                                        {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
+                                    @endbutton
+
+                                @endif
+
+                            @if($sourceSystem == "reachmee")
+
+                                @button([
+                                    'icon' => 'assignment_ind',
+                                    'reversePositions' => true,
+                                    'text' => __('Log in'),
+                                    'style' => 'filled',
+                                    'id' => 'job-listings-login',
+                                    'attributeList' => [
+                                        'data-open' => 'job-listings-modal',
+                                        'js-trigger-btn-id' => 'true'
+                                    ],
+                                    'classList' => ['c-button--margin-top']
+                                ])
+                                @endbutton
+
+                            @endif
                         </div>
                     @endif
                 
@@ -226,20 +254,18 @@
         </div>
     </div>
 
-    @if($sourceSystem == "reachmee") {
-        <!-- Modal -->
-        <div id="job-listings-modal" class="modal modal-backdrop-4 modal-small" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-content material-shadow-lg">
-                <div id="job-listings-modal-body">
-                </div>
-                <div class="modal-footer">
-                    <a href="#close" class="btn btn-default"><?php _e('Close', 'job-listings') ?></a>
-                </div>
-            </div>
-            <a href="#close" class="backdrop"></a>
-        </div>
-        <!-- /modal -->
+    @if($sourceSystem == "reachmee")
+
+        @modal([
+            'isPanel' => false,
+            'id' => 'job-listings-modal',
+            'overlay' => 'dark',
+            'animation' => 'scale-up',
+        ])
+        @endmodal
+
     @endif
+
 
 @stop
 

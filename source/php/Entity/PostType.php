@@ -35,6 +35,8 @@ class PostType
         add_filter('manage_edit-' . $this->slug . '_columns', array($this, 'tableColumns'));
         add_filter('manage_edit-' . $this->slug . '_sortable_columns', array($this, 'tableSortableColumns'));
         add_action('manage_' . $this->slug . '_posts_custom_column', array($this, 'tableColumnsContent'), 10, 2);
+
+
     }
 
     /**

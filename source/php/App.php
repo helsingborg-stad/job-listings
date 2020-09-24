@@ -32,7 +32,9 @@ class App
             'supports' => array('title', 'revisions', 'editor')
         ));
 
-        add_filter('Municipio/blade/view_paths', array($this, 'includePluginTemplates'), 10);
+        // Add view paths
+        add_filter('Municipio/blade/view_paths', array($this, 'addViewPaths'), 2, 1);
+
 
         new \JobListings\Entity\Taxonomy(
             __('Job categories', 'job-listings'),
@@ -75,6 +77,8 @@ class App
             )
         );
 
+
+
         new Controller(); 
 
         add_action('wp_enqueue_scripts', array($this, 'enqueueStyles'), 14);
@@ -83,6 +87,26 @@ class App
         add_action('pre_get_posts', array($this, 'removeInactiveAds'));
 
         add_action('init', array($this, 'initializeImporters'));
+
+
+    }
+
+    /**
+     * Add searchable blade template paths
+     * @param array  $array Template paths
+     * @return array        Modified template paths
+     */
+    public function addViewPaths($array)
+    {
+        // If child theme is active, insert plugin view path after child views path.
+        if (is_child_theme()) {
+            array_splice( $array, 2, 0, array(JOBLISTINGS_PATH_VIEW_PATH) );
+        } else {
+            // Add view path first in the list if child theme is not active.
+            array_unshift($array, JOBLISTINGS_PATH_VIEW_PATH);
+        }
+
+        return $array;
     }
 
     /** Initialize importers

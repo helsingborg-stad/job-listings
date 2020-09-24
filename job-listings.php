@@ -20,6 +20,7 @@ if (! defined('WPINC')) {
 
 define('JOBLISTINGS_PATH', plugin_dir_path(__FILE__));
 define('JOBLISTINGS_URL', plugins_url('', __FILE__));
+define('JOBLISTINGS_PATH_VIEW_PATH', plugin_dir_path(__FILE__) . 'views');
 define('JOBLISTINGS_TEMPLATE_PATH', JOBLISTINGS_PATH . 'templates/');
 
 load_plugin_textdomain('job-listings', false, plugin_basename(dirname(__FILE__)) . '/languages');
