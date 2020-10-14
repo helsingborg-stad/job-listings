@@ -8,6 +8,11 @@ node_modules/
 # ignore composer vendor directory
 /vendor
 
+#ignore dist files
+dist
+dist/
+dist/*
+
 # ignore composer lock file
 composer.lock
 
@@ -66,3 +71,4 @@ dist/.temp
 # track these files, if they exist
 !.gitignore
 !.editorconfig
+!.github
