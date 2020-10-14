@@ -20,7 +20,7 @@ class Controller
         add_filter('Municipio/Controller/Archive/getItems', array($this, 'prepareDataArchive'));
 
     }
-    
+
     /**
      * Get single view data
      * @return array

@@ -9,9 +9,7 @@ node_modules/
 /vendor
 
 #ignore dist files
-dist
 dist/
-dist/*
 
 # ignore composer lock file
 composer.lock
