@@ -10,6 +10,7 @@ node_modules/
 
 #ignore dist files
 dist/
+dist/*
 
 # ignore composer lock file
 composer.lock
