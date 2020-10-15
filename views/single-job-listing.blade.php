@@ -127,12 +127,12 @@
                     @card([
                         'heading' => __('Information', 'job-listings')
                     ])
-                        @listing([
-                            'list' => $preparedListData['employeList'],
-                            'elementType' => "ul",
-                            'classList' => ['unlist', 'job-listing-sidenav', 'job-listing-employees']
+
+                        @collection([
+                            'list' => $preparedListData['employeList']
                         ])
-                        @endlisting
+                        @endcollection
+
                     @endcard
 
                     <div class="gutter gutter-top">
@@ -141,44 +141,46 @@
                                 @card([
                                     'heading' => __('Contact', 'job-listings')
                                 ])
+                                    @collection([])
 
-                                    @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
+                                        @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
+                                             @collection__item()
+                                                @typography([
+                                                    'element' => "h4"
+                                                ])
+                                                    {{ $contact['contactPerson'] }}
+                                                @endtypography
+                                            @endcollection__item
+                                        @endif
 
-                                        @typography([
-                                            'element' => "h4"
-                                        ])
-                                            {{ $contact['contactPerson'] }}
-                                        @endtypography
+                                        @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
+                                            @collection__item()
+                                                @typography([
+                                                    'variant' => "meta",
+                                                    'element' => "span"
+                                                ])
+                                                    {{ $contact['contactPosition'] }}
+                                                @endtypography
+                                            @endcollection__item
+                                        @endif
 
-                                    @endif
+                                        @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
+                                            @collection__item()
+                                                @typography([
+                                                    'element' => "p"
+                                                ])
+                                                    @icon([
+                                                        'icon' => 'phone',
+                                                        'size' => 'sm',
+                                                        'color' => 'primary'
+                                                    ])
+                                                    @endicon
+                                                    {!! $contact['contactPhone'] !!}
+                                                        @endtypography
+                                            @endcollection__item
+                                        @endif
 
-                                    @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
-
-                                        @typography([
-                                            'variant' => "meta",
-                                            'element' => "span"
-                                        ])
-                                            {{ $contact['contactPosition'] }}
-                                        @endtypography
-
-                                    @endif
-
-                                    @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
-
-                                        @typography([
-                                            'element' => "p"
-                                        ])
-                                    @icon([
-                                        'icon' => 'phone',
-                                        'size' => 'sm',
-                                        'color' => 'primary'
-                                    ])
-                                    @endicon
-                                    {!! $contact['contactPhone'] !!}
-                                        @endtypography
-
-                                    @endif
-
+                                    @endcollection
                                 @endcard
                             @endforeach
 
