@@ -197,12 +197,12 @@ class Controller
 
                 $postMeta = get_post_meta($item->id);
                 $href = $item->permalink ?: '';
-                $title = $item->postTitle ?: '';
+                $title = "<a href=".$href.">".$item->postTitle."</a>" ?: '';
                 $published = $postMeta['publish_start_date'][0] ?: '';
                 $endDate = $postMeta['application_end_date'][0] ?: '';
                 $category = $postMeta['occupationclassifications'][0] ?: '';
 
-                array_push($this->list, ['href' => $href ?? '', 'columns' => [$title, $published, $endDate, $category]]);
+                array_push($this->list, ['columns' => [$title, $published, $endDate, $category]]);
             }
 
             add_filter('Municipio/viewData', array($this, 'archiveData'));
