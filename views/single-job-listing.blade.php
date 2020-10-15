@@ -120,137 +120,152 @@
                     </div>
                 </div>
             </div>
+
             <aside class="grid-lg-3 grid-md-12 sidebar-left-sidebar">
+                <!-- -Information -->
+                @typography([
+                    'element' => "h3"
+                ])
+                    {{__('Information', 'job-listings')}}
+                @endtypography
 
-                <div class="grid--columns">
-
-                    @card([
-                        'heading' => __('Information', 'job-listings')
-                    ])
-
+                @card([
+                    'classList' => [
+                        'c-card--panel'
+                    ]
+                ])
+                    <div class="c-card__body">
                         @collection([
                             'list' => $preparedListData['employeList']
                         ])
                         @endcollection
-
-                    @endcard
-
-                    <div class="gutter gutter-top">
-                    @if($contacts)
-                            @foreach($preparedListData['contacts'] as $contact)
-                                @card([
-                                    'heading' => __('Contact', 'job-listings')
-                                ])
-                                    @collection([])
-
-                                        @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
-                                             @collection__item()
-                                                @typography([
-                                                    'element' => "h4"
-                                                ])
-                                                    {{ $contact['contactPerson'] }}
-                                                @endtypography
-                                            @endcollection__item
-                                        @endif
-
-                                        @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
-                                            @collection__item()
-                                                @typography([
-                                                    'variant' => "meta",
-                                                    'element' => "span"
-                                                ])
-                                                    {{ $contact['contactPosition'] }}
-                                                @endtypography
-                                            @endcollection__item
-                                        @endif
-
-                                        @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
-                                            @collection__item()
-                                                @typography([
-                                                    'element' => "p"
-                                                ])
-                                                    @icon([
-                                                        'icon' => 'phone',
-                                                        'size' => 'sm',
-                                                        'color' => 'primary'
-                                                    ])
-                                                    @endicon
-                                                    {!! $contact['contactPhone'] !!}
-                                                        @endtypography
-                                            @endcollection__item
-                                        @endif
-
-                                    @endcollection
-                                @endcard
-                            @endforeach
-
-                    @endif
                     </div>
-                    @if($isExpired)
-                        <div class="gutter gutter-top">
 
-                            @button([
-                                'style' => 'filled',
-                                'attributeList' => ['disabled' => 'true']
+                @endcard
 
-                            ])
-                                {{_e('The application period has ended', 'job-listings')}}
-                            @endbutton
+                <!-- -Contact -->
+                @if($contacts)
+                    @typography([
+                        'element' => "h3"
+                    ])
+                        {{__('Contact', 'job-listings')}}
+                    @endtypography
 
-                        </div>
-                    @else
-                        <div class="gutter gutter-top">
+                    @foreach($preparedListData['contacts'] as $contact)
+                        @card([
+                            'classList' => [
+                                'c-card--panel'
+                            ]
+                        ])
+                            <div class="c-card__body">
+                                @collection([])
 
-                                @if($applyLink === '#job-listings-modal')
+                                    @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
+                                         @collection__item()
+                                            @typography([
+                                                'element' => "h4"
+                                            ])
+                                                {{ $contact['contactPerson'] }}
+                                            @endtypography
+                                        @endcollection__item
+                                    @endif
 
-                                    @button([
-                                        'color' => 'primary',
-                                        'style' => 'filled',
-                                        'id' => 'job-listings-apply',
-                                        'classList' => ['c-button--margin-top'],
-                                        'attributeList' => [
-                                            'data-open' => 'job-listings-modal',
-                                            'js-trigger-btn-id' => 'true'
-                                        ]
-                                    ])
-                                        {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
-                                    @endbutton
+                                    @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
+                                        @collection__item()
+                                            @typography([
+                                                'variant' => "meta",
+                                                'element' => "span"
+                                            ])
+                                                {{ $contact['contactPosition'] }}
+                                            @endtypography
+                                        @endcollection__item
+                                    @endif
 
-                                @else
+                                    @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
+                                        @collection__item()
+                                            @typography([
+                                                'element' => "p"
+                                            ])
+                                                @icon([
+                                                    'icon' => 'phone',
+                                                    'size' => 'sm',
+                                                    'color' => 'primary'
+                                                ])
+                                                @endicon
+                                                {!! $contact['contactPhone'] !!}
+                                                    @endtypography
+                                        @endcollection__item
+                                    @endif
 
-                                    @button([
-                                        'color' => 'primary',
-                                        'style' => 'filled',
-                                        'href' => $applyLink,
-                                        'classList' => ['c-button--margin-top']
-                                    ])
-                                        {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
-                                    @endbutton
+                                @endcollection
+                            </div>
+                        @endcard
 
-                                @endif
+                    @endforeach
+                @endif
 
-                            @if($sourceSystem == "reachmee")
+                @if($isExpired)
+                    <div class="gutter gutter-top">
+
+                        @button([
+                            'style' => 'filled',
+                            'attributeList' => ['disabled' => 'true']
+
+                        ])
+                            {{_e('The application period has ended', 'job-listings')}}
+                        @endbutton
+
+                    </div>
+                @else
+                    <div class="gutter gutter-top">
+
+                            @if($applyLink === '#job-listings-modal')
 
                                 @button([
-                                    'icon' => 'assignment_ind',
-                                    'reversePositions' => true,
-                                    'text' => __('Log in'),
+                                    'color' => 'primary',
                                     'style' => 'filled',
-                                    'id' => 'job-listings-login',
+                                    'id' => 'job-listings-apply',
+                                    'classList' => ['c-button--margin-top'],
                                     'attributeList' => [
                                         'data-open' => 'job-listings-modal',
                                         'js-trigger-btn-id' => 'true'
-                                    ],
+                                    ]
+                                ])
+                                    {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
+                                @endbutton
+
+                            @else
+
+                                @button([
+                                    'color' => 'primary',
+                                    'style' => 'filled',
+                                    'href' => $applyLink,
                                     'classList' => ['c-button--margin-top']
                                 ])
+                                    {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
                                 @endbutton
 
                             @endif
-                        </div>
-                    @endif
-                
-                    
-                </div>
+
+                        @if($sourceSystem == "reachmee")
+
+                            @button([
+                                'icon' => 'assignment_ind',
+                                'reversePositions' => true,
+                                'text' => __('Log in'),
+                                'style' => 'filled',
+                                'id' => 'job-listings-login',
+                                'attributeList' => [
+                                    'data-open' => 'job-listings-modal',
+                                    'js-trigger-btn-id' => 'true'
+                                ],
+                                'classList' => ['c-button--margin-top']
+                            ])
+                            @endbutton
+
+                        @endif
+                    </div>
+                @endif
 
             </aside>
         </div>
