@@ -5,17 +5,17 @@
     <div class="container main-container job-listings">
         @include('partials.navigation.breadcrumb')
 
-        <div class="grid  grid--columns">
-            <div class="grid-md-12 grid-lg-9">
+        <div class="o-grid  grid--columns">
+            <div class="o-grid-12@md o-grid-9@lg">
 
                 @if (is_single() && is_active_sidebar('content-area-top'))
-                    <div class="grid grid--columns sidebar-content-area sidebar-content-area-top">
+                    <div class="c-grid grid--columns sidebar-content-area sidebar-content-area-top">
                         <?php dynamic_sidebar('content-area-top'); ?>
                     </div>
                 @endif
 
-                <div class="grid">
-                    <div class="grid-sm-12">
+                <div class="o-grid">
+                    <div class="o-grid-xs@12">
                         {!! the_post() !!}
 
                         @if($isExpired)
@@ -37,11 +37,11 @@
                             </div>
                         @endif
 
-                        <div class="grid">
-                            <div class="grid-xs-12">
+                        <div class="o-grid">
+                            <div class="o-grid-xs-12">
                                 <div class="post post-single">
 
-                                    <article class="u-mb-5" id="article">
+                                    <article class="c-article" id="article">
 
                                                 @if(!$isExpired)
                                                     @if($applyLink === '#job-listings-modal')
@@ -91,17 +91,15 @@
 
                                             @if(isset($legal) && !empty($legal))
 
-                                                @card([
-                                                    'heading' => '',
-                                                    'subHeading' => ''
-                                                ])
-                                                    @typography([
-                                                    'element' => "h5",
-                                                    'classList' => ['legal']
+                                                    @card([
+                                                        'heading' => 'Heading',
+                                                        'subHeading' => 'SubHeading',
+                                                        'content' =>  $legal,
+                                                        'classList' => [
+                                                            'c-card--panel'
+                                                        ]
                                                     ])
-                                                        {{ $legal }}
-                                                    @endtypography
-
+                           
                                                 @endcard
 
                                             @endif
@@ -110,7 +108,7 @@
                                     </article>
 
                                     @if (is_single() && is_active_sidebar('content-area'))
-                                        <div class="grid grid--columns sidebar-content-area sidebar-content-area-bottom">
+                                        <div class="o-grid grid--columns sidebar-content-area sidebar-content-area-bottom">
                                             <?php dynamic_sidebar('content-area'); ?>
                                         </div>
                                     @endif
@@ -121,7 +119,7 @@
                 </div>
             </div>
 
-            <aside class="grid-lg-3 grid-md-12 sidebar-left-sidebar">
+            <aside class="o-grid-42 o-grid-3@md o-order-2 o-order-1@md sidebar-left-sidebar">
                 <!-- -Information -->
                 @typography([
                     'element' => "h3"
@@ -134,12 +132,11 @@
                         'c-card--panel'
                     ]
                 ])
-                    <div class="c-card__body">
+
                         @collection([
                             'list' => $preparedListData['employeList']
                         ])
                         @endcollection
-                    </div>
 
                 @endcard
 
@@ -157,7 +154,7 @@
                                 'c-card--panel'
                             ]
                         ])
-                            <div class="c-card__body">
+
                                 @collection([])
 
                                     @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
@@ -198,7 +195,7 @@
                                     @endif
 
                                 @endcollection
-                            </div>
+
                         @endcard
 
                     @endforeach
@@ -217,7 +214,8 @@
 
                     </div>
                 @else
-                    <div class="gutter gutter-top">
+                    <div class="o-grid">
+                        <div class=""o-grid-3@md o-order-1@md">
 
                             @if($applyLink === '#job-listings-modal')
 
@@ -263,6 +261,8 @@
                             @endbutton
 
                         @endif
+
+                        </div>
                     </div>
                 @endif
 

@@ -10,7 +10,7 @@ class JobListings {
     const { jobId } = jobListings;
     const applyButtons = document.getElementsByClassName('js-job-listings-apply');
     const loginButton = document.querySelector('[js-trigger-btn-id]');
-
+    console.log(applyButtons);
     for (let i = 0; i < applyButtons.length; i++) {
       const button = applyButtons.item(i);
       button.addEventListener('click', e => {
@@ -36,6 +36,7 @@ class JobListings {
       this.renderApplicationIframe();
     });
   };
+
 
   renderApplicationIframe = () => {
     // from db
