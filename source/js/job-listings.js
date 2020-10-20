@@ -8,7 +8,7 @@ class JobListings {
 
   handleEvents = () => {
     const { jobId } = jobListings;
-    const applyButtons = document.getElementsByClassName('job-listings-application');
+    const applyButtons = document.getElementsByClassName('js-job-listings-apply');
     const loginButton = document.querySelector('[js-trigger-btn-id]');
 
     for (let i = 0; i < applyButtons.length; i++) {

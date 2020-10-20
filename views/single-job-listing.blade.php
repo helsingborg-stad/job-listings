@@ -50,9 +50,9 @@
                                                             'color' => 'primary',
                                                             'style' => 'filled',
                                                             'id' => 'job-listings-apply',
+                                                            'classList' => ['js-job-listnings-apply'],
                                                             'attributeList' => [
                                                                 'data-open' => 'job-listings-modal',
-                                                                'js-trigger-btn-id' => 'true'
                                                             ]
                                                         ])
                                                             {{__('Apply now', 'job-listings')}}
@@ -225,10 +225,9 @@
                                     'color' => 'primary',
                                     'style' => 'filled',
                                     'id' => 'job-listings-apply',
-                                    'classList' => ['c-button--margin-top'],
+                                    'classList' => ['c-button--margin-top', 'js-job-listnings-apply'],
                                     'attributeList' => [
                                         'data-open' => 'job-listings-modal',
-                                        'js-trigger-btn-id' => 'true'
                                     ]
                                 ])
                                     {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
@@ -278,6 +277,7 @@
             'id' => 'job-listings-modal',
             'overlay' => 'dark',
             'animation' => 'scale-up',
+            'size' => 'lg'
         ])
         @endmodal
 
