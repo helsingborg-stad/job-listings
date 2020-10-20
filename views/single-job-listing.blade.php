@@ -50,7 +50,7 @@
                                                             'color' => 'primary',
                                                             'style' => 'filled',
                                                             'id' => 'job-listings-apply',
-                                                            'classList' => ['js-job-listnings-apply'],
+                                                            'classList' => ['js-job-listings-apply'],
                                                             'attributeList' => [
                                                                 'data-open' => 'job-listings-modal',
                                                             ]
@@ -225,7 +225,7 @@
                                     'color' => 'primary',
                                     'style' => 'filled',
                                     'id' => 'job-listings-apply',
-                                    'classList' => ['c-button--margin-top', 'js-job-listnings-apply'],
+                                    'classList' => ['c-button--margin-top', 'js-job-listings-apply'],
                                     'attributeList' => [
                                         'data-open' => 'job-listings-modal',
                                     ]
