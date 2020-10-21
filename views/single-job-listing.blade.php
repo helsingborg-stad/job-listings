@@ -34,7 +34,7 @@
     <article class="c-article" id="article">
 
         @typography(["element" => "h1"])
-        {{the_title() }}
+            {{the_title() }}
         @endtypography
 
                 @if(!$isExpired)
@@ -95,103 +95,103 @@
                 @endcard
 
             @endif
-
         @endif
     </article>
 @stop
 
 @section('sidebar-right')
     <!-- -Information -->
-    @typography([
-        'element' => "h3",
-        'classList' => ['u-padding__bottom--2']
-    ])
-        {{__('Information', 'job-listings')}}
-    @endtypography
-
-    @card([
-        'classList' => [
-            'c-card--panel'
-        ]
-    ])
-
-            @collection([
-                'list' => $preparedListData['employeList']
-            ])
-            @endcollection
-
-    @endcard
-
-    <!-- -Contact -->
-    @if($contacts)
-
+    <div class="o-grid">
         @typography([
-            'element' => "h3",
-            'classList' => ['u-padding__bottom--2', 'u-padding__top--3']
+            'element' => "h2",
+            'variant' => "h2"
         ])
-            {{__('Contact', 'job-listings')}}
+            {{__('Information', 'job-listings')}}
         @endtypography
 
-        @foreach($preparedListData['contacts'] as $contact)
+        @card([
+            'classList' => [
+                'c-card--panel'
+            ]
+        ])
+                @collection([
+                    'list' => $preparedListData['employeList']
+                ])
+                @endcollection
 
-            {{--//@TODO: Change to contact card--}}
-
-            @card([
-                'classList' => [
-                    'c-card--panel'
-                ]
+        @endcard
+    </div>
+    <!-- -Contact -->
+    @if($contacts)
+        <div class="o-grid">
+            @typography([
+                'element' => "h2",
+                'variant' => "h2"
             ])
+                {{__('Contact', 'job-listings')}}
+            @endtypography
 
-                    @collection([])
+            @foreach($preparedListData['contacts'] as $contact)
 
-                        @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
+                {{--//@TODO: Change to contact card--}}
 
-                            @collection__item()
-                                @typography([
-                                    'element' => "h4"
-                                ])
-                                    {{ $contact['contactPerson'] }}
-                                @endtypography
+                @card([
+                    'classList' => [
+                        'c-card--panel'
+                    ]
+                ])
 
-                            @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
+                        @collection([])
 
-                                @typography([
-                                    'variant' => "meta",
-                                    'element' => "span"
-                                ])
-                                    {{ $contact['contactPosition'] }}
-                                @endtypography
+                            @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
 
+                                @collection__item()
+                                    @typography([
+                                        'element' => "h4"
+                                    ])
+                                        {{ $contact['contactPerson'] }}
+                                    @endtypography
+
+                                    @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
+
+                                        @typography([
+                                            'variant' => "meta",
+                                            'element' => "span"
+                                        ])
+                                            {{ $contact['contactPosition'] }}
+                                        @endtypography
+
+                                    @endif
+
+                                    @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
+
+                                        @typography([
+                                            'element' => "p"
+                                        ])
+                                            @icon([
+                                            'icon' => 'phone',
+                                            'size' => 'sm',
+                                            'color' => 'primary'
+                                        ])
+                                            @endicon
+                                            {!! $contact['contactPhone'] !!}
+                                        @endtypography
+
+                                    @endif
+
+                                @endcollection__item
                             @endif
 
-                @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
+                        @endcollection
+                @endcard
 
-                    @typography([
-                        'element' => "p"
-                    ])
-                        @icon([
-                        'icon' => 'phone',
-                        'size' => 'sm',
-                        'color' => 'primary'
-                    ])
-                        @endicon
-                        {!! $contact['contactPhone'] !!}
-                    @endtypography
+            @endforeach
+        </div>
 
-                @endif
-
-                            @endcollection__item
-                        @endif
-
-                    @endcollection
-
-            @endcard
-
-        @endforeach
     @endif
 
     @if($isExpired)
-        <div>
+        <div class="o-grid">
 
             @button([
                 'style' => 'filled',
@@ -204,7 +204,7 @@
         </div>
     @else
         <div class="o-grid">
-            <div class=""o-grid-3@md o-order-1@md">
+
 
                 @if($applyLink === '#job-listings-modal')
 
@@ -251,7 +251,7 @@
 
             @endif
 
-            </div>
+
         </div>
     @endif
 @stop
