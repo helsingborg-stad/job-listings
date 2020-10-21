@@ -164,33 +164,33 @@
                                             ])
                                                 {{ $contact['contactPerson'] }}
                                             @endtypography
-                                        @endcollection__item
-                                    @endif
+                                        @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
 
-                                    @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
-                                        @collection__item()
                                             @typography([
                                                 'variant' => "meta",
                                                 'element' => "span"
                                             ])
                                                 {{ $contact['contactPosition'] }}
                                             @endtypography
-                                        @endcollection__item
-                                    @endif
 
-                                    @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
-                                        @collection__item()
-                                            @typography([
-                                                'element' => "p"
-                                            ])
-                                                @icon([
-                                                    'icon' => 'phone',
-                                                    'size' => 'sm',
-                                                    'color' => 'primary'
-                                                ])
-                                                @endicon
-                                                {!! $contact['contactPhone'] !!}
-                                                    @endtypography
+                                        @endif
+
+                            @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
+
+                                @typography([
+                                    'element' => "p"
+                                    ])
+                                    @icon([
+                                    'icon' => 'phone',
+                                    'size' => 'sm',
+                                    'color' => 'primary'
+                                ])
+                                    @endicon
+                                    {!! $contact['contactPhone'] !!}
+                                @endtypography
+
+                            @endif
+
                                         @endcollection__item
                                     @endif
 
@@ -268,7 +268,6 @@
 
             </aside>
         </div>
-    </div>
 
     @if($sourceSystem == "reachmee")
 
@@ -281,7 +280,11 @@
         ])
         @endmodal
 
-    @endif
+        @endif
+
+    </div>
+
+
 
 
 @stop
