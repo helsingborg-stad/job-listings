@@ -1,4 +1,14 @@
 @extends('templates.master')
+
+@section('before-layout')
+@stop
+
+@section('above')
+    <div class="nav-helper">
+        @includeIf('partials.navigation.breadcrumb')
+        @includeIf('partials.navigation.accessibility')
+    </div>
+@stop
 @section('content')
 
     @if (get_field('archive_' . sanitize_title($postType) . '_filter_position', 'option') == 'top')
@@ -6,7 +16,7 @@
     @endif
 
     <div class="container main-container job-listings">
-        @include('partials.navigation.breadcrumb')
+
 
         <div class="grid" class="jobb-listings">
             @if (get_field('archive_' . sanitize_title($postType) . '_show_sidebar_navigation', 'option'))
@@ -14,13 +24,13 @@
             @endif
 
             <?php
-            $cols = 'grid-md-12';
+            $cols = 'o-grid-12@md';
             if (is_active_sidebar('right-sidebar') && get_field('archive_' . sanitize_title($postType) . '_show_sidebar_navigation',
                     'option')) {
-                $cols = 'grid-md-8 grid-lg-6';
+                $cols = 'o-grid-8@md o-grid-6@lg';
             } elseif (is_active_sidebar('right-sidebar') || get_field('archive_' . sanitize_title($postType) . '_show_sidebar_navigation',
                     'option')) {
-                $cols = 'grid-md-8 grid-lg-9';
+                $cols = 'o-grid-8@md o-grid-9@lg';
             }
             ?>
 
@@ -28,8 +38,8 @@
 
                 @if (get_field('archive_' . sanitize_title($postType) . '_title', 'option') || is_category() || is_date())
 
-                    <div class="grid">
-                        <div class="grid-md-12">
+                    <div class="o-grid">
+                        <div class="o-grid-12@md">
                             @if (get_field('archive_' . sanitize_title($postType) . '_title', 'option'))
 
                                 @if (is_category())
@@ -100,22 +110,22 @@
                     </div>
 
                 @elseif (!empty(apply_filters('accessibility_items', array())))
-                    <div class="grid">
-                        <div class="grid-xs-12 u-mb-3">
+                    <div class="o-grid">
+                        <div class="o-grid-12@xs u-mb-3">
                             @include('partials.accessibility-menu')
                         </div>
                     </div>
                 @endif
 
                 @if (is_active_sidebar('content-area-top'))
-                    <div class="grid grid--columns sidebar-content-area sidebar-content-area-top">
+                    <div class="o-grid sidebar-content-area sidebar-content-area-top">
                         <?php dynamic_sidebar('content-area-top'); ?>
                     </div>
                 @endif
 
 
                 @if (get_field('archive_' . sanitize_title($postType) . '_filter_position', 'option') == 'content')
-                    <div class="grid filter-content">
+                    <div class="o-grid filter-content">
                         @include('partials.archive.archive-filters')
                     </div>
                 @endif
@@ -137,7 +147,7 @@
                 @endif
 
                 @if (is_active_sidebar('content-area'))
-                    <div class="grid grid--columns sidebar-content-area sidebar-content-area-bottom">
+                    <div class="o-grid sidebar-content-area sidebar-content-area-bottom">
                         <?php dynamic_sidebar('content-area'); ?>
                     </div>
                 @endif

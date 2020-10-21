@@ -1,15 +1,23 @@
 @extends('templates.master')
 
+@section('before-layout')
+@stop
+
+@section('above')
+    <div class="nav-helper">
+        @includeIf('partials.navigation.breadcrumb')
+        @includeIf('partials.navigation.accessibility')
+    </div>
+@stop
+
 @section('content')
 
     <div class="container main-container job-listings">
-        @include('partials.navigation.breadcrumb')
-
         <div class="o-grid  grid--columns">
             <div class="o-grid-12@md o-grid-9@lg">
 
                 @if (is_single() && is_active_sidebar('content-area-top'))
-                    <div class="c-grid grid--columns sidebar-content-area sidebar-content-area-top">
+                    <div class="o-grid sidebar-content-area sidebar-content-area-top">
                         <?php dynamic_sidebar('content-area-top'); ?>
                     </div>
                 @endif
@@ -42,6 +50,10 @@
                                 <div class="post post-single">
 
                                     <article class="c-article" id="article">
+
+                                        @typography(["element" => "h1"])
+                                           {{the_title() }}
+                                        @endtypography
 
                                                 @if(!$isExpired)
                                                     @if($applyLink === '#job-listings-modal')
@@ -92,8 +104,6 @@
                                             @if(isset($legal) && !empty($legal))
 
                                                     @card([
-                                                        'heading' => 'Heading',
-                                                        'subHeading' => 'SubHeading',
                                                         'content' =>  $legal,
                                                         'classList' => [
                                                             'c-card--panel'
@@ -122,7 +132,8 @@
             <aside class="o-grid-42 o-grid-3@md o-order-2 o-order-1@md sidebar-left-sidebar">
                 <!-- -Information -->
                 @typography([
-                    'element' => "h3"
+                    'element' => "h3",
+                    'classList' => ['u-padding__bottom--2']
                 ])
                     {{__('Information', 'job-listings')}}
                 @endtypography
@@ -142,13 +153,18 @@
 
                 <!-- -Contact -->
                 @if($contacts)
+
                     @typography([
-                        'element' => "h3"
+                        'element' => "h3",
+                        'classList' => ['u-padding__bottom--2', 'u-padding__top--3']
                     ])
                         {{__('Contact', 'job-listings')}}
                     @endtypography
 
                     @foreach($preparedListData['contacts'] as $contact)
+
+                        {{--//@TODO: Change to contact card--}}
+
                         @card([
                             'classList' => [
                                 'c-card--panel'
@@ -158,12 +174,14 @@
                                 @collection([])
 
                                     @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
+
                                          @collection__item()
                                             @typography([
                                                 'element' => "h4"
                                             ])
                                                 {{ $contact['contactPerson'] }}
                                             @endtypography
+
                                         @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
 
                                             @typography([
@@ -179,7 +197,7 @@
 
                                 @typography([
                                     'element' => "p"
-                                    ])
+                                ])
                                     @icon([
                                     'icon' => 'phone',
                                     'size' => 'sm',
@@ -202,7 +220,7 @@
                 @endif
 
                 @if($isExpired)
-                    <div class="gutter gutter-top">
+                    <div>
 
                         @button([
                             'style' => 'filled',
@@ -223,7 +241,7 @@
                                     'color' => 'primary',
                                     'style' => 'filled',
                                     'id' => 'job-listings-apply',
-                                    'classList' => ['c-button--margin-top', 'js-job-listings-apply'],
+                                    'classList' => ['c-button--margin-top', 'u-margin__right--1',  'js-job-listings-apply'],
                                     'attributeList' => [
                                         'data-open' => 'job-listings-modal',
                                     ]
@@ -237,7 +255,7 @@
                                     'color' => 'primary',
                                     'style' => 'filled',
                                     'href' => $applyLink,
-                                    'classList' => ['c-button--margin-top']
+                                    'classList' => ['c-button--margin-top', 'u-margin__right--1']
                                 ])
                                     {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
                                 @endbutton
