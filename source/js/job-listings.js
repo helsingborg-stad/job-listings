@@ -8,7 +8,7 @@ class JobListings {
 
   handleEvents = () => {
     const { jobId } = jobListings;
-    const applyButtons = document.getElementsByClassName('job-listings-application');
+    const applyButtons = document.getElementsByClassName('js-job-listings-apply');
     const loginButton = document.querySelector('[js-trigger-btn-id]');
 
     for (let i = 0; i < applyButtons.length; i++) {
@@ -36,6 +36,7 @@ class JobListings {
       this.renderApplicationIframe();
     });
   };
+
 
   renderApplicationIframe = () => {
     // from db
@@ -212,7 +213,7 @@ class JobListings {
       iframe.setAttribute('height', height);
       iframe.setAttribute('frameborder', '0');
       iframe.setAttribute('src', iFrameUrl);
-      console.log(iFrameUrl);
+
       const wrap = document.createElement('div');
       wrap.appendChild(iframe);
 

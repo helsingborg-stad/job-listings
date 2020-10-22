@@ -1,258 +1,262 @@
-@extends('templates.master')
+@extends('templates.single')
+
+@section('above')
+    <div class="nav-helper">
+        @includeIf('partials.navigation.breadcrumb')
+        @includeIf('partials.navigation.accessibility')
+    </div>
+
+    @if($isExpired)
+        <div class="gutter gutter-bottom">
+            @notice([
+                'type' => 'warning',
+                    'message' => [
+                    'text' => _("The application period for this reqruitment has ended."),
+                    'size' => 'md'
+                ],
+                'icon' => [
+                    'name' => 'report',
+                    'size' => 'md',
+                    'color' => 'white'
+                ]
+            ])
+            @endnotice
+
+        </div>
+    @endif
+@stop
+
+@section('sidebar-left')
+
+@stop
 
 @section('content')
+    <article class="c-article" id="article">
 
-    <div class="container main-container job-listings">
-        @include('partials.navigation.breadcrumb')
+        @typography(["element" => "h1"])
+            {{the_title() }}
+        @endtypography
 
-        <div class="grid  grid--columns">
-            <div class="grid-md-12 grid-lg-9">
+                @if(!$isExpired)
+                    @if($applyLink === '#job-listings-modal')
 
-                @if (is_single() && is_active_sidebar('content-area-top'))
-                    <div class="grid grid--columns sidebar-content-area sidebar-content-area-top">
-                        <?php dynamic_sidebar('content-area-top'); ?>
-                    </div>
+                        @button([
+                            'color' => 'primary',
+                            'style' => 'filled',
+                            'id' => 'job-listings-apply',
+                            'classList' => ['js-job-listings-apply'],
+                            'attributeList' => [
+                                'data-open' => 'job-listings-modal',
+                            ]
+                        ])
+                            {{__('Apply now', 'job-listings')}}
+                        @endbutton
+
+                    @else
+
+                        @button([
+                            'text' => __('Apply now', 'job-listings'),
+                            'color' => 'primary',
+                            'style' => 'filled',
+                            'href' => $applyLink,
+                            'size' => 'lg'
+                        ])
+                        @endbutton
+
+                    @endif
                 @endif
 
-                <div class="grid">
-                    <div class="grid-sm-12">
-                        {!! the_post() !!}
+                @if (post_password_required(get_post()))
+                    {!! get_the_password_form() !!}
+                @else
 
-                        @if($isExpired)
-                            <div class="gutter gutter-bottom">
-                                @notice([
-                                    'type' => 'warning',
-                                        'message' => [
-                                        'text' => _("The application period for this reqruitment has ended."),
-                                        'size' => 'md'
-                                    ],
-                                    'icon' => [
-                                        'name' => 'report',
-                                        'size' => 'md',
-                                        'color' => 'white'
-                                    ]
-                                ])
-                                @endnotice
+                @if(isset($preamble) && !empty($preamble))
 
-                            </div>
-                        @endif
-
-                        <div class="grid">
-                            <div class="grid-xs-12">
-                                <div class="post post-single">
-
-                                    <article class="u-mb-5" id="article">
-
-                                                @if(!$isExpired)
-                                                    @if($applyLink === '#job-listings-modal')
-
-                                                        @button([
-                                                            'color' => 'primary',
-                                                            'style' => 'filled',
-                                                            'id' => 'job-listings-apply',
-                                                            'attributeList' => [
-                                                                'data-open' => 'job-listings-modal',
-                                                                'js-trigger-btn-id' => 'true'
-                                                            ]
-                                                        ])
-                                                            {{__('Apply now', 'job-listings')}}
-                                                        @endbutton
-
-                                                    @else
-
-                                                        @button([
-                                                            'text' => __('Apply now', 'job-listings'),
-                                                            'color' => 'primary',
-                                                            'style' => 'filled',
-                                                            'href' => $applyLink,
-                                                            'size' => 'lg'
-                                                        ])
-                                                        @endbutton
-
-                                                    @endif
-                                                @endif
-
-                                                @if (post_password_required(get_post()))
-                                                    {!! get_the_password_form() !!}
-                                                @else
-
-                                                @if(isset($preamble) && !empty($preamble))
-
-                                                    @typography([
-                                                        'element' => "p",
-                                                        'classList' => ['lead']
-                                                    ])
-                                                        {{ $preamble }}
-                                                    @endtypography
-
-                                                @endif
-
-                                                {!! $content !!}
-
-                                            @if(isset($legal) && !empty($legal))
-
-                                                @card([
-                                                    'heading' => '',
-                                                    'subHeading' => ''
-                                                ])
-                                                    @typography([
-                                                    'element' => "h5",
-                                                    'classList' => ['legal']
-                                                    ])
-                                                        {{ $legal }}
-                                                    @endtypography
-
-                                                @endcard
-
-                                            @endif
-
-                                        @endif
-                                    </article>
-
-                                    @if (is_single() && is_active_sidebar('content-area'))
-                                        <div class="grid grid--columns sidebar-content-area sidebar-content-area-bottom">
-                                            <?php dynamic_sidebar('content-area'); ?>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <aside class="grid-lg-3 grid-md-12 sidebar-left-sidebar">
-
-                <div class="grid--columns">
-
-                    @card([
-                        'heading' => __('Information', 'job-listings')
+                    @typography([
+                        'element' => "p",
+                        'classList' => ['lead']
                     ])
-                        @listing([
-                            'list' => $preparedListData['employeList'],
-                            'elementType' => "ul",
-                            'classList' => ['unlist', 'job-listing-sidenav', 'job-listing-employees']
+                        {{ $preamble }}
+                    @endtypography
+
+                @endif
+
+                {!! $content !!}
+
+            @if(isset($legal) && !empty($legal))
+
+                @card([
+                        'content' =>  $legal,
+                        'classList' => [
+                            'c-card--panel'
+                        ]
+                ])
+                @endcard
+
+            @endif
+        @endif
+    </article>
+@stop
+
+@section('sidebar-right')
+    <!-- -Information -->
+    <div class="o-grid">
+
+        @typography([
+            'element' => "h2",
+            'variant' => "h2"
+        ])
+            {{__('Information', 'job-listings')}}
+        @endtypography
+
+        <div class="o-grid-12">
+            @card([
+                'classList' => [
+                    'c-card--panel'
+                ]
+            ])
+                @collection([
+                    'list' => $preparedListData['employeList']
+                ])
+                @endcollection
+
+            @endcard
+        </div>
+        <!-- -Contact -->
+        @if($contacts)
+
+                @typography([
+                    'element' => "h2",
+                    'variant' => "h2"
+                ])
+                    {{__('Contact', 'job-listings')}}
+                @endtypography
+
+                @foreach($preparedListData['contacts'] as $contact)
+                    <div class="o-grid-12">
+                        {{--//@TODO: Change to contact card--}}
+
+                        @card([
+                            'classList' => [
+                                'c-card--panel'
+                            ]
                         ])
-                        @endlisting
-                    @endcard
 
-                    <div class="gutter gutter-top">
-                    @if($contacts)
-                            @foreach($preparedListData['contacts'] as $contact)
-                                @card([
-                                    'heading' => __('Contact', 'job-listings')
-                                ])
+                            @collection([])
 
-                                    @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
+                                @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
 
+                                    @collection__item()
                                         @typography([
                                             'element' => "h4"
                                         ])
                                             {{ $contact['contactPerson'] }}
                                         @endtypography
 
-                                    @endif
+                                        @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
 
-                                    @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
+                                            @typography([
+                                                'variant' => "meta",
+                                                'element' => "span"
+                                            ])
+                                                {{ $contact['contactPosition'] }}
+                                            @endtypography
 
-                                        @typography([
-                                            'variant' => "meta",
-                                            'element' => "span"
-                                        ])
-                                            {{ $contact['contactPosition'] }}
-                                        @endtypography
+                                        @endif
 
-                                    @endif
+                                        @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
 
-                                    @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
+                                            @typography([
+                                                'element' => "p"
+                                            ])
+                                                @icon([
+                                                'icon' => 'phone',
+                                                'size' => 'sm',
+                                                'color' => 'primary'
+                                            ])
+                                                @endicon
+                                                {!! $contact['contactPhone'] !!}
+                                            @endtypography
 
-                                        @typography([
-                                            'element' => "p"
-                                        ])
-                                    @icon([
-                                        'icon' => 'phone',
-                                        'size' => 'sm',
-                                        'color' => 'primary'
-                                    ])
-                                    @endicon
-                                    {!! $contact['contactPhone'] !!}
-                                        @endtypography
+                                        @endif
 
-                                    @endif
-
-                                @endcard
-                            @endforeach
-
-                    @endif
-                    </div>
-                    @if($isExpired)
-                        <div class="gutter gutter-top">
-
-                            @button([
-                                'style' => 'filled',
-                                'attributeList' => ['disabled' => 'true']
-
-                            ])
-                                {{_e('The application period has ended', 'job-listings')}}
-                            @endbutton
-
-                        </div>
-                    @else
-                        <div class="gutter gutter-top">
-
-                                @if($applyLink === '#job-listings-modal')
-
-                                    @button([
-                                        'color' => 'primary',
-                                        'style' => 'filled',
-                                        'id' => 'job-listings-apply',
-                                        'classList' => ['c-button--margin-top'],
-                                        'attributeList' => [
-                                            'data-open' => 'job-listings-modal',
-                                            'js-trigger-btn-id' => 'true'
-                                        ]
-                                    ])
-                                        {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
-                                    @endbutton
-
-                                @else
-
-                                    @button([
-                                        'color' => 'primary',
-                                        'style' => 'filled',
-                                        'href' => $applyLink,
-                                        'classList' => ['c-button--margin-top']
-                                    ])
-                                        {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
-                                    @endbutton
-
+                                    @endcollection__item
                                 @endif
 
-                            @if($sourceSystem == "reachmee")
+                            @endcollection
+                        @endcard
+                    </div>
+                @endforeach
+        @endif
 
-                                @button([
-                                    'icon' => 'assignment_ind',
-                                    'reversePositions' => true,
-                                    'text' => __('Log in'),
-                                    'style' => 'filled',
-                                    'id' => 'job-listings-login',
-                                    'attributeList' => [
-                                        'data-open' => 'job-listings-modal',
-                                        'js-trigger-btn-id' => 'true'
-                                    ],
-                                    'classList' => ['c-button--margin-top']
-                                ])
-                                @endbutton
+        @if($isExpired)
+            <div class="o-grid-12">
 
-                            @endif
-                        </div>
-                    @endif
-                
-                    
-                </div>
+                @button([
+                    'style' => 'filled',
+                    'attributeList' => ['disabled' => 'true']
 
-            </aside>
-        </div>
+                ])
+                    {{_e('The application period has ended', 'job-listings')}}
+                @endbutton
+
+            </div>
+        @else
+
+                @if($applyLink === '#job-listings-modal')
+                    <div class="o-grid-12">
+                        @button([
+                            'color' => 'primary',
+                            'style' => 'filled',
+                            'id' => 'job-listings-apply',
+                            'classList' => ['c-button--margin-top', 'u-margin__right--1',  'js-job-listings-apply'],
+                            'attributeList' => [
+                                'data-open' => 'job-listings-modal',
+                            ]
+                        ])
+                            {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
+                        @endbutton
+                    </div>
+
+                @else
+                    <div class="o-grid-12">
+                        @button([
+                            'color' => 'primary',
+                            'style' => 'filled',
+                            'href' => $applyLink,
+                            'classList' => ['c-button--margin-top', 'u-margin__right--1']
+                        ])
+                            {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
+                        @endbutton
+                    </div>
+                @endif
+
+
+                @if($sourceSystem == "reachmee")
+                    <div class="o-grid-12">
+                        @button([
+                            'icon' => 'assignment_ind',
+                            'reversePositions' => true,
+                            'text' => __('Log in'),
+                            'style' => 'filled',
+                            'id' => 'job-listings-login',
+                            'attributeList' => [
+                                'data-open' => 'job-listings-modal',
+                                'js-trigger-btn-id' => 'true'
+                            ],
+                            'classList' => ['c-button--margin-top']
+                        ])
+                        @endbutton
+                    </div>
+                @endif
+
+        @endif
+
     </div>
+@stop
+
+@section('below')
+    @includeIf('partials.sidebar', ['id' => 'content-area-bottom', 'classes' => ['o-grid']])
 
     @if($sourceSystem == "reachmee")
 
@@ -261,11 +265,10 @@
             'id' => 'job-listings-modal',
             'overlay' => 'dark',
             'animation' => 'scale-up',
+            'size' => 'lg'
         ])
         @endmodal
 
     @endif
 
-
 @stop
-

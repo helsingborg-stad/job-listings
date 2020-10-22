@@ -107,47 +107,47 @@ class Controller
         // prepare data for List
         if ($data['isExpired']) {
             array_push($prepList, [
-                'label' => '<b>' . __('Deadline for applications:', 'job-listings') . '</b><br />
+                'content' => '<b>' . __('Deadline for applications:', 'job-listings') . '</b><br />
                     ' . $data['isExpired'] . ' (' . $data['daysLeft'] . ')']);
         }
 
         if ($data['projectNr']) {
-            array_push($prepList, ['label' => '<b>' . __('Reference:', 'job-listings') . '</b> <br />' .
+            array_push($prepList, ['content' => '<b>' . __('Reference:', 'job-listings') . '</b> <br />' .
                 $data['projectNr']]);
         }
 
         if ($data['startDate']) {
-            array_push($prepList, ['label' => '<b>' . __('Published:', 'job-listings') . '</b><br />' .
+            array_push($prepList, ['content' => '<b>' . __('Published:', 'job-listings') . '</b><br />' .
                 $data['startDate']]);
         }
 
         if ($data['numberOfPositions']) {
-            array_push($prepList, ['label' => '<b>' . __('Number of positions:', 'job-listings') . '</b><br />' .
+            array_push($prepList, ['content' => '<b>' . __('Number of positions:', 'job-listings') . '</b><br />' .
                 $data['numberOfPositions']]);
         }
 
         if ($data['expreience']) {
-            array_push($prepList, ['label' => '<b>' . __('Experience:', 'job-listings') . '</b><br />' .
+            array_push($prepList, ['content' => '<b>' . __('Experience:', 'job-listings') . '</b><br />' .
                 $data['expreience']]);
         }
 
         if ($data['employmentType']) {
-            array_push($prepList, ['label' => '<b>' . __('Employment type:', 'job-listings') . '</b> <br />' .
+            array_push($prepList, ['content' => '<b>' . __('Employment type:', 'job-listings') . '</b> <br />' .
                 $data['employmentType']]);
         }
 
         if ($data['employmentGrade']) {
-            array_push($prepList, ['label' => '<b>' . __('Extent:', 'job-listings') . '</b> <br />' .
+            array_push($prepList, ['content' => '<b>' . __('Extent:', 'job-listings') . '</b> <br />' .
                 $data['employmentGrade']]);
         }
 
         if ($data['location']) {
-            array_push($prepList, ['label' => '<b>' . __('Location:', 'job-listings') . '</b> <br />' .
+            array_push($prepList, ['content' => '<b>' . __('Location:', 'job-listings') . '</b> <br />' .
                 $data['location']]);
         }
 
         if ($data['department']) {
-            array_push($prepList, ['label' => '<b>' . __('Company:', 'job-listings') . '</b> <br />' .
+            array_push($prepList, ['content' => '<b>' . __('Company:', 'job-listings') . '</b> <br />' .
                 $data['department']]);
         }
 
@@ -197,12 +197,12 @@ class Controller
 
                 $postMeta = get_post_meta($item->id);
                 $href = $item->permalink ?: '';
-                $title = $item->postTitle ?: '';
+                $title = "<a href=".$href.">".$item->postTitle."</a>" ?: '';
                 $published = $postMeta['publish_start_date'][0] ?: '';
                 $endDate = $postMeta['application_end_date'][0] ?: '';
                 $category = $postMeta['occupationclassifications'][0] ?: '';
 
-                array_push($this->list, ['href' => $href ?? '', 'columns' => [$title, $published, $endDate, $category]]);
+                array_push($this->list, ['columns' => [$title, $published, $endDate, $category]]);
             }
 
             add_filter('Municipio/viewData', array($this, 'archiveData'));
