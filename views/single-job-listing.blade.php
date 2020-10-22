@@ -109,7 +109,7 @@
             {{__('Information', 'job-listings')}}
         @endtypography
 
-        <div class="o-grid-12@md">
+        <div class="o-grid-12">
             @card([
                 'classList' => [
                     'c-card--panel'
@@ -133,7 +133,7 @@
                 @endtypography
 
                 @foreach($preparedListData['contacts'] as $contact)
-                    <div class="o-grid-12@md">
+                    <div class="o-grid-12">
                         {{--//@TODO: Change to contact card--}}
 
                         @card([
@@ -190,7 +190,7 @@
         @endif
 
         @if($isExpired)
-            <div class="o-grid-12@md">
+            <div class="o-grid-12">
 
                 @button([
                     'style' => 'filled',
@@ -204,7 +204,7 @@
         @else
 
                 @if($applyLink === '#job-listings-modal')
-                    <div class="o-grid-12@md">
+                    <div class="o-grid-12">
                         @button([
                             'color' => 'primary',
                             'style' => 'filled',
@@ -219,7 +219,7 @@
                     </div>
 
                 @else
-                    <div class="o-grid-12@md">
+                    <div class="o-grid-12">
                         @button([
                             'color' => 'primary',
                             'style' => 'filled',
@@ -233,7 +233,7 @@
 
 
                 @if($sourceSystem == "reachmee")
-                    <div class="o-grid-12@md">
+                    <div class="o-grid-12">
                         @button([
                             'icon' => 'assignment_ind',
                             'reversePositions' => true,
