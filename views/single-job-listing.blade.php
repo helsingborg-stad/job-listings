@@ -85,13 +85,12 @@
 
             @if(isset($legal) && !empty($legal))
 
-                    @card([
+                @card([
                         'content' =>  $legal,
                         'classList' => [
                             'c-card--panel'
                         ]
-                    ])
-
+                ])
                 @endcard
 
             @endif
@@ -102,6 +101,7 @@
 @section('sidebar-right')
     <!-- -Information -->
     <div class="o-grid">
+
         @typography([
             'element' => "h2",
             'variant' => "h2"
@@ -109,151 +109,150 @@
             {{__('Information', 'job-listings')}}
         @endtypography
 
-        @card([
-            'classList' => [
-                'c-card--panel'
-            ]
-        ])
+        <div class="o-grid-12@md">
+            @card([
+                'classList' => [
+                    'c-card--panel'
+                ]
+            ])
                 @collection([
                     'list' => $preparedListData['employeList']
                 ])
                 @endcollection
 
-        @endcard
-    </div>
-    <!-- -Contact -->
-    @if($contacts)
-        <div class="o-grid">
-            @typography([
-                'element' => "h2",
-                'variant' => "h2"
-            ])
-                {{__('Contact', 'job-listings')}}
-            @endtypography
+            @endcard
+        </div>
+        <!-- -Contact -->
+        @if($contacts)
 
-            @foreach($preparedListData['contacts'] as $contact)
-
-                {{--//@TODO: Change to contact card--}}
-
-                @card([
-                    'classList' => [
-                        'c-card--panel'
-                    ]
+                @typography([
+                    'element' => "h2",
+                    'variant' => "h2"
                 ])
+                    {{__('Contact', 'job-listings')}}
+                @endtypography
 
-                        @collection([])
+                @foreach($preparedListData['contacts'] as $contact)
+                    <div class="o-grid-12@md">
+                        {{--//@TODO: Change to contact card--}}
 
-                            @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
+                        @card([
+                            'classList' => [
+                                'c-card--panel'
+                            ]
+                        ])
 
-                                @collection__item()
-                                    @typography([
-                                        'element' => "h4"
-                                    ])
-                                        {{ $contact['contactPerson'] }}
-                                    @endtypography
+                            @collection([])
 
-                                    @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
+                                @if( isset($contact['contactPerson']) && !empty($contact['contactPerson']) )
 
+                                    @collection__item()
                                         @typography([
-                                            'variant' => "meta",
-                                            'element' => "span"
+                                            'element' => "h4"
                                         ])
-                                            {{ $contact['contactPosition'] }}
+                                            {{ $contact['contactPerson'] }}
                                         @endtypography
 
-                                    @endif
+                                        @if( isset($contact['contactPosition']) && !empty($contact['contactPosition']) )
 
-                                    @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
+                                            @typography([
+                                                'variant' => "meta",
+                                                'element' => "span"
+                                            ])
+                                                {{ $contact['contactPosition'] }}
+                                            @endtypography
 
-                                        @typography([
-                                            'element' => "p"
-                                        ])
-                                            @icon([
-                                            'icon' => 'phone',
-                                            'size' => 'sm',
-                                            'color' => 'primary'
-                                        ])
-                                            @endicon
-                                            {!! $contact['contactPhone'] !!}
-                                        @endtypography
+                                        @endif
 
-                                    @endif
+                                        @if( isset($contact['contactPhone']) && !empty($contact['contactPhone']) )
 
-                                @endcollection__item
-                            @endif
+                                            @typography([
+                                                'element' => "p"
+                                            ])
+                                                @icon([
+                                                'icon' => 'phone',
+                                                'size' => 'sm',
+                                                'color' => 'primary'
+                                            ])
+                                                @endicon
+                                                {!! $contact['contactPhone'] !!}
+                                            @endtypography
 
-                        @endcollection
-                @endcard
+                                        @endif
 
-            @endforeach
-        </div>
+                                    @endcollection__item
+                                @endif
 
-    @endif
+                            @endcollection
+                        @endcard
+                    </div>
+                @endforeach
+        @endif
 
-    @if($isExpired)
-        <div class="o-grid">
-
-            @button([
-                'style' => 'filled',
-                'attributeList' => ['disabled' => 'true']
-
-            ])
-                {{_e('The application period has ended', 'job-listings')}}
-            @endbutton
-
-        </div>
-    @else
-        <div class="o-grid">
-
-
-                @if($applyLink === '#job-listings-modal')
-
-                    @button([
-                        'color' => 'primary',
-                        'style' => 'filled',
-                        'id' => 'job-listings-apply',
-                        'classList' => ['c-button--margin-top', 'u-margin__right--1',  'js-job-listings-apply'],
-                        'attributeList' => [
-                            'data-open' => 'job-listings-modal',
-                        ]
-                    ])
-                        {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
-                    @endbutton
-
-                @else
-
-                    @button([
-                        'color' => 'primary',
-                        'style' => 'filled',
-                        'href' => $applyLink,
-                        'classList' => ['c-button--margin-top', 'u-margin__right--1']
-                    ])
-                        {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
-                    @endbutton
-
-                @endif
-
-            @if($sourceSystem == "reachmee")
+        @if($isExpired)
+            <div class="o-grid-12@md">
 
                 @button([
-                    'icon' => 'assignment_ind',
-                    'reversePositions' => true,
-                    'text' => __('Log in'),
                     'style' => 'filled',
-                    'id' => 'job-listings-login',
-                    'attributeList' => [
-                        'data-open' => 'job-listings-modal',
-                        'js-trigger-btn-id' => 'true'
-                    ],
-                    'classList' => ['c-button--margin-top']
+                    'attributeList' => ['disabled' => 'true']
+
                 ])
+                    {{_e('The application period has ended', 'job-listings')}}
                 @endbutton
 
-            @endif
+            </div>
+        @else
+
+                @if($applyLink === '#job-listings-modal')
+                    <div class="o-grid-12@md">
+                        @button([
+                            'color' => 'primary',
+                            'style' => 'filled',
+                            'id' => 'job-listings-apply',
+                            'classList' => ['c-button--margin-top', 'u-margin__right--1',  'js-job-listings-apply'],
+                            'attributeList' => [
+                                'data-open' => 'job-listings-modal',
+                            ]
+                        ])
+                            {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
+                        @endbutton
+                    </div>
+
+                @else
+                    <div class="o-grid-12@md">
+                        @button([
+                            'color' => 'primary',
+                            'style' => 'filled',
+                            'href' => $applyLink,
+                            'classList' => ['c-button--margin-top', 'u-margin__right--1']
+                        ])
+                            {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
+                        @endbutton
+                    </div>
+                @endif
 
 
-        </div>
-    @endif
+                @if($sourceSystem == "reachmee")
+                    <div class="o-grid-12@md">
+                        @button([
+                            'icon' => 'assignment_ind',
+                            'reversePositions' => true,
+                            'text' => __('Log in'),
+                            'style' => 'filled',
+                            'id' => 'job-listings-login',
+                            'attributeList' => [
+                                'data-open' => 'job-listings-modal',
+                                'js-trigger-btn-id' => 'true'
+                            ],
+                            'classList' => ['c-button--margin-top']
+                        ])
+                        @endbutton
+                    </div>
+                @endif
+
+        @endif
+
+    </div>
 @stop
 
 @section('below')
