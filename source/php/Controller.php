@@ -16,9 +16,9 @@ class Controller
      */
     public function __construct()
     {
-        add_filter('Municipio/viewData', array($this, 'singleViewData'));
-        add_filter('Municipio/Controller/Archive/getItems', array($this, 'prepareDataArchive'));
 
+        add_filter('Municipio/viewData', array($this, 'singleViewData'));
+        add_filter('Municipio/Controller/Archive/Data', array($this, 'archiveViewData'));
     }
 
     /**
@@ -28,15 +28,14 @@ class Controller
     public function singleViewData($data)
     {
 
+        if(!$this->isSingleAd()) {
+            return $data; 
+        }
+
         //Populate post
         if (is_null($this->post)) {
             global $post;
             $this->post = $post;
-        }
-
-        //Check if single ad
-        if (!$this->isSingleAd()) {
-            return $data;
         }
 
         $data['applyLink'] = ($this->getSourceSystem() == 'reachmee') ? '#job-listings-modal' : $this->getMeta('external_url');
@@ -63,35 +62,13 @@ class Controller
     }
 
     /**
-     * Get archive view data
-     * @param $data
-     * @return array
-     */
-    public function archiveData($data)
-    {
-
-        if (is_null($this->post)) {
-            global $post;
-            $this->post = $post;
-        }
-
-        if (!$this->isArchive()) {
-            return false;
-        }
-
-        $data['tableData'] = (count($this->list) > 0) ? $this->list : [];
-        return $data;
-    }
-
-    /**
      * @param $data
      * @return mixed
      */
     public function prepareData($data)
     {
-
-        $prepData['employeList'] = $this->prepareList($data);
-        $prepData['contacts'] = $this->prepareContacts($data);
+        $prepData['employeList']    = $this->prepareList($data);
+        $prepData['contacts']       = $this->prepareContacts($data);
 
         return $prepData;
     }
@@ -189,27 +166,48 @@ class Controller
      * @param $archiveItems
      * @return void
      */
-    public function prepareDataArchive($archiveItems)
+    public function archiveViewData(array $data)
     {
 
-        if(isset($archiveItems) && !empty($archiveItems)){
-            foreach ($archiveItems as $item) {
-
-                $postMeta = get_post_meta($item->id);
-                $href = $item->permalink ?: '';
-                $title = "<a href=".$href.">".$item->postTitle."</a>" ?: '';
-                $published = $postMeta['publish_start_date'][0] ?: '';
-                $endDate = $postMeta['application_end_date'][0] ?: '';
-                $category = $postMeta['occupationclassifications'][0] ?: '';
-
-                array_push($this->list, ['columns' => [$title, $published, $endDate, $category]]);
-            }
-
-            add_filter('Municipio/viewData', array($this, 'archiveData'));
+        if(!$this->isArchive()) {
+            return $data; 
         }
+
+        $preparedPosts = [
+            'items' => [],
+            'headings' => [
+                __('Position', 'job-listings'),
+                __('Published', 'job-listings'),
+                __('Apply by', 'job-listings'),
+                __('Category', 'job-listings')
+            ]
+        ];  
+
+        if(is_array($data['posts']['items']) && !empty($data['posts']['items'])) {
+            foreach ($data['posts']['items'] as $post) {
+
+                $postMeta   = get_post_meta($post['id']);
+                $title      = "<a href=" . $post['href'] . ">". $post['columns'][0] ."</a>" ?: '';
+                $published  = $postMeta['publish_start_date'][0] ?: '';
+                $endDate    = $postMeta['application_end_date'][0] ?: '';
+                $category   = $postMeta['occupationclassifications'][0] ?: '';
+
+                $preparedPosts['items'][] = [
+                    'columns' => [
+                        $title, 
+                        $published, 
+                        $endDate, 
+                        $category
+                    ]
+                ]; 
+            }
+        }
+
+        //Assign as list
+        $data['posts'] = $preparedPosts; 
+
+        return $data;
     }
-
-
 
     /**
      * Get meta key, simplified
@@ -282,7 +280,7 @@ class Controller
      */
     public function isSingleAd()
     {
-        if ($this->post->post_type == "job-listing" && is_single()) {
+        if (is_singular('job-listing')) {
             return true;
         }
         return false;
@@ -295,7 +293,7 @@ class Controller
     public function isArchive()
     {
 
-        if ($this->post->post_type == "job-listing" && is_archive()) {
+        if (is_post_type_archive("job-listing")) {
             return true;
         }
 
