@@ -208,10 +208,10 @@ class Controller
                     ]
                 ]; 
             }
-        }
 
-        //Assign as list
-        $data['posts'] = $preparedPosts; 
+            //Assign as list
+            $data['posts'] = $preparedPosts; 
+        }
 
         return $data;
     }
