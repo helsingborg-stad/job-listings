@@ -187,7 +187,14 @@ class Controller
             foreach ($data['posts']['items'] as $post) {
 
                 $postMeta   = get_post_meta($post['id']);
-                $title      = "<a href=" . $post['href'] . ">". $post['columns'][0] ."</a>" ?: '';
+
+                $title      = sprintf(
+                    '<a href="%s" title="%s">%s</a>', 
+                    $post['href'], 
+                    $post['columns'][0], 
+                    $post['columns'][0]
+                );
+
                 $published  = $postMeta['publish_start_date'][0] ?: '';
                 $endDate    = $postMeta['application_end_date'][0] ?: '';
                 $category   = $postMeta['occupationclassifications'][0] ?: '';
