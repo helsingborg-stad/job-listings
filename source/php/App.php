@@ -77,18 +77,12 @@ class App
             )
         );
 
-
-
         new Controller(); 
 
         add_action('wp_enqueue_scripts', array($this, 'enqueueStyles'), 14);
         add_action('wp_enqueue_scripts', array($this, 'enqueueScripts'));
 
-        add_action('pre_get_posts', array($this, 'removeInactiveAds'));
-
-        add_action('init', array($this, 'initializeImporters'));
-
-
+        add_action('init', array($this, 'initializeImporters')); 
     }
 
     /**
@@ -192,30 +186,6 @@ class App
                 'jobId' => $output['rmjob'] ?? '',
               )
             );
-        }
-    }
-
-    /**
-     * Remove inactive ads from archive
-     * @return void
-     */
-    public function removeInactiveAds($query)
-    {
-        if (!is_admin() && $query->is_main_query() && is_post_type_archive('job-listing')) {
-            $query->set('meta_query', array(
-                array(
-                   'key'=>'publish_end_date',
-                   'value'=> date("Y-m-d"),
-                   'compare'=>'>=',
-                   'type' => 'DATE'
-                ),
-                array(
-                    'key'=>'publish_start_date',
-                    'value'=> date("Y-m-d"),
-                    'compare'=>'<=',
-                    'type' => 'DATE'
-                 ),
-            ));
         }
     }
 }
