@@ -137,7 +137,9 @@ class ReachmeeImport extends Import
                 if (isset($item->{$target[0]})) {
                     $dataObject[$key] = $item->{$target[0]};
                 } else {
-                    $dataObject[$key] = "";
+                    if (!isset($dataObject[$key])) {
+                        $dataObject[$key] = "";
+                    }
                 }
             }
 
