@@ -110,6 +110,8 @@ class Import
      */
     public function importXml()
     {
+        //Set max execution time
+        ini_set('max_execution_time', 60*10);
 
         //Get curl helper
         $curl = new \JobListings\Helper\Curl(true, $this->cacheTTL);
@@ -156,19 +158,16 @@ class Import
     }
 
     /**
-     * Unpublish job ads that is missing from feed and exclude form Algolia search.
+     * Remove jobs not in source list.
      * @return void
      */
     public function deactivateMissingJobs()
     {
-        $activePosts = $this->getActivePosts();
-        if (is_array($activePosts) && !empty($activePosts)) {
-            foreach ($activePosts as $activePost) {
-                if (!in_array($activePost->uuid, $this->importedUuids)) {
-                    update_post_meta($activePost->ID, 'exclude_from_search', 1);
-                    update_post_meta($activePost->ID, 'has_expired', 1);
-                    update_post_meta($activePost->ID, 'publish_end_date', date('Y-m-d', strtotime('-1 day')));
-                    update_post_meta($activePost->ID, 'application_end_date', date('Y-m-d', strtotime('-1 day')));
+        $localPosts = $this->getLocalPosts();
+        if (is_array($localPosts) && !empty($localPosts)) {
+            foreach ($localPosts as $localPost) {
+                if (!in_array($localPost->uuid, $this->importedUuids)) {
+                    wp_delete_post($localPost->ID, true); 
                 }
             }
         }
@@ -307,30 +306,14 @@ class Import
     }
 
     /**
-     * Get currently active job ads.
+     * Get local job ads.
      * @return array
      */
-    public function getActivePosts()
+    public function getLocalPosts()
     {
-        $metaQuery = [
-            [
-                'key' => 'publish_end_date',
-                'value' => date("Y-m-d"),
-                'compare' => '>=',
-                'type' => 'DATE'
-            ],
-            [
-                 'key' => 'publish_start_date',
-                 'value' => date("Y-m-d"),
-                 'compare' => '<=',
-                 'type' => 'DATE'
-            ]
-        ];
-
         $posts = get_posts([
             'post_type' => $this->postType,
-            'numberposts' => -1,
-            'meta_query' => $metaQuery
+            'numberposts' => -1
         ]);
 
         foreach ($posts as $post) {
