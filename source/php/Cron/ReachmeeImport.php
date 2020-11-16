@@ -40,7 +40,7 @@ class ReachmeeImport extends Import
         $item->hasExpired = strtotime('+1 day', strtotime($item->pubDateTo)) >= time() ? '0' : '1';
         $item->numberOfDaysLeft = date_diff(
             date_create(date("Y-m-d", time())), 
-            date_create(strtotime('+1 day', strtotime($item->pubDateTo)))
+            date_create(date("Y-m-d", strtotime('+1 day', strtotime($item->pubDateTo))))
         )->days;
         $item->link = str_replace("rmpage=job", "rmpage=apply", $item->link); 
 
