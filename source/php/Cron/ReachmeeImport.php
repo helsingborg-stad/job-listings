@@ -181,13 +181,15 @@ class ReachmeeImport extends Import
 
                 //Diff data
                 if (count(array_unique($updateDiff)) != count($updateDiff)) {
-                    wp_update_post(
-                        array(
-                            'ID' => $postId,
-                            'post_title' => $dataObject['post_title'],
-                            'post_content' => $dataObject['post_content']
-                        )
-                    );
+                    if(!empty($dataObject['post_title']) && !empty($dataObject['post_content'])) {
+                        wp_update_post(
+                            array(
+                                'ID' => $postId,
+                                'post_title' => $dataObject['post_title'],
+                                'post_content' => $dataObject['post_content']
+                            )
+                        );
+                    }
                 }
             }
 
