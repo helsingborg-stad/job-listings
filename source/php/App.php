@@ -83,8 +83,24 @@ class App
         add_action('wp_enqueue_scripts', array($this, 'enqueueScripts'));
 
         add_action('init', array($this, 'initializeImporters')); 
+
+        add_action('pre_get_posts', array($this, 'orderPostByPublishDate'), 999);
     }
 
+    /**
+     * Order posts by publish date
+     *
+     * @param object $query
+     * @return void
+     */
+    public function orderPostByPublishDate($query) {
+        if ($query->is_main_query() && $query->query_vars['post_type'] == "job-listing") {
+            $query->set('orderby', 'meta_value');
+            $query->set('meta_key', 'publish_start_date');
+            $query->set('order', 'DESC');
+        }
+    }
+    
     /**
      * Add searchable blade template paths
      * @param array  $array Template paths
