@@ -180,7 +180,7 @@ class ReachmeeImport extends Import
                 );
 
                 //Diff data
-                if (count(array_unique($updateDiff)) != count($updateDiff)) {
+                if (count(array_unique($updateDiff)) == count($updateDiff)) {
                     if(!empty($dataObject['post_title']) && !empty($dataObject['post_content'])) {
                         wp_update_post(
                             array(
