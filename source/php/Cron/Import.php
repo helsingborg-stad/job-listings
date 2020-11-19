@@ -128,20 +128,26 @@ class Import
 
         // Create array with simple xml
         try {
-            $data = simplexml_load_string($data);
+            $data = simplexml_load_string($data); 
         } catch (Exception $e) {
             if (!strstr($e->getMessage(), 'XML')) {
                 throw $e;
             }
         }
 
+        //Get target data
+        $data   = (array) $data->{$this->baseNode}; 
+        $data    = $data[$this->subNode]; 
+        $data = json_decode(json_encode($data), true); 
 
-        // Get main node
-        $data = json_decode(json_encode($data->{$this->baseNode}), false)->{$this->subNode};
         
+
         // Check if valid list, update jobs
         if (isset($data) && !empty($data)) {
             foreach ($data as $item) {
+
+                $item = (object) $item; 
+
                 $item = apply_filters(str_replace("\\", "/", get_class($this))."/Item", $item);
 
                 if ($item) {
