@@ -173,6 +173,8 @@ class App
 
             $postMeta = get_post_meta(get_the_ID());
             $applyUrl = $postMeta['external_url'][0] ?? '';
+            $importMeta = get_post_meta(get_the_ID(), 'importer_meta', true);
+            
             parse_str(htmlspecialchars_decode($applyUrl), $output);
 
             wp_localize_script(
@@ -180,6 +182,7 @@ class App
               'jobListings',
               array(
                 'jobId' => $output['rmjob'] ?? '',
+                'importMeta' => $importMeta
               )
             );
         }

@@ -11,6 +11,7 @@ class ReachmeeImport extends Import
     public $curlMethod = "GET";
     public $baseUrl = "";
     public $queryParams = array();
+    public $settings; 
 
     public $baseNode = "channel";
     public $subNode = "item";
@@ -23,6 +24,7 @@ class ReachmeeImport extends Import
         //Assign parameters
         $this->baseUrl = $baseUrl;
         $this->queryParams = $queryParams;
+        $this->settings = $settings; 
 
         //Construct parent class
         parent::__construct();

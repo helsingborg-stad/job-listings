@@ -38,17 +38,26 @@ class JobListings {
   };
 
   renderApplicationIframe = () => {
-    // from db
-    let iFrameUrl = 'https://web103.reachmee.com/ext/';
     const validator = '9ec24d855e37a090a5e232077f53c593';
-    const iid = 'I017';
-    const customer = '1118';
-    const site = '9';
-    const iHelperUrl = 'https://helsingborg.se/arbete/lediga-jobb-i-helsingborgs-stad/';
+    const iHelperUrl = window.location.href;
     const height = '4000';
-    const langDef = 'SE';
     const title = 'ReachMee Rekrytera extern webbplats';
     let ref = encodeURIComponent(document.referrer);
+
+    //Get post data if defined, else default.
+    if(typeof jobListings.importMeta !== 'undefined') {
+      const iid = jobListings.importMeta.InstallationID;
+      const site = jobListings.importMeta.id;
+      const langDef = jobListings.importMeta.lang;
+      const customer = jobListings.importMeta.customerID;
+      let iFrameUrl = jobListings.importMeta.applicationIframeUrl;
+    } else {
+      const iid = 'I017';
+      const site = '9';
+      const langDef = 'SE';
+      const customer = '1118';
+      let iFrameUrl = 'https://web103.reachmee.com/ext/';
+    }
 
     // form url
     let jobId = '';
@@ -215,8 +224,13 @@ class JobListings {
       const wrap = document.createElement('div');
       wrap.appendChild(iframe);
 
+<<<<<<< Updated upstream
       // document.write(wrap.innerHTML); // <- Old code
       const modalBody = document.getElementById('job-listings-modal-body');
+=======
+      const modalBody = document.getElementById('job-listings-modal').getElementsByClassName('c-modal__content')[0];
+
+>>>>>>> Stashed changes
       modalBody.innerHTML = '';
       modalBody.appendChild(wrap);
 

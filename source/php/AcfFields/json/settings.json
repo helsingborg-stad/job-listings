@@ -176,6 +176,41 @@
                             "prepend": "&lang=",
                             "append": "",
                             "maxlength": ""
+                        },
+                        {
+                            "key": "field_5fb7af2c741b7",
+                            "label": "CustomerID",
+                            "name": "customerID",
+                            "type": "text",
+                            "instructions": "Customer id for application iframe",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 1118,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_5fb7af68741b8",
+                            "label": "Application Iframe URL",
+                            "name": "applicationIframeUrl",
+                            "type": "url",
+                            "instructions": "Url to use for application iframe",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "https:\/\/web103.reachmee.com\/ext\/",
+                            "placeholder": ""
                         }
                     ],
                     "min": "",
