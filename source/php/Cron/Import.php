@@ -137,10 +137,8 @@ class Import
 
         //Get target data
         $data   = (array) $data->{$this->baseNode}; 
-        $data    = $data[$this->subNode]; 
-        $data = json_decode(json_encode($data), true); 
-
-        
+        $data   = $data[$this->subNode]; 
+        $data   = json_decode(json_encode($data), true); 
 
         // Check if valid list, update jobs
         if (isset($data) && !empty($data)) {
@@ -289,6 +287,8 @@ class Import
                     update_post_meta($postId, $metaKey, $metaValue);
                 }
             }
+
+            update_post_meta($postId, 'importer_meta', $this->settings); 
 
             return true;
         }
