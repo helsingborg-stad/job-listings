@@ -224,13 +224,8 @@ class JobListings {
       const wrap = document.createElement('div');
       wrap.appendChild(iframe);
 
-<<<<<<< Updated upstream
-      // document.write(wrap.innerHTML); // <- Old code
       const modalBody = document.getElementById('job-listings-modal-body');
-=======
-      const modalBody = document.getElementById('job-listings-modal').getElementsByClassName('c-modal__content')[0];
-
->>>>>>> Stashed changes
+      
       modalBody.innerHTML = '';
       modalBody.appendChild(wrap);
 
