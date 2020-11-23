@@ -29,7 +29,7 @@ class Import
         add_action('restrict_manage_posts', array($this, 'addImportButton'), 100);
 
         // Filter data from external party
-        add_filter(str_replace("\\", "/", get_class($this)) . '/Item', array($this, 'normalize')); 
+        add_filter(str_replace("\\", "/", get_class($this)) . '/Item', array($this, 'normalize'));
     }
 
     /**
@@ -128,23 +128,18 @@ class Import
 
         // Create array with simple xml
         try {
-            $data = simplexml_load_string($data); 
+            $data = simplexml_load_string($data);
         } catch (Exception $e) {
             if (!strstr($e->getMessage(), 'XML')) {
                 throw $e;
             }
         }
 
-        //Get target data
-        $data   = (array) $data->{$this->baseNode}; 
-        $data   = $data[$this->subNode]; 
-        $data   = json_decode(json_encode($data), true); 
+        $data = $data->xpath($this->baseNode. "/" . $this->subNode);
 
         // Check if valid list, update jobs
         if (isset($data) && !empty($data)) {
             foreach ($data as $item) {
-
-                $item = (object) $item; 
 
                 $item = apply_filters(str_replace("\\", "/", get_class($this))."/Item", $item);
 
@@ -152,7 +147,7 @@ class Import
                     $this->updateItem($item);
                 }
             }
-            
+
             // Deactivate missing jobs ads.
             $this->deactivateMissingJobs();
             return true;
@@ -171,7 +166,7 @@ class Import
         if (is_array($localPosts) && !empty($localPosts)) {
             foreach ($localPosts as $localPost) {
                 if (!in_array($localPost->uuid, $this->importedUuids)) {
-                    wp_delete_post($localPost->ID, true); 
+                    wp_delete_post($localPost->ID, true);
                 }
             }
         }
@@ -219,7 +214,7 @@ class Import
         if (!empty($post) && is_array($post)) {
             $post = array_pop($post);
             if(isset($post->ID) && is_numeric($post->ID)) {
-              return $post; 
+              return $post;
             }
         }
 
@@ -258,14 +253,14 @@ class Import
             }
 
             // Remove previous connections
-            wp_delete_object_term_relationships($postId, $termId); 
+            wp_delete_object_term_relationships($postId, $termId);
 
             // Connecting term to post
             return wp_set_post_terms($postId, $dataObject[$termSourceKey], $termId, true);
 
         }
 
-        return false; 
+        return false;
     }
 
     /**
@@ -287,8 +282,6 @@ class Import
                     update_post_meta($postId, $metaKey, $metaValue);
                 }
             }
-
-            update_post_meta($postId, 'importer_meta', $this->settings); 
 
             return true;
         }

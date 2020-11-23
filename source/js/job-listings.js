@@ -45,20 +45,12 @@ class JobListings {
     const title = 'ReachMee Rekrytera extern webbplats';
     let ref = encodeURIComponent(document.referrer);
 
-    //Get post data if defined, else default.
-    if(typeof jobListings.importMeta !== 'undefined') {
-      const iid = jobListings.importMeta.InstallationID;
-      const site = jobListings.importMeta.id;
-      const langDef = jobListings.importMeta.lang;
-      const customer = jobListings.importMeta.customerID;
-      let iFrameUrl = jobListings.importMeta.applicationIframeUrl;
-    } else {
-      const iid = 'I017';
-      const site = '9';
-      const langDef = 'SE';
-      const customer = '1118';
-      let iFrameUrl = 'https://web103.reachmee.com/ext/';
-    }
+    //Get post data
+    const iid = jobListings.importMeta.InstallationID;
+    const site = jobListings.importMeta.id;
+    const langDef = jobListings.importMeta.lang;
+    const customer = jobListings.importMeta.customerID;
+    let iFrameUrl = jobListings.importMeta.applicationIframeUrl;
 
     // form url
     let jobId = '';
