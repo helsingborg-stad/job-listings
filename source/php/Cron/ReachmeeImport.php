@@ -11,7 +11,6 @@ class ReachmeeImport extends Import
     public $curlMethod = "GET";
     public $baseUrl = "";
     public $queryParams = array();
-    public $settings; 
 
     public $baseNode = "channel";
     public $subNode = "item";
@@ -24,7 +23,6 @@ class ReachmeeImport extends Import
         //Assign parameters
         $this->baseUrl = $baseUrl;
         $this->queryParams = $queryParams;
-        $this->settings = $settings; 
 
         //Construct parent class
         parent::__construct();
@@ -37,29 +35,41 @@ class ReachmeeImport extends Import
     public function normalize($item)
     {
 
+        //Get description as string
+        if (!is_string($item->description)) {
+            $item->description = $item->description->asXML();
+        }
+
+        //Convert to object
+        $item = (object) json_decode(json_encode($item), true);
+
+        //Dates
         $item->pubDate = date("Y-m-d", strtotime($item->pubDate));
         $item->pubDateTo = date("Y-m-d", strtotime($item->pubDateTo));
         $item->hasExpired = strtotime('+1 day', strtotime($item->pubDateTo)) >= time() ? '0' : '1';
         $item->numberOfDaysLeft = date_diff(
-            date_create(date("Y-m-d", time())), 
+            date_create(date("Y-m-d", time())),
             date_create(date("Y-m-d", strtotime('+1 day', strtotime($item->pubDateTo))))
         )->days;
-        $item->link = str_replace("rmpage=job", "rmpage=apply", $item->link); 
 
+        //Url
+        $item->link = str_replace("rmpage=job", "rmpage=apply", $item->link);
+
+        //Sanitize descriptions
         $item->description = html_entity_decode(
             html_entity_decode($item->description)
-        ); 
+        );
 
-        //Contacts
-        $item->contact = array(); 
+        //Format contacts
+        $item->contact = [];
         if(isset($item->contactPerson) && is_array($item->contactPerson) && !empty($item->contactPerson)) {
             foreach($item->contactPerson as $key => $detail) {
                 $item->contact[] = array(
                     'name' => isset($item->contactPersonFullName[$key]) ? $item->contactPersonFullName[$key] : '',
                     'phone' => isset($item->contactPersonTelephone[$key]) ? preg_replace('/\D/', '', $item->contactPersonTelephone[$key]) : '',
                     'phone_sanitized' => isset($item->contactPersonTelephone[$key]) ? preg_replace('/\D/', '', $item->contactPersonTelephone[$key]) : '',
-                    'position' => is_array($item->contactPersonPosition) && isset($item->contactPersonPosition[$key]) ? $item->contactPersonPosition[$key] : ($key == 0 ? $item->contactPersonPosition : '')
-                ); 
+                    'position' => isset($item->contactPersonPosition) && is_array($item->contactPersonPosition) && isset($item->contactPersonPosition[$key]) ? $item->contactPersonPosition[$key] : ( isset($item->contactPersonPosition) && $key == 0 ? $item->contactPersonPosition : '')
+                );
             }
         } elseif(isset($item->contactPerson)) {
             $item->contact[] = array(
@@ -69,8 +79,8 @@ class ReachmeeImport extends Import
                 'position' => isset($item->contactPersonPosition) ? $item->contactPersonPosition : ''
             );
         }
-        
-        return $item; 
+
+        return $item;
     }
 
     /**
@@ -81,8 +91,8 @@ class ReachmeeImport extends Import
     {
         global $wp;
         if(isset(get_current_screen()->post_type) && get_current_screen()->post_type == "job-listing") {
-            $queryArgs = array_merge($wp->query_vars, array(str_replace("\\", "", __CLASS__) => 'true')); 
-            echo '<a href="' . add_query_arg($queryArgs, home_url($wp->request)) . '" class="button-primary extraspace" style="float: right; margin-right: 10px;">'. __("Start Reachmee Import") .'</a>'; 
+            $queryArgs = array_merge($wp->query_vars, array(str_replace("\\", "", __CLASS__) => 'true'));
+            echo '<a href="' . add_query_arg($queryArgs, home_url($wp->request)) . '" class="button-primary extraspace" style="float: right; margin-right: 10px;">'. __("Start Reachmee Import") .'</a>';
         }
     }
 
@@ -103,12 +113,12 @@ class ReachmeeImport extends Import
 
                 //Check if is default val
                 if(!is_array($target)) {
-                    
+
                     //Assign default val
-                    $dataObject[$key] = $target; 
+                    $dataObject[$key] = $target;
 
                     //Skip to next
-                    continue; 
+                    continue;
                 }
 
                 //Check if multiple targets (concat these then)
@@ -120,19 +130,19 @@ class ReachmeeImport extends Import
 
                     //Get multiple values and create array
                     foreach($target as $subkey => $subtarget) {
-                        
+
                         if(is_string($item->{$target[$subkey][0]})) {
                             $result .= $this->metaImplodeLimiters($key)[$i] . $item->{$target[$subkey][0]};
                         }
-                        
+
                         $i++;
                     }
 
                     //Concat values
-                    $dataObject[$key] = $result; 
+                    $dataObject[$key] = $result;
 
                     //Skip to next
-                    continue; 
+                    continue;
                 }
 
                 //If not multi
@@ -158,7 +168,7 @@ class ReachmeeImport extends Import
 
             //Not existing, create new
             if (!isset($postObject->ID)) {
-                
+
                 $postId = wp_insert_post(
                     array(
                         'post_title' => $dataObject['post_title'],
@@ -241,7 +251,7 @@ class ReachmeeImport extends Import
             'employment_grade' => array("occupationDegree"),
             'departments' => array(array("Org2"), array("Org3")),
             'occupationclassifications' => array("occupationArea"),
-            
+
             'contact_person' => array("contactPerson"),
             'contact_person_name' => array("contactPersonFullName"),
             'contact_person_phone' => array("contactPersonTelephone"),
