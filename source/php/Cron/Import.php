@@ -283,6 +283,8 @@ class Import
                 }
             }
 
+            update_post_meta($postId, 'importer_meta', $this->settings);
+
             return true;
         }
 
