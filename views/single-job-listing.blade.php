@@ -76,7 +76,7 @@
                         'element' => "p",
                         'classList' => ['lead']
                     ])
-                        {{ $preamble }}
+                        {!! nl2br($preamble) !!}
                     @endtypography
 
                 @endif
