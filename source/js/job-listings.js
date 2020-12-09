@@ -46,11 +46,12 @@ class JobListings {
     let ref = encodeURIComponent(document.referrer);
 
     //Get post data
-    const iid = jobListings.importMeta.InstallationID;
-    const site = jobListings.importMeta.id;
-    const langDef = jobListings.importMeta.lang;
-    const customer = jobListings.importMeta.customerID;
-    let iFrameUrl = jobListings.importMeta.applicationIframeUrl;
+    const iid               = jobListings.importMeta.InstallationID;
+    const site              = jobListings.importMeta.id;
+    const langDef           = jobListings.importMeta.lang;
+    const customer          = jobListings.importMeta.customerID;
+    const iFrameValidator   = jobListings.importMeta.applicationIframeValidator;
+    let   iFrameUrl         = jobListings.importMeta.applicationIframeUrl;
 
     // form url
     let jobId = '';
@@ -143,7 +144,7 @@ class JobListings {
     }
 
     iFrameUrl += destPage;
-    iFrameUrl += 'site=' + site + '&validator=' + validator;
+    iFrameUrl += 'site=' + site + '&validator=' + iFrameValidator;
 
     if (typeof langId === 'undefined' || langId == '') {
       langId = langDef;
