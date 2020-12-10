@@ -139,7 +139,11 @@
                         @card([
                             'classList' => [
                                 'c-card--panel'
-                            ]
+                            ],
+                            'attributeList' => [
+                                'itemscope'     => '',
+                                'itemtype'      => 'http://schema.org/Person'
+                            ],
                         ])
 
                             @collection([])
@@ -176,6 +180,23 @@
                                             ])
                                                 @endicon
                                                 {!! $contact['contactPhone'] !!}
+                                            @endtypography
+
+                                        @endif
+
+
+                                        @if( isset($contact['contactEmail']) && !empty($contact['contactEmail']) )
+
+                                            @typography([
+                                                'element' => "p"
+                                            ])
+                                                @icon([
+                                                'icon' => 'email',
+                                                'size' => 'sm',
+                                                'color' => 'primary'
+                                            ])
+                                                @endicon
+                                                {!! $contact['contactEmail'] !!}
                                             @endtypography
 
                                         @endif

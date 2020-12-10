@@ -153,7 +153,11 @@ class Controller
                 }
 
                 if ($contact->phone) {
-                    $prepContact[$index]['contactPhone'] = '<a href="tel:' . $contact->phone_sanitized . ' ' . $contact->phone . '">' . $contact->phone . '</a>';
+                    $prepContact[$index]['contactPhone'] = '<a href="tel:' . $contact->phone_sanitized . '">' . $contact->phone . '</a>';
+                }
+
+                if ($contact->email) {
+                    $prepContact[$index]['contactEmail'] = '<a href="mail:' . $contact->email . '">' . $contact->email . '</a>';
                 }
             }
         }
