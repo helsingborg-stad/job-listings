@@ -192,6 +192,14 @@
                                             </li>
                                         @endif
 
+                                        @if ($contact->email)
+                                            <li class="link-item link-item-email">
+                                                <a href="mail:{{ $contact->email }}">
+                                                    {{ $contact->email }}
+                                                </a>
+                                            </li>
+                                        @endif
+
                                     </ul>
                                 </div>
                             </div>
