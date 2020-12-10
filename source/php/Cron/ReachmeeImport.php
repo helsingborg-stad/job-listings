@@ -37,6 +37,9 @@ class ReachmeeImport extends Import
     public function normalize($item)
     {
 
+        //Str replace magic to get contacts as a structured array
+        $contacts = $this->getContactArray($item); 
+
         //Get description as string
         if (!is_string($item->description)) {
             $item->description = $item->description->asXML();
@@ -63,26 +66,52 @@ class ReachmeeImport extends Import
         );
 
         //Format contacts
-        $item->contact = [];
-        if(isset($item->contactPerson) && is_array($item->contactPerson) && !empty($item->contactPerson)) {
-            foreach($item->contactPerson as $key => $detail) {
-                $item->contact[] = array(
-                    'name' => isset($item->contactPersonFullName[$key]) ? $item->contactPersonFullName[$key] : '',
-                    'phone' => isset($item->contactPersonTelephone[$key]) ? preg_replace('/\D/', '', $item->contactPersonTelephone[$key]) : '',
-                    'phone_sanitized' => isset($item->contactPersonTelephone[$key]) ? preg_replace('/\D/', '', $item->contactPersonTelephone[$key]) : '',
-                    'position' => isset($item->contactPersonPosition) && is_array($item->contactPersonPosition) && isset($item->contactPersonPosition[$key]) ? $item->contactPersonPosition[$key] : ( isset($item->contactPersonPosition) && $key == 0 ? $item->contactPersonPosition : '')
-                );
-            }
-        } elseif(isset($item->contactPerson)) {
-            $item->contact[] = array(
-                'name' => isset($item->contactPersonFullName) ? $item->contactPersonFullName : '',
-                'phone' => isset($item->contactPersonTelephone) ? $item->contactPersonTelephone : '',
-                'phone_sanitized' => isset($item->contactPersonTelephone) ? preg_replace('/\D/', '', $item->contactPersonTelephone) : '',
-                'position' => isset($item->contactPersonPosition) ? $item->contactPersonPosition : ''
-            );
-        }
+        $item->contact = $contacts;
 
         return $item;
+    }
+
+    /**
+     * Hacky solution  to get contacts
+     *
+     * @param XMLObject $item
+     * @return array
+     */
+    public function getContactArray($item) {
+
+        //Hacky parse due to bad markup structure
+        $parsed = $item->asXML();
+        $parsed = str_replace('<contactPerson>', '</contact><contact><contactPerson>', $parsed); 
+        $parsed = str_replace('</item>', '</contact></item>', $parsed); 
+        $parsed = preg_replace('/<\/contact>/','',$parsed, 1);
+
+        // Create array with simple xml
+        try {
+            $parsed = simplexml_load_string($parsed);
+        } catch (Exception $e) {
+            if (!strstr($e->getMessage(), 'XML')) {
+                throw $e;
+            }
+        }
+
+        //Get contacts
+        $parsed = $parsed->xpath("contact");
+
+        //Rename keys
+        $contacts = []; 
+        if(is_array($parsed) && !empty($parsed)) {
+            foreach($parsed as $item) {
+               $contacts[] = [
+                    'name' => (string) $item->xpath("contactPersonFullName")[0],
+                    'phone' => (string) $item->xpath("contactPersonTelephone")[0],
+                    'phone_sanitized' => preg_replace('/\D/', '', (string) $item->xpath("contactPersonTelephone")[0]),
+                    'position' => (string) $item->xpath("contactPersonPosition")[0],
+                    'email' => strtolower((string) $item->xpath("contactPersonEmail")[0])
+                ];
+            }
+        }
+
+        return $contacts;
     }
 
     /**
