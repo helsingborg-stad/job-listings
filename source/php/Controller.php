@@ -157,7 +157,7 @@ class Controller
                 }
 
                 if ($contact->email) {
-                    $prepContact[$index]['contactEmail'] = '<a href="mail:' . $contact->email . '">' . $contact->email . '</a>';
+                    $prepContact[$index]['contactEmail'] = '<a href="mailto:' . $contact->email . '">' . $contact->email . '</a>';
                 }
             }
         }
