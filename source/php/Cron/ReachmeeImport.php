@@ -197,9 +197,6 @@ class ReachmeeImport extends Import
                 )
             );
 
-            var_dump($dataObject);
-            die; 
-
             //Not existing, create new
             if (!isset($postObject->ID)) {
 
