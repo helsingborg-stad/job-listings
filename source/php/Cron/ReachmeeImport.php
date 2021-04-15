@@ -259,7 +259,7 @@ class ReachmeeImport extends Import
     private function metaKeyMap()
     {
         return array(
-            'uuid' => array("projectNr"), //Required!
+            'uuid' => array("CommAdSeqNo"), //Required!
             'guid' => array("title"),
             'post_title' => array("title"),
             'preamble' => array("prefixtext"),
