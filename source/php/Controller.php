@@ -45,7 +45,7 @@ class Controller
         $data['startDate'] = $this->getMeta('publish_start_date');
         $data['endDate'] = $this->getMeta('publish_end_date');
         $data['referenceId'] = $this->getMeta('ad_reference_nbr');
-        $data['projectNr'] = $this->getMeta('uuid');
+        $data['projectNr'] = $this->getMeta('project_number');
         $data['numberOfPositions'] = $this->getMeta('number_of_positions');
         $data['expreience'] = $this->getMeta('number_of_positions');
         $data['employmentType'] = $this->getMeta('employment_type');
