@@ -260,6 +260,7 @@ class ReachmeeImport extends Import
     {
         return array(
             'uuid' => array("CommAdSeqNo"), //Required!
+            'project_number' => array("projectNr"), //Required!
             'guid' => array("title"),
             'post_title' => array("title"),
             'preamble' => array("prefixtext"),
