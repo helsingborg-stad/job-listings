@@ -163,9 +163,9 @@ class Import
     public function deactivateMissingJobs()
     {
         $localPosts = $this->getLocalPosts();
-        if (is_array($localPosts) && !empty($localPosts)) {
+        if (is_array($localPosts) && !empty($localPosts) && is_array($this->importedUuids) && !empty($this->importedUuids)) {
             foreach ($localPosts as $localPost) {
-                if (!in_array($localPost->uuid, $this->importedUuids)) {
+                if (!in_array((int) $localPost->uuid, $this->importedUuids)) {
                     wp_delete_post($localPost->ID, true);
                 }
             }

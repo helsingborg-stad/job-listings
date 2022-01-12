@@ -38,7 +38,7 @@ class ReachmeeImport extends Import
     {
 
         //Str replace magic to get contacts as a structured array
-        $contacts = $this->getContactArray($item); 
+        $contacts = $this->getContactArray($item);
 
         //Get description as string
         if (!is_string($item->description)) {
@@ -81,8 +81,8 @@ class ReachmeeImport extends Import
 
         //Hacky parse due to bad markup structure
         $parsed = $item->asXML();
-        $parsed = str_replace('<contactPerson>', '</contact><contact><contactPerson>', $parsed); 
-        $parsed = str_replace('</item>', '</contact></item>', $parsed); 
+        $parsed = str_replace('<contactPerson>', '</contact><contact><contactPerson>', $parsed);
+        $parsed = str_replace('</item>', '</contact></item>', $parsed);
         $parsed = preg_replace('/<\/contact>/','',$parsed, 1);
 
         // Create array with simple xml
@@ -98,15 +98,15 @@ class ReachmeeImport extends Import
         $parsed = $parsed->xpath("contact");
 
         //Rename keys
-        $contacts = []; 
+        $contacts = [];
         if(is_array($parsed) && !empty($parsed)) {
             foreach($parsed as $item) {
                $contacts[] = [
-                    'name' => (string) $item->xpath("contactPersonFullName")[0],
-                    'phone' => (string) $item->xpath("contactPersonTelephone")[0],
-                    'phone_sanitized' => preg_replace('/\D/', '', (string) $item->xpath("contactPersonTelephone")[0]),
-                    'position' => (string) $item->xpath("contactPersonPosition")[0],
-                    'email' => strtolower((string) $item->xpath("contactPersonEmail")[0])
+                    'name' => isset($item->xpath("contactPersonFullName")[0]) ? (string) $item->xpath("contactPersonFullName")[0] : '',
+                    'phone' => isset($item->xpath("contactPersonTelephone")[0]) ? (string) $item->xpath("contactPersonTelephone")[0] : '',
+                    'phone_sanitized' => isset($item->xpath("contactPersonTelephone")[0]) ? (string) preg_replace('/\D/', '', (string) $item->xpath("contactPersonTelephone")[0]) : '',
+                    'position' => isset($item->xpath("contactPersonPosition")[0]) ? (string) $item->xpath("contactPersonPosition")[0] : '',
+                    'email' => isset($item->xpath("contactPersonEmail")[0]) ? (string) strtolower((string) $item->xpath("contactPersonEmail")[0]) : ''
                 ];
             }
         }
@@ -134,6 +134,8 @@ class ReachmeeImport extends Import
      */
     public function updateItem($item)
     {
+        $updateTaxMeta = false;
+
         if (isset($item) && is_object($item) && !empty($item)) {
 
             //Create Response object
@@ -187,7 +189,7 @@ class ReachmeeImport extends Import
             }
 
             // Store for later comparison.
-            $this->importedUuids[] = $dataObject['uuid'];
+            $this->importedUuids[] = (int) $dataObject['uuid'];
 
             //Get matching post
             $postObject = $this->getPost(
@@ -197,7 +199,6 @@ class ReachmeeImport extends Import
                 )
             );
 
-            
 
             //Not existing, create new
             if (!isset($postObject->ID)) {
@@ -211,6 +212,8 @@ class ReachmeeImport extends Import
                     )
                 );
 
+                $updateTaxMeta = true;
+
             } else {
 
                 //Get post object id
@@ -218,10 +221,10 @@ class ReachmeeImport extends Import
 
                 //Create diffable array
                 $updateDiff = array(
-                    sanitize_text_field($postObject->post_title),
-                    sanitize_text_field($postObject->post_content),
-                    sanitize_text_field($dataObject['post_title']),
-                    sanitize_text_field($dataObject['post_content'])
+                    sanitize_text_field(html_entity_decode($postObject->post_title)),
+                    sanitize_text_field(html_entity_decode($postObject->post_content)),
+                    sanitize_text_field(html_entity_decode($dataObject['post_title'])),
+                    sanitize_text_field(html_entity_decode($dataObject['post_content']))
                 );
 
                 //Diff data
@@ -234,18 +237,25 @@ class ReachmeeImport extends Import
                                 'post_content' => $dataObject['post_content']
                             )
                         );
+
+                        $updateTaxMeta = true;
                     }
                 }
             }
 
-            // Taxonomies - Work categories
-            $this->updateTaxonomy($postId, 'occupationclassifications', 'job-listing-category', $dataObject);
+            //If post updated, update meta
+            if($updateTaxMeta == true) {
 
-            // Taxonomys source system
-            $this->updateTaxonomy($postId, 'source_system', 'job-listing-source', $dataObject);
+                // Taxonomies - Work categories
+                $this->updateTaxonomy($postId, 'occupationclassifications', 'job-listing-category', $dataObject);
 
-            //Update post with meta
-            $this->updatePostMeta($postId, $dataObject);
+                // Taxonomys source system
+                $this->updateTaxonomy($postId, 'source_system', 'job-listing-source', $dataObject);
+
+                //Update post with meta
+                $this->updatePostMeta($postId, $dataObject);
+
+            }
 
             //Done
             return true;
