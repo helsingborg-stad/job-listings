@@ -223,8 +223,8 @@ class ReachmeeImport extends Import
                 );
 
                 //Diff data
-                if (count(array_unique($updateDiff)) != count($updateDiff)) {
-                    if(!empty($dataObject['post_title']) && !empty($dataObject['post_content'])) {
+                if (count(array_unique($updateDiff)) != (count($updateDiff) / 2)) {
+                    if (!empty($dataObject['post_title']) && !empty($dataObject['post_content'])) {
                         wp_update_post(
                             array(
                                 'ID' => $postId,
