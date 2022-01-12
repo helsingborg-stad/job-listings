@@ -197,6 +197,8 @@ class ReachmeeImport extends Import
                 )
             );
 
+            
+
             //Not existing, create new
             if (!isset($postObject->ID)) {
 
@@ -216,10 +218,10 @@ class ReachmeeImport extends Import
 
                 //Create diffable array
                 $updateDiff = array(
-                    $postObject->post_title,
-                    $postObject->post_content,
-                    $dataObject['post_title'],
-                    $dataObject['post_content']
+                    sanitize_text_field($postObject->post_title),
+                    sanitize_text_field($postObject->post_content),
+                    sanitize_text_field($dataObject['post_title']),
+                    sanitize_text_field($dataObject['post_content'])
                 );
 
                 //Diff data
