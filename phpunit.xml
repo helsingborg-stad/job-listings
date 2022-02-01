@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         bootstrap="test/php/includes/bootstrap.php"
+         backupGlobals="true"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         verbose="true"
+         printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer">
+
+  <coverage processUncoveredFiles="false">
+    <include>
+      <directory suffix=".php">./source/php</directory>
+    </include>
+    <report>
+      <text outputFile="php://stdout" showUncoveredFiles="true"/>
+    </report>
+  </coverage>
+
+  <testsuites>
+    <testsuite name="Plugin Test Suit">
+      <directory suffix="Test.php">./test/php</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
