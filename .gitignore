@@ -12,8 +12,6 @@ node_modules/
 dist/
 dist/*
 
-# ignore composer lock file
-composer.lock
 
 # ignore jekyll build directory
 /_site
