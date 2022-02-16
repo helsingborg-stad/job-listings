@@ -20,8 +20,7 @@
   },
   "browserslist": [
     "> 1%",
-    "not dead",
-    "IE 11"
+    "not dead"
   ],
   "devDependencies": {
     "@babel/core": "^7.17.2",
