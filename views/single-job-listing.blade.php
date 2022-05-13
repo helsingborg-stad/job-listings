@@ -34,8 +34,8 @@
 
                 @if(!$isExpired)
                     @if($applyLink === '#job-listings-modal')
-
                         @button([
+                            'text' => __('Apply now', 'job-listings'),
                             'color' => 'primary',
                             'style' => 'filled',
                             'id' => 'job-listings-apply',
@@ -44,11 +44,8 @@
                                 'data-open' => 'job-listings-modal',
                             ]
                         ])
-                            {{__('Apply now', 'job-listings')}}
                         @endbutton
-
                     @else
-
                         @button([
                             'text' => __('Apply now', 'job-listings'),
                             'color' => 'primary',
@@ -57,7 +54,6 @@
                             'size' => 'lg'
                         ])
                         @endbutton
-
                     @endif
                 @endif
 
@@ -209,11 +205,11 @@
             <div class="o-grid-12">
 
                 @button([
+                    'text' => __('The application period has ended', 'job-listings'),
                     'style' => 'filled',
                     'attributeList' => ['disabled' => 'true']
 
                 ])
-                    {{_e('The application period has ended', 'job-listings')}}
                 @endbutton
 
             </div>
@@ -222,6 +218,7 @@
                 @if($applyLink === '#job-listings-modal')
                     <div class="o-grid-12">
                         @button([
+                            'text' => __('Apply here','job-listings') . " (" . $daysLeft . " " . __('days left','job-listings') . ")",
                             'color' => 'primary',
                             'style' => 'filled',
                             'id' => 'job-listings-apply',
@@ -230,19 +227,18 @@
                                 'data-open' => 'job-listings-modal',
                             ]
                         ])
-                            {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
                         @endbutton
                     </div>
 
                 @else
                     <div class="o-grid-12">
                         @button([
+                            'text' => __('Apply here','job-listings') . " (" . $daysLeft . " " . __('days left','job-listings') . ")",
                             'color' => 'primary',
                             'style' => 'filled',
                             'href' => $applyLink,
                             'classList' => ['c-button--margin-top', 'u-margin__right--1']
                         ])
-                            {{_e('Apply here','job-listings')}} ({{ $daysLeft }} {{_e('days left','job-listings')}})
                         @endbutton
                     </div>
                 @endif
