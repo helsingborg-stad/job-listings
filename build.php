@@ -60,7 +60,14 @@ if (isset($argv[1]) && $argv[1] === '--cleanup') {
  */
 function executeCommand($command)
 {
-    $proc = popen("$command 2>&1 ; echo Exit status : $?", 'r');
+    $fullCommand = '';
+    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        $fullCommand = "cmd /v:on /c \"$command 2>&1 & echo Exit status : !ErrorLevel!\"";
+    } else {
+        $fullCommand = "$command 2>&1 ; echo Exit status : $?";
+    }
+
+    $proc = popen($fullCommand, 'r');
 
     $liveOutput     = '';
     $completeOutput = '';
