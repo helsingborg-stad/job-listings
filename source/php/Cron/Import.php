@@ -140,7 +140,7 @@ class Import
             if(defined('WP_CLI') && WP_CLI) {
                 $errorString = "Could not load XML at ". home_url() . ": " . $this->baseUrl . "?" .  build_query($this->queryParams);
                 error_log($errorString); 
-                \WP_CLI::error($errorString);
+                \WP_CLI::warning($errorString);
             }
             return null;
         }
