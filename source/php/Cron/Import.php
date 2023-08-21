@@ -135,6 +135,16 @@ class Import
             }
         }
 
+        //Make shure this is a object
+        if(!is_object($data)) {
+            if(defined('WP_CLI') && WP_CLI) {
+                $errorString = "Could not load XML at ". home_url() . ": " . $this->baseUrl . "?" .  build_query($this->queryParams);
+                error_log($errorString); 
+                \WP_CLI::error($errorString);
+            }
+            return null;
+        }
+
         $data = $data->xpath($this->baseNode. "/" . $this->subNode);
 
         // Check if valid list, update jobs
