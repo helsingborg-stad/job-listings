@@ -35,5 +35,10 @@
         "allow-plugins": {
             "composer/installers": true
         }
+    },
+    "autoload": {
+        "psr-4": {
+          "JobListings\\": "source/php/"
+        }
     }
 }

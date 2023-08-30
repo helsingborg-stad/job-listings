@@ -25,17 +25,10 @@ define('JOBLISTINGS_TEMPLATE_PATH', JOBLISTINGS_PATH . 'templates/');
 
 load_plugin_textdomain('job-listings', false, plugin_basename(dirname(__FILE__)) . '/languages');
 
-require_once JOBLISTINGS_PATH . 'source/php/Vendor/Psr4ClassLoader.php';
-require_once JOBLISTINGS_PATH . 'Public.php';
 if (file_exists(JOBLISTINGS_PATH . 'vendor/autoload.php')) {
     require_once JOBLISTINGS_PATH . 'vendor/autoload.php';
 }
-
-// Instantiate and register the autoloader
-$loader = new JobListings\Vendor\Psr4ClassLoader();
-$loader->addPrefix('JobListings', JOBLISTINGS_PATH);
-$loader->addPrefix('JobListings', JOBLISTINGS_PATH . 'source/php/');
-$loader->register();
+require_once JOBLISTINGS_PATH . 'Public.php';
 
 // Start application
 new JobListings\App();
