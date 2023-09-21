@@ -94,7 +94,7 @@ class App
      * @return void
      */
     public function orderPostByPublishDate($query) {
-        if ($query->is_main_query() && isset($query->query_vars['post_type']) && $query->query_vars['post_type'] == "job-listing") {
+        if ($query->is_main_query() && !empty($query->query_vars['post_type']) && $query->query_vars['post_type'] == "job-listing") {
             $query->set('orderby', 'meta_value');
             $query->set('meta_key', 'publish_start_date');
             $query->set('order', 'DESC');
