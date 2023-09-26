@@ -38,7 +38,8 @@
     },
     "autoload": {
         "psr-4": {
-          "JobListings\\": "source/php/"
+            "JobListings\\": "source/php/"
         }
-    }
+    },
+    "version": "3.0.0"
 }
