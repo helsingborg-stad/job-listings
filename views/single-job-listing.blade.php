@@ -34,7 +34,7 @@
                 @if(!$isExpired)
                     @if($applyLink === '#job-listings-modal')
                         @button([
-                            'text' => $lang['applyNow'],
+                            'text' => $lang->applyNow,
                             'color' => 'primary',
                             'style' => 'filled',
                             'id' => 'job-listings-apply',
@@ -46,7 +46,7 @@
                         @endbutton
                     @else
                         @button([
-                            'text' => $lang['applyNow'],
+                            'text' => $lang->applyNow,
                             'color' => 'primary',
                             'style' => 'filled',
                             'href' => $applyLink,
@@ -96,7 +96,7 @@
             'element' => "h2",
             'variant' => "h2"
         ])
-            {{ $lang['information'] }}
+            {{ $lang->information }}
         @endtypography
 
         <div class="o-grid-12">
@@ -119,7 +119,7 @@
                     'element' => "h2",
                     'variant' => "h2"
                 ])
-                    {{ $lang['contact'] }}
+                    {{ $lang->contact }}
                 @endtypography
 
                 @foreach($preparedListData['contacts'] as $contact)
@@ -204,7 +204,7 @@
             <div class="o-grid-12">
 
                 @button([
-                    'text' => $lang['periodEnded'],
+                    'text' => $lang->periodEnded,
                     'style' => 'filled',
                     'attributeList' => ['disabled' => 'true']
 
@@ -217,7 +217,7 @@
                 @if($applyLink === '#job-listings-modal')
                     <div class="o-grid-12">
                         @button([
-                            'text' => $lang['applyHere'] . " (" . $daysLeft . " " . $lang['daysLeft'] . ")",
+                            'text' => $lang->applyHere . " (" . $daysLeft . " " . $lang->daysLeft . ")",
                             'color' => 'primary',
                             'style' => 'filled',
                             'id' => 'job-listings-apply',
@@ -232,7 +232,7 @@
                 @else
                     <div class="o-grid-12">
                         @button([
-                            'text' => $lang['applyHere'] . " (" . $daysLeft . " " . $lang['daysLeft'] . ")",
+                            'text' => $lang->applyHere . " (" . $daysLeft . " " . $lang->daysLeft . ")",
                             'color' => 'primary',
                             'style' => 'filled',
                             'href' => $applyLink,
@@ -248,7 +248,7 @@
                         @button([
                             'icon' => 'assignment_ind',
                             'reversePositions' => true,
-                            'text' => $lang['login'],
+                            'text' => $lang->login,
                             'style' => 'filled',
                             'id' => 'job-listings-login',
                             'attributeList' => [

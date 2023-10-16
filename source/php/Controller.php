@@ -58,7 +58,7 @@ class Controller
         $data['sourceSystem'] = $this->getSourceSystem();
         $data['preparedListData'] = $this->prepareData($data);
 
-        $data['lang'] = [
+        $data['lang'] = (object) [
             'applyNow'      => __('Apply now', 'job-listing'),
             'applyHere'     => __('Apply here', 'job-listing'),
             'contact'       => __('Contact', 'job-listing'),
