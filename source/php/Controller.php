@@ -58,6 +58,16 @@ class Controller
         $data['sourceSystem'] = $this->getSourceSystem();
         $data['preparedListData'] = $this->prepareData($data);
 
+        $data['lang'] = (object) [
+            'applyNow'      => __('Apply now', 'job-listings'),
+            'applyHere'     => __('Apply here', 'job-listings'),
+            'contact'       => __('Contact', 'job-listings'),
+            'information'   => __('Information', 'job-listings'),
+            'login'         => __('Log in', 'job-listings'),
+            'daysLeft'      => __('Days left', 'job-listings'),
+            'periodEnded'   => __('The application period has ended', 'job-listings'),
+        ];
+
         return $data;
     }
 
