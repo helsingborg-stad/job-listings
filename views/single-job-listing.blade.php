@@ -37,7 +37,6 @@
                             'text' => $lang->applyNow,
                             'color' => 'primary',
                             'style' => 'filled',
-                            'id' => 'job-listings-apply',
                             'classList' => ['js-job-listings-apply'],
                             'attributeList' => [
                                 'data-open' => 'job-listings-modal',
@@ -220,7 +219,6 @@
                             'text' => $lang->applyHere . " (" . $daysLeft . " " . $lang->daysLeft . ")",
                             'color' => 'primary',
                             'style' => 'filled',
-                            'id' => 'job-listings-apply',
                             'classList' => ['c-button--margin-top', 'u-margin__right--1',  'js-job-listings-apply'],
                             'attributeList' => [
                                 'data-open' => 'job-listings-modal',
