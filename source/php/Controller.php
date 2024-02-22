@@ -290,6 +290,10 @@ class Controller
     {
         $contacts = $this->getMeta('contact');
 
+        if(!is_array($contacts)) {
+            return []; 
+        }
+
         array_walk($contacts, function (&$contact) {
             $contact = (object)$contact;
         });
