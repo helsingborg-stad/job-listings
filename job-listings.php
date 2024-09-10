@@ -4,7 +4,7 @@
  * Plugin Name:       Job Listings
  * Plugin URI:        (#plugin_url#)
  * Description:       
- * Version: 4.1.4
+ * Version: 4.1.5
  * Author:            Nikolas Ramstedt, Sebastian Thulin & Johan Silvergrund
  * Author URI:        
  * License:           MIT
