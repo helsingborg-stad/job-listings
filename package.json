@@ -1,5 +1,5 @@
 {
-    "name": "job-listings",
+    "name": "@helsingborg-stad/job-listings",
     "version": "4.1.4",
     "description": "",
     "repository": {
@@ -12,6 +12,7 @@
         "url": "https://github.com/helsingborg-stad/job-listings/issues"
     },
     "homepage": "https://github.com/helsingborg-stad/job-listings",
+    "files": ["dist/"],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "watch": "cross-env NODE_ENV=development webpack --watch",
