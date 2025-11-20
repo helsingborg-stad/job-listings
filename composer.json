@@ -40,6 +40,5 @@
         "psr-4": {
             "JobListings\\": "source/php/"
         }
-    },
-    "version": "4.1.5"
+    }
 }
