@@ -44,6 +44,26 @@ class VismaImport extends Import
     public function normalize($item)
     {
 
+        $guid = (string) $item->Guid;
+        $details = $this->getDetails($guid);
+        if (
+            !isset(
+                $details->Assignment->Localization->AssignmentLoc->DepartmentDescr,
+                $details->Assignment->Localization->AssignmentLoc->WorkDescr,
+                $details->Assignment->Localization->AssignmentLoc->Qualifications,
+                $details->Assignment->Localization->AssignmentLoc->AdditionalInfo
+            )
+        ) {
+            return false;
+        }
+
+        // Use a regular object so normalized values and contact arrays remain
+        // type stable on PHP 8 while preserving XML attributes such as AssignmentId.
+        $item = json_decode(json_encode($item));
+        if (!is_object($item) || !isset($item->Localization->AssignmentLoc)) {
+            return false;
+        }
+
         $item->PublishStartDate = date("Y-m-d", strtotime($item->PublishStartDate));
         $item->PublishEndDate = date("Y-m-d", strtotime($item->PublishEndDate));
         $item->ApplicationEndDate = date("Y-m-d", strtotime($item->ApplicationEndDate));
@@ -56,19 +76,18 @@ class VismaImport extends Import
             date_create(date("Y-m-d", time())), 
             date_create($item->ApplicationEndDate)
         )->days;
-        $item->ReadMoreUrl = $this->settings['apply_base_link'] . $item->Guid; 
+        $item->ReadMoreUrl = $this->settings['apply_base_link'] . $guid;
 
         //Get full text
-        $details = $this->getDetails($item->Guid);
         $item->Localization->AssignmentLoc->WorkDescr = implode("\r\n", array(
-            $details->Assignment->Localization->AssignmentLoc->DepartmentDescr,
+            (string) $details->Assignment->Localization->AssignmentLoc->DepartmentDescr,
             PHP_EOL . PHP_EOL . "  <!--more-->". PHP_EOL . PHP_EOL,
             '<h2>'. __('Work Description', 'job-listings') .'</h2>',
-            $details->Assignment->Localization->AssignmentLoc->WorkDescr,
+            (string) $details->Assignment->Localization->AssignmentLoc->WorkDescr,
             '<h2>'. __('Qualifications', 'job-listings') .'</h2>',
-            $details->Assignment->Localization->AssignmentLoc->Qualifications,
+            (string) $details->Assignment->Localization->AssignmentLoc->Qualifications,
             '<h2>'. __('Other', 'job-listings') .'</h2>',
-            $details->Assignment->Localization->AssignmentLoc->AdditionalInfo
+            (string) $details->Assignment->Localization->AssignmentLoc->AdditionalInfo
         ));
 
         //Contacts
@@ -76,10 +95,10 @@ class VismaImport extends Import
         if(isset($details->Assignment->Localization->AssignmentLoc->ContactPersons->ContactPerson) && is_object($details->Assignment->Localization->AssignmentLoc->ContactPersons->ContactPerson) && !empty($details->Assignment->Localization->AssignmentLoc->ContactPersons->ContactPerson)) {
             foreach($details->Assignment->Localization->AssignmentLoc->ContactPersons->ContactPerson as $key => $detail) {
                 $item->contact[] = array(
-                    'name' => isset($detail->ContactName) ? reset($detail->ContactName) : '',
+                    'name' => isset($detail->ContactName) ? (string) $detail->ContactName : '',
                     'phone' => isset($detail->Telephone) ? (string) $detail->Telephone : '',
                     'phone_sanitized' => isset($detail->Telephone) ? preg_replace('/\D/', '', (string) $detail->Telephone) : '',
-                    'position' => isset($detail->Title) ? reset($detail->Title) : ''
+                    'position' => isset($detail->Title) ? (string) $detail->Title : ''
                 );
             }
         }
@@ -293,15 +312,15 @@ class VismaImport extends Import
             )
         );
 
-        //Create array with simple xml
-        try {
-            $data = simplexml_load_string($data);
-        } catch (Exception $e) {
-            if (!strstr($e->getMessage(), 'XML')) {
-                throw $e;
-            }
+        if (!is_string($data) || trim($data) === '') {
+            return false;
         }
 
-        return $data; 
+        $previousInternalErrors = libxml_use_internal_errors(true);
+        $details = simplexml_load_string($data);
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousInternalErrors);
+
+        return $details;
     }
 }
