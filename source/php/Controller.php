@@ -19,6 +19,7 @@ class Controller
 
         add_filter('Municipio/viewData', array($this, 'singleViewData'));
         add_filter('Municipio/Controller/Archive/Data', array($this, 'archiveViewData'));
+        add_filter('Municipio/PostsList/Table/Arguments', array($this, 'postsListTableArguments'), 10, 3);
     }
 
     /**
@@ -230,6 +231,65 @@ class Controller
         }
 
         return $data;
+    }
+
+    /**
+     * Prepare job listing data for Municipio's Posts List table.
+     *
+     * The Posts List filter also runs during asynchronous rendering, where the
+     * main query is not the post type archive. Use the configured post types,
+     * and validate returned posts when present, instead of relying on archive
+     * request state. The configured types also cover empty filtered results.
+     *
+     * @param array $arguments
+     * @param array $posts
+     * @param array $postTypes
+     * @return array
+     */
+    public function postsListTableArguments(array $arguments, array $posts, array $postTypes)
+    {
+        if (!$this->containsOnlyJobListings($posts, $postTypes)) {
+            return $arguments;
+        }
+
+        $arguments['headings'] = [
+            __('Position', 'job-listings'),
+            __('Published', 'job-listings'),
+            __('Apply by', 'job-listings'),
+            __('Category', 'job-listings')
+        ];
+
+        foreach ($arguments['list'] as $index => $item) {
+            $postMeta = get_post_meta($item['id']);
+            $arguments['list'][$index]['columns'] = [
+                $item['columns'][0] ?? '',
+                $postMeta['publish_start_date'][0] ?? '',
+                $postMeta['application_end_date'][0] ?? '',
+                $postMeta['occupationclassifications'][0] ?? ''
+            ];
+        }
+
+        return $arguments;
+    }
+
+    /**
+     * @param array $posts
+     * @param array $postTypes
+     * @return bool
+     */
+    private function containsOnlyJobListings(array $posts, array $postTypes)
+    {
+        if ($postTypes !== ['job-listing']) {
+            return false;
+        }
+
+        foreach ($posts as $post) {
+            if (!is_object($post) || !method_exists($post, 'getPostType') || $post->getPostType() !== 'job-listing') {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

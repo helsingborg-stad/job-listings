@@ -39,3 +39,16 @@
 
 
 }
+
+.post-type-archive-job-listing .archive-list .c-table__column-0 > .c-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.post-type-archive-job-listing .archive-list .c-table__column-0 > .c-link:hover,
+.post-type-archive-job-listing .archive-list .c-table__column-0 > .c-link:focus,
+.post-type-archive-job-listing .archive-list .c-table__column-0 > .c-link:active,
+.post-type-archive-job-listing .archive-list .c-table__column-0 > .c-link:visited {
+  color: inherit;
+  text-decoration: none;
+}
