@@ -179,6 +179,14 @@ class App
      */
     public function enqueueStyles()
     {
+        if (
+            !is_post_type_archive('job-listing') &&
+            !is_singular('job-listing') &&
+            !is_tax(array('job-listing-category', 'job-listing-source'))
+        ) {
+            return;
+        }
+
         wp_enqueue_style('job-listings-css', JOBLISTINGS_URL . '/dist/' . Helper\CacheBust::name('css/job-listings.css'));
     }
 
