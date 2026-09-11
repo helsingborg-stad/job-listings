@@ -11,6 +11,7 @@ class Import
     public $postType = "job-listing";
     public $cacheTTL = 60 * 60; //Minutes
     public $importedUuids = [];
+    protected $hasCompleteImport = false;
     /**
      * Import constructor.
      */
@@ -66,12 +67,22 @@ class Import
         header("Cache-Control: post-check=0, pre-check=0", false);
         header("Pragma: no-cache");
 
-        $this->importXml();
+        $success = $this->importXml() === true;
+
+        if (!$success) {
+            wp_die(
+                '<h1>' . __('Import failed', 'job-listings') . '</h1><p>'
+                . __('The import could not be completed. Missing jobs have not been removed. Please try again or contact support.', 'job-listings') . '</p>',
+                __('Import failed', 'job-listings'),
+                array('back_link' => true, 'response' => 500)
+            );
+            return;
+        }
 
         wp_die(
             sprintf(__("%sImport done%s %s Data has been imported with %s method. %s", 'job-listings'), "<h1>", "</h1>", "<p>", '<strong>'.get_class($this) . '</strong>',"</p>"),
             "Import",
-            array('back_link' => true)
+            array('back_link' => true, 'response' => 200)
         );
       }
     }
@@ -110,6 +121,9 @@ class Import
      */
     public function importXml()
     {
+        $this->importedUuids = [];
+        $this->hasCompleteImport = false;
+
         //Set max execution time
         ini_set('max_execution_time', 60*10);
 
@@ -123,17 +137,17 @@ class Import
             (array) $this->queryParams
         );
 
+        if (!is_string($data) || trim($data) === '') {
+            return null;
+        }
+
         // Translate url's & to &amp;
         $data = str_replace("&", "&amp;", $data);
 
-        // Create array with simple xml
-        try {
-            $data = simplexml_load_string($data);
-        } catch (Exception $e) {
-            if (!strstr($e->getMessage(), 'XML')) {
-                throw $e;
-            }
-        }
+        $previousInternalErrors = libxml_use_internal_errors(true);
+        $data = simplexml_load_string($data);
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousInternalErrors);
 
         //Make shure this is a object
         if(!is_object($data)) {
@@ -145,20 +159,22 @@ class Import
             return null;
         }
 
-        $data = $data->xpath($this->baseNode. "/" . $this->subNode);
+        $data = $this->getImportItems($data);
 
         // Check if valid list, update jobs
-        if (isset($data) && !empty($data)) {
+        if (is_array($data)) {
             foreach ($data as $item) {
 
                 $item = apply_filters(str_replace("\\", "/", get_class($this))."/Item", $item);
 
-                if ($item) {
-                    $this->updateItem($item);
+                if (!$item || !$this->updateItem($item)) {
+                    // A partial import must not delete jobs whose details failed.
+                    return null;
                 }
             }
 
             // Deactivate missing jobs ads.
+            $this->hasCompleteImport = true;
             $this->deactivateMissingJobs();
             return true;
         }
@@ -167,13 +183,26 @@ class Import
     }
 
     /**
+     * Providers may accept an empty list only after validating its envelope.
+     * @return array|false
+     */
+    protected function getImportItems($data)
+    {
+        $items = $data->xpath($this->baseNode . "/" . $this->subNode);
+        return !empty($items) ? $items : false;
+    }
+
+    /**
      * Remove jobs not in source list.
      * @return void
      */
     public function deactivateMissingJobs()
     {
+        if (!$this->hasCompleteImport) {
+            return;
+        }
         $localPosts = $this->getLocalPosts();
-        if (is_array($localPosts) && !empty($localPosts) && is_array($this->importedUuids) && !empty($this->importedUuids)) {
+        if (is_array($localPosts) && !empty($localPosts) && is_array($this->importedUuids)) {
             foreach ($localPosts as $localPost) {
                 if (!in_array((int) $localPost->uuid, $this->importedUuids)) {
                     wp_delete_post($localPost->ID, true);
