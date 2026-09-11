@@ -123,9 +123,14 @@ class Curl
          */
         $ch = curl_init();
         curl_setopt_array($ch, $arguments);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $response = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+
+        // Error responses must neither be imported nor cached as a source list.
+        if ($response === false || $httpcode < 200 || $httpcode >= 300) {
+            return false;
+        }
 
         /**
          * Cache response

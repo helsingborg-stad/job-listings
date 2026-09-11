@@ -154,6 +154,12 @@ msgstr "Kategori"
 
 #: source/php/Cron/Import.php:72
 #, php-format
+msgid "Import failed"
+msgstr "Importen misslyckades"
+
+msgid "The import could not be completed. Missing jobs have not been removed. Please try again or contact support."
+msgstr "Importen kunde inte slutföras. Rensningen av borttagna jobb har inte körts. Försök igen eller kontakta support."
+
 msgid "%sImport done%s %s Data has been imported with %s method. %s"
 msgstr ""
 "%sImport genomförd%s %s Informationen har importerats med metoden %s. %s"

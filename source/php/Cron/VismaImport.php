@@ -177,6 +177,9 @@ class VismaImport extends Import
                 }
             }
 
+            // Store for later comparison, including jobs with unchanged content.
+            $this->importedUuids[] = (int) $dataObject['uuid'];
+
             //Get matching post
             $postObject = $this->getPost(
                 array(
@@ -184,6 +187,11 @@ class VismaImport extends Import
                     'value' => $dataObject['uuid']
                 )
             );
+
+            // Do not claim a colliding identifier owned by another feed.
+            if (isset($postObject->ID) && !$this->ownsPost($postObject)) {
+                return false;
+            }
 
             //Not existing, create new
             if (!isset($postObject->ID)) {
@@ -211,7 +219,7 @@ class VismaImport extends Import
 
                 //Diff data
                 if (count(array_unique($updateDiff)) != count($updateDiff)) {
-                    wp_update_post(
+                    $postId = wp_update_post(
                         array(
                             'ID' => $postId,
                             'post_title' => $dataObject['post_title'],
@@ -219,6 +227,10 @@ class VismaImport extends Import
                         )
                     );
                 }
+            }
+
+            if (!$postId || is_wp_error($postId)) {
+                return false;
             }
 
             // Taxonomies - Work categories
@@ -276,6 +288,52 @@ class VismaImport extends Import
             'number_of_days_left' => array("numberOfDaysLeft"),
             'contact' => array("contact")
         );
+    }
+
+    /**
+     * An empty Assignments element is authoritative; an error document is not.
+     * Validate all identifiers before allowing any cleanup.
+     * @return array|false
+     */
+    protected function getImportItems($data)
+    {
+        if ($data->getName() !== 'Assignmentlist'
+            || array_diff(array_keys((array) $data), ['Assignments', 'Visibility', 'UseLocId'])
+            || count($data->Assignments) !== 1 || trim((string) $data) !== ''
+            || trim((string) $data->Assignments) !== '' || empty($this->queryParams['guidGroup'])) {
+            return false;
+        }
+
+        $items = $data->xpath('Assignments/Assignment');
+        if (count($data->Assignments->children()) !== count($items)) {
+            return false;
+        }
+
+        foreach ($items as $item) {
+            $uuid = (string) $item['AssignmentId'];
+            if (!ctype_digit($uuid) || (int) $uuid <= 0) {
+                return false;
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * Only this Visma group owns these posts. Preserve manual and other feeds' jobs.
+     */
+    public function getLocalPosts()
+    {
+        return array_values(array_filter(parent::getLocalPosts(), [$this, 'ownsPost']));
+    }
+
+    private function ownsPost($post)
+    {
+        $settings = get_post_meta($post->ID, 'importer_meta', true);
+        return get_post_meta($post->ID, 'source_system', true) === 'Visma'
+            && is_array($settings) && !empty($settings['guidGroup'])
+            && !empty($this->queryParams['guidGroup'])
+            && strcasecmp($settings['guidGroup'], $this->queryParams['guidGroup']) === 0;
     }
 
     public function getDetails($guid) {
